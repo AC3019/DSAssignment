@@ -14,7 +14,7 @@ public class DSAssignment {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("I hate Netbeans");
+        System.out.println("I hate Netbeans, faQ");
     }
     
 }
