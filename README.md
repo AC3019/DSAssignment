@@ -24,7 +24,7 @@ javac -cp ./src/ -d ./build/ **/*.java
 
 java -cp ./build dsassignment.DSAssignment
 ```
-or just use the script `buildRun`
+TODO: or just use the script `buildRun`
 
 ## Members
 - Xuan Bin
