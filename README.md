@@ -3,7 +3,7 @@
 The assignment repo for a 3 students from TAR UMT Year 2 Sem 1 (2022 -> 2024)
 
 ## Requirements
-- JDK > 20
+- JDK 20
 
 ## Editing
 - School recommends using Netbeans
