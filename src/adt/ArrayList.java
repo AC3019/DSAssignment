@@ -1,5 +1,7 @@
 package adt;
 
+import java.util.Arrays;
+
 @SuppressWarnings("unchecked") // casting Object[] -> T[] will be complained by compiler as it can't guarantee type safety, surpress it abo noisy
 /**
  * There will be no nulls in between elements at all times, therefore inserting items at very far to the end of the array is not possible
@@ -132,11 +134,18 @@ public class ArrayList<T> implements ListInterface<T>{
         T temp = this.arr[index];
         this.arr[index] = item;
         for (int i = index + 1; i < this.numberOfEntries; i++) {
+            T temp2 = this.arr[i];
             this.arr[i] = temp;
-            temp = this.arr[i + 1];
+            temp = temp2;
         }
         
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "ArrayList [arr=" + Arrays.toString(arr) + ", numberOfEntries=" + numberOfEntries + 
+            ", customCap=" + customCap + "]";
     }
     
 }
