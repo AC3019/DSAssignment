@@ -70,12 +70,20 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
     }
 
     @Override
+    /**
+     * Empties the entire list
+     */
     public void clear() {
         this.numberOfEntries = 0;
         this.arr = (T[]) (new Object[this.customCap]); // create a new array with the same cap they wanted when creating
     }
 
     @Override
+    /**
+     * Gets an item from the list
+     * @param index The index of the item
+     * @throws IndexOutOfBoundsException
+     */
     public T get(int index) throws IndexOutOfBoundsException {
         if (index >= numberOfEntries) throw new IndexOutOfBoundsException(index);
 
@@ -93,6 +101,11 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
     }
 
     @Override
+    /**
+     * Removes the element at `index`, shifting every element on the right to the left
+     * @param index The index of the element to remove
+     * @throws IndexOutOfBoundsException
+     */
     public T remove(int index) throws IndexOutOfBoundsException {
         if (index >= this.numberOfEntries) throw new IndexOutOfBoundsException(index);
         T res = this.arr[index];
@@ -102,6 +115,11 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
     }
 
     @Override
+    /**
+     * Inserts an item to the list
+     * @param item Inserts the item to the back of the array
+     * @return `this` Returns the object itself, after inserting the element to facilitate method chaining
+     */
     public ListInterface<T> insert(T item) {
         if (this.isFull()) this.expandArray();
 
@@ -150,6 +168,10 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
     }
 
     @Override
+    /**
+     * Returns an iterator that allows traversing the list in one way, facilitates foreach loop
+     * @return Iterator
+     */
     public Iterator<T> iterator() {
         return new ArrayListIterator();
     }
