@@ -1,13 +1,14 @@
 package adt;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 @SuppressWarnings("unchecked") // casting Object[] -> T[] will be complained by compiler as it can't guarantee type safety, surpress it abo noisy
 /**
  * There will be no nulls in between elements at all times, therefore inserting items at very far to the end of the array is not possible
  * Optimal for memory (no space wasted to store null in between the elements)
  */
-public class ArrayList<T> implements ListInterface<T>{
+public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
 
     private T[] arr;
     private int numberOfEntries = 0;
@@ -146,6 +147,27 @@ public class ArrayList<T> implements ListInterface<T>{
     public String toString() {
         return "ArrayList [arr=" + Arrays.toString(arr) + ", numberOfEntries=" + numberOfEntries + 
             ", customCap=" + customCap + "]";
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayListIterator();
+    }
+
+    private class ArrayListIterator implements Iterator<T> {
+
+        private int currPos = 0;
+        
+        @Override
+        public boolean hasNext() {
+            return currPos >= ArrayList.this.numberOfEntries;
+        }
+    
+        @Override
+        public T next() {
+            return ArrayList.this.get(this.currPos++);
+        }
+
     }
     
 }
