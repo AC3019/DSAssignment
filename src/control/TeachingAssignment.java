@@ -26,8 +26,9 @@ public class TeachingAssignment {
 
         for (Integer x: b)
             System.out.println(x);
-
-        for (Integer d: b.filter((el) -> {boolean f = el < 4; System.out.println("Is error here?"); return f;}))
+        for (Integer x: b.toArray(Integer.class))
+            System.out.println(x);
+        for (Integer d: b.filter((el) -> {return el < 4;}))
             System.out.println(d);
     }
 }

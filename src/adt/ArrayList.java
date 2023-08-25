@@ -1,5 +1,6 @@
 package adt;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -145,29 +146,24 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
 
     // TODO: fix this
     @Override
-    public T[] toPrimitiveArray() {
+    public <U> U[] toArray(Class<U> clazz) {
         // getNumberOfEntries because we don't want the additional nulls behind the array to be included
-        T[] res = (T[]) (new Object[this.getNumberOfEntries()]);
-        for (int i = 0; i < res.length; i++) {
-            // copy over the elements
-            res[i] = this.arr[i];
-        }
-
+        U[] res = (U[]) Array.newInstance(clazz, this.getNumberOfEntries());
+        System.arraycopy(this.arr, 0, res, 0, this.getNumberOfEntries());
         return res;
     }
 
     @Override
-    public T[] filter(Filterable<T> f) {
+    public ArrayList<T> filter(Filterable<T> f) {
         ArrayList<T> resList = new ArrayList<>();
 
         // loop over this instead of the underlying array so nulls wont be included
         for (T item: this) {
-            System.out.println("Is error here?");
             if (f.apply(item))
                 resList.insert(item);
         }
 
-        return resList.toPrimitiveArray();
+        return resList;
     }
     
     @Override

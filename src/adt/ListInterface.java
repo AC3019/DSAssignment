@@ -49,14 +49,15 @@ public interface ListInterface<T> {
 
     /**
      * Converts the list back to a java array
-     * @return T[] the array containing every item in the list, except null
+     * @param Class<U> the class to cast to
+     * @return U[] the array containing every item in the list, except null (with the class)
      */
-    public abstract T[] toPrimitiveArray();
+    public abstract <U> U[] toArray(Class<U> clazz);
 
     /**
      * Applies filter to every item in the list, if the item passes through the filter, it will be included in the final result
      * @param f
      * @return T[] primitive java array containing items that passes the filter
      */
-    public abstract T[] filter(Filterable<T> f);
+    public abstract ListInterface<T> filter(Filterable<T> f);
 }
