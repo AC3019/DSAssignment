@@ -23,5 +23,11 @@ public class TeachingAssignment {
 
         for (int i = 0; i < b.getNumberOfEntries(); i++)
             System.out.println(b.get(i));
+
+        for (Integer x: b)
+            System.out.println(x);
+
+        for (Integer d: b.filter((el) -> {boolean f = el < 4; System.out.println("Is error here?"); return f;}))
+            System.out.println(d);
     }
 }

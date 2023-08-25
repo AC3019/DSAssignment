@@ -143,6 +143,7 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
         return this;
     }
 
+    // TODO: fix this
     @Override
     public T[] toPrimitiveArray() {
         // getNumberOfEntries because we don't want the additional nulls behind the array to be included
@@ -161,6 +162,7 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
 
         // loop over this instead of the underlying array so nulls wont be included
         for (T item: this) {
+            System.out.println("Is error here?");
             if (f.apply(item))
                 resList.insert(item);
         }
@@ -183,7 +185,7 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
         
         @Override
         public boolean hasNext() {
-            return currPos >= ArrayList.this.numberOfEntries;
+            return currPos < ArrayList.this.numberOfEntries;
         }
     
         @Override
