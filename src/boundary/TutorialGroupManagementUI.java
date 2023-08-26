@@ -3,7 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package boundary;
-
+import entity.TutorialGroup;
+import entity.Student;
 /**
  *
  * @author Neoh Soon Chee

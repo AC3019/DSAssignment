@@ -16,8 +16,8 @@ public class Student {
     
     public Student(){};
     
-    public Student (String studentName, int age){
-        this.studentID = String.valueOf(numberOfStudents);
+    public Student (String studentID, String studentName, int age){
+        this.studentID = studentID + numberOfStudents;
         this.studentName = studentName;
         this.age = age;
         numberOfStudents++;
