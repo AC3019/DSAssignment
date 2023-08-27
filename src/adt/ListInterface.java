@@ -89,4 +89,18 @@ public interface ListInterface<T> {
      * @return -1 if not found, otherwise the index of the object in the list
      */
     public abstract int indexOf(Findable<T> f);
+
+    /**
+     * Checks if the obj exists in the list
+     * @param obj
+     * @return true if exist, false otherwise
+     */
+    public abstract boolean contains(T obj);
+
+    /**
+     * Applies a function to every item in the list, if the function returns true, the object is considered exist in the list
+     * @param f
+     * @return true if exist, false otherwise
+     */
+    public abstract boolean contains(Findable<T> f);
 }

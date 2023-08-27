@@ -191,6 +191,16 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
     public int indexOf(T obj) {
         return this.indexOf((item) -> item.equals(obj));
     }
+
+    @Override
+    public boolean contains(Findable<T> f) {
+        return this.indexOf(f) != -1;
+    }
+
+    @Override
+    public boolean contains(T obj) {
+        return this.indexOf(obj) != -1;
+    }
     
     @Override
     /**
