@@ -1,5 +1,6 @@
 package utility;
 
+import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -22,7 +23,7 @@ public class Input {
      * @return the string inputted by user
      */
     public static String getString(String prompt) {
-        System.out.println(prompt);
+        System.out.print(prompt);
         return s.nextLine();
     }
 
@@ -50,7 +51,7 @@ public class Input {
     public static int getInt(String prompt) {
         while (true) {
             try {
-                System.out.println(prompt);
+                System.out.print(prompt);
                 return s.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input: Please input a valid integer");
@@ -87,7 +88,7 @@ public class Input {
     public static double getDouble(String prompt) {
         while (true) {
             try {
-                System.out.println(prompt);
+                System.out.print(prompt);
                 return s.nextDouble();
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input: Please input a valid decimal");
@@ -107,9 +108,43 @@ public class Input {
         while (true) {
             try {
                 double res = getDouble(prompt);
-                if (res >= min && res <= max)
+                if (res >= min || res <= max)
                     return res;
                 throw new InputOutOfRangeException(min, max);
+            } catch (InputOutOfRangeException iiore) {
+                System.out.println(iiore.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Displays a table the choices available to the user, by transforming the obj through Choicer c
+     * @param <T> type of the objs
+     * @param choices
+     * @param c the function how the obj should be transformed to get a choice
+     * @return the choice of the user, in integer (starting from 1)
+     */
+    public static <T> int getChoice(String prompt, T[] choices, Choicer<T> c) {
+        while (true) {
+            try {
+                String[] newArr = new String[choices.length];
+                for (int i = 0; i < choices.length; i++) {
+                    newArr[i] = c.toChoiceString(choices[i]);
+                }
+                TableBuilder tb = new TableBuilder(
+                    new String[] {"Choice"}, 
+                    new String[][] { newArr }
+                );
+
+                tb.printTable(true);
+
+                // handles valid integer validation alrd
+                int choice = Input.getInt(prompt);
+
+                if (choice >= newArr.length || choice < 0)
+                    throw new InputOutOfRangeException(0, newArr.length);
+                
+                return choice;
             } catch (InputOutOfRangeException iiore) {
                 System.out.println(iiore.getMessage());
             }

@@ -33,7 +33,6 @@ public class HashMap<K extends Comparable<K>, V>
     @Override
     public void put(K key, V value) {
         int position = getHashModulo(key);
-        System.out.println(position);
 
         // TODO: implement rehash for better performance
         this.buckets[position].insert(key, value);
@@ -102,11 +101,11 @@ public class HashMap<K extends Comparable<K>, V>
             return this.right;
         }
 
-        K getKey() {
+        public K getKey() {
             return this.key;
         }
 
-        V getValue() {
+        public V getValue() {
             return this.value;
         }
 
@@ -118,7 +117,8 @@ public class HashMap<K extends Comparable<K>, V>
             this.right = right;
         }
 
-        public void setKey(K key) {
+        // should not be able to cincai set the key abo the bst will mess up
+        void setKey(K key) {
             this.key = key;
         }
 

@@ -4,6 +4,8 @@ import java.util.Iterator;
 
 import adt.ArrayList;
 import adt.HashMap;
+import utility.Input;
+import utility.TableBuilder;
 
 /**
  * @author hanyue1014
@@ -57,27 +59,45 @@ public class TeachingAssignment {
         // } 
 
         // test HashMap
-        HashMap<String, Integer> hs = new HashMap<>() {{
-            put("abc", 123);
-            put("def", 456);
-            put("ghi", 789);
-        }};
+        // HashMap<String, Integer> hs = new HashMap<>() {{
+        //     put("abc", 123);
+        //     put("def", 456);
+        //     put("ghi", 789);
+        // }};
 
-        System.out.println("HashMap 1st");
-        for (HashMap<String, Integer>.Node n: hs) {
-            System.out.println(n);
-        }
+        // System.out.println("HashMap 1st");
+        // for (HashMap<String, Integer>.Node n: hs) {
+        //     System.out.println(n);
+        // }
 
-        hs.set("def", 234);
-        System.out.println("HashMap 2nd");
-        for (HashMap<String, Integer>.Node n: hs) {
-            System.out.println(n);
-        }
+        // hs.set("def", 234);
+        // System.out.println("HashMap 2nd");
+        // for (HashMap<String, Integer>.Node n: hs) {
+        //     System.out.println(n);
+        // }
 
-        hs.remove("def");
-        System.out.println("HashMap 3rd");
-        for (HashMap<String, Integer>.Node n: hs) {
-            System.out.println(n);
-        }
+        // hs.remove("def");
+        // System.out.println("HashMap 3rd");
+        // for (HashMap<String, Integer>.Node n: hs) {
+        //     System.out.println(n);
+        // }
+
+        // test table builder
+        // TableBuilder tb = new TableBuilder();
+        // tb
+        //     .addColumn("Abc", new String[] {"huayu", "yingwen"})
+        //     .addColumn("Def", new String[] {"malaiwen", "shuxue"});
+        // tb.printTable(true);
+
+        // test input choice
+        Input.getChoice(
+            "Please enter your choice: ", 
+            new String[] {
+                "Abc",
+                "Def",
+                "GHIJKLMNOP"
+            },
+            (item) -> item // simply return the item since it is string alrd
+        );
     }
 }
