@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import utility.Filterable;
+import utility.Findable;
 
 @SuppressWarnings("unchecked") // casting Object[] -> T[] will be complained by compiler as it can't guarantee type safety, surpress it abo noisy
 /**
@@ -173,6 +174,22 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
         }
 
         return resList;
+    }
+
+    @Override
+    public int indexOf(Findable<T> f) {
+        for (int i = 0; i < this.getNumberOfEntries(); i++) {
+            if (f.find(this.get(i))) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    @Override
+    public int indexOf(T obj) {
+        return this.indexOf((item) -> item.equals(obj));
     }
     
     @Override

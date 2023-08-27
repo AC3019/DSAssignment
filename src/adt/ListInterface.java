@@ -1,6 +1,7 @@
 package adt;
 
 import utility.Filterable;
+import utility.Findable;
 
 /**
  * @author hanyue1014
@@ -74,4 +75,18 @@ public interface ListInterface<T> {
      * @return T[] primitive java array containing items that passes the filter
      */
     public abstract ListInterface<T> filter(Filterable<T> f);
+
+    /**
+     * Search for the index of the certain objectm using the `.equals()` method on the object
+     * @param obj
+     * @return -1 if not found, otherwise the index of the object in the list
+     */
+    public abstract int indexOf(T obj);
+
+    /**
+     * Applies a function to every item in the list, if the function returns true, the object is considered found and the index of the object is returned
+     * @param f
+     * @return -1 if not found, otherwise the index of the object in the list
+     */
+    public abstract int indexOf(Findable<T> f);
 }
