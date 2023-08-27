@@ -35,26 +35,49 @@ public class TeachingAssignment {
         //     System.out.println(d);
 
         // test HashMap.BinarySearchTree
-        HashMap<Integer, Integer> test = new HashMap<>();
-        HashMap<Integer, Integer>.BinarySearchTree bst = test.new BinarySearchTree() {{
-            insert(10, 10);
-            insert(5, 5);
-            insert(50, 50);
-            insert(20, 20);
-            insert(30, 30);
+        // HashMap<Integer, Integer> test = new HashMap<>();
+        // HashMap<Integer, Integer>.BinarySearchTree bst = test.new BinarySearchTree() {{
+        //     insert(10, 10);
+        //     insert(5, 5);
+        //     insert(50, 50);
+        //     insert(20, 20);
+        //     insert(30, 30);
+        // }};
+
+        // Iterator itr = bst.iterator();
+        // System.out.println("Number of el: " + bst.getNumberOfElements());
+        // while (itr.hasNext()) {
+        //     System.out.println(itr.next());
+        // }
+        // System.out.println(bst.delete(10).toString());
+        // System.out.println("Number of el: " + bst.getNumberOfElements());
+        // itr = bst.iterator();
+        // while (itr.hasNext()) {
+        //     System.out.println(itr.next());
+        // } 
+
+        // test HashMap
+        HashMap<String, Integer> hs = new HashMap<>() {{
+            put("abc", 123);
+            put("def", 456);
+            put("ghi", 789);
         }};
 
-        Iterator itr = bst.iterator();
-        System.out.println("Number of el: " + bst.getNumberOfElements());
-        while (itr.hasNext()) {
-            System.out.println(itr.next());
+        System.out.println("HashMap 1st");
+        for (HashMap<String, Integer>.Node n: hs) {
+            System.out.println(n);
         }
-        System.out.println(bst.delete(10).toString());
-        System.out.println("Number of el: " + bst.getNumberOfElements());
-        itr = bst.iterator();
-        while (itr.hasNext()) {
-            System.out.println(itr.next());
-        } 
-        
+
+        hs.set("def", 234);
+        System.out.println("HashMap 2nd");
+        for (HashMap<String, Integer>.Node n: hs) {
+            System.out.println(n);
+        }
+
+        hs.remove("def");
+        System.out.println("HashMap 3rd");
+        for (HashMap<String, Integer>.Node n: hs) {
+            System.out.println(n);
+        }
     }
 }

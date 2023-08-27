@@ -1,38 +1,147 @@
 package adt;
 
+import java.lang.reflect.Array;
 import java.util.Iterator;
 
 import utility.NoNoArgConstructorException;
 
-public class HashMap<K extends Comparable<K>, V> implements MapInterface<K, V> {
+@SuppressWarnings("unchecked")
+public class HashMap<K extends Comparable<K>, V> 
+    implements MapInterface<K, V>, Iterable<HashMap<K, V>.Node> {
 
     private ArrayList<K> keys;
-    
+    private BinarySearchTree[] buckets;
+    private int bucketNum;
+    private static int DEFAULT_BUCKET_NUM = 10;
+
+    // util to calculate hash of the key specific to hashmap size
+    private int getHashModulo(K key) {
+        return key.hashCode() % this.bucketNum;
+    }
+
+    public HashMap() { this(DEFAULT_BUCKET_NUM); }
+
+    public HashMap(int bucketNum) {
+        this.bucketNum = bucketNum;
+        this.buckets = (BinarySearchTree[]) Array.newInstance(BinarySearchTree.class, this.bucketNum);
+        for (int i = 0; i < this.bucketNum; i++) {
+            this.buckets[i] = new BinarySearchTree();
+        }
+        this.keys = new ArrayList<>();
+    }
 
     @Override
     public void put(K key, V value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'put'");
+        int position = getHashModulo(key);
+        System.out.println(position);
+
+        // TODO: implement rehash for better performance
+        this.buckets[position].insert(key, value);
+        this.keys.insert(key);
     }
 
     @Override
     public V get(K key) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+        int position = getHashModulo(key);
+
+        // direct search is faster than searching through the array of keys
+        return this.buckets[position].find(key).getValue();
+    }
+
+    @Override
+    public boolean set(K key, V value) {
+        if (!this.keys.contains(key)) {
+            return false;
+        }
+
+        int position = this.getHashModulo(key);
+        this.buckets[position].find(key).setValue(value);
+
+        return true;
+    }
+
+    @Override
+    public V remove(K key) {
+        if (!this.keys.contains(key)) {
+            return null;
+        }
+        
+        int position = this.getHashModulo(key);
+        return this.buckets[position].delete(key).getValue();
     }
 
     @Override
     public K[] getKeys(Class<K> clazz) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getKeys'");
+        return this.keys.toArray(clazz);
+    }
+
+    // we store key value pairs in form of Nodes
+    public class Node {
+        private Node left;
+        private Node right;
+        private K key;
+        private V value;
+
+        // no no arg constructor
+        Node() throws NoNoArgConstructorException {
+            throw new NoNoArgConstructorException(this.getClass());
+        }
+
+        Node(K key, V value) {
+            this.left = null;
+            this.right = null;
+            this.key = key;
+            this.value = value;
+        }
+
+        Node getLeft() {
+            return this.left;
+        }
+
+        Node getRight() {
+            return this.right;
+        }
+
+        K getKey() {
+            return this.key;
+        }
+
+        V getValue() {
+            return this.value;
+        }
+
+        void setLeft(Node left) {
+            this.left = left;
+        }
+
+        void setRight(Node right) {
+            this.right = right;
+        }
+
+        public void setKey(K key) {
+            this.key = key;
+        }
+
+        public void setValue(V value) {
+            this.value = value;
+        }
+
+        public Node clone() {
+            return new Node(this.key, this.value);
+        }
+
+        @Override
+        public String toString() {
+            return "K: " + this.key + " V: " + this.value;
+        }
+
     }
 
     /**
      * Can be it's own ADT but I only use it in this hashmap to work as (buckets, for collision)
      * So this is gonna be a nerfed version of BinarySearchTree (no reordering)
      */
-    @SuppressWarnings("unused")
-    public class BinarySearchTree implements Iterable<BinarySearchTree.Node> {
+    class BinarySearchTree implements Iterable<Node> {
 
         private Node root;
         private int numberOfElements;
@@ -83,16 +192,25 @@ public class HashMap<K extends Comparable<K>, V> implements MapInterface<K, V> {
             return inOrderSuccessor(root.getLeft());
         }
 
-        public Node find(K key) {
-            for (Node n: this) {
-                if (key.equals(n.getKey()))
-                    return n;
-            }
+        public Node find(Node root, K key) {
+            if (key.equals(root.getKey()))
+                return root;
+            else if (key.compareTo(root.getKey()) < 0)
+                return this.find(root.getLeft(), key);
+            else if (key.compareTo(root.getKey()) > 0)
+                return this.find(root.getRight(), key);
+
             return null;
+        }
+
+        // returns null if key not found in the current bst
+        public Node find(K key) {
+            return this.find(this.root, key);
         }
 
         // will be used recursively
         private Node delete(Node root, K key) {
+            System.out.println("Root: " + root + " Key: " + key);
             if (root == null)
                 return root;
             
@@ -169,67 +287,62 @@ public class HashMap<K extends Comparable<K>, V> implements MapInterface<K, V> {
             }
         }
 
-        public class Node {
-            private Node left;
-            private Node right;
-            private K key;
-            private V value;
+    }
 
-            // no no arg constructor
-            Node() throws NoNoArgConstructorException {
-                throw new NoNoArgConstructorException(this.getClass());
-            }
+    @Override
+    public Iterator<HashMap<K, V>.Node> iterator() {
+        return new Itr();
+    }
 
-            Node(K key, V value) {
-                this.left = null;
-                this.right = null;
-                this.key = key;
-                this.value = value;
-            }
+    // iterates through HashMap, with no particular order
+    private class Itr implements Iterator<Node> {
 
-            Node getLeft() {
-                return this.left;
-            }
+        private int currentBucket = 0;
+        private Iterator<Node> currentIterating;
 
-            Node getRight() {
-                return this.right;
-            }
-
-            K getKey() {
-                return this.key;
-            }
-
-            V getValue() {
-                return this.value;
-            }
-
-            void setLeft(Node left) {
-                this.left = left;
-            }
-
-            void setRight(Node right) {
-                this.right = right;
-            }
-
-            public void setKey(K key) {
-                this.key = key;
-            }
-
-            public void setValue(V value) {
-                this.value = value;
-            }
-
-            public Node clone() {
-                return new Node(this.key, this.value);
-            }
-
-            @Override
-            public String toString() {
-                return "K: " + this.key + " V: " + this.value;
-            }
-
+        // util for advancing to the next bucket
+        private void nextBucket() {
+            // if already at the last bucket STAWP
+            if (++this.currentBucket >= HashMap.this.bucketNum)
+                return;
+            this.currentIterating = HashMap.this.buckets[this.currentBucket].iterator();
         }
 
+        // util to find the next non empty bucket
+        private void findNonEmptyBucket() {
+            while (
+                !this.currentIterating.hasNext() && this.currentBucket < HashMap.this.bucketNum
+            ) {
+                this.nextBucket();
+            }
+        }
+
+        Itr() {
+            this.currentIterating = HashMap.this.buckets[this.currentBucket].iterator();
+            // find the bucket that already has something
+            this.findNonEmptyBucket();
+        }
+
+        @Override
+        public boolean hasNext() {
+            return 
+                this.currentBucket < HashMap.this.bucketNum && 
+                this.currentIterating.hasNext();
+        }
+
+        @Override
+        public Node next() {
+            Node res = null;
+
+            res = this.currentIterating.next();
+            
+            // finished looping the current bucket, advance to next
+            if (!this.currentIterating.hasNext()) 
+                this.findNonEmptyBucket();
+
+            return res;
+        }
+        
     }
-    
+
 }
