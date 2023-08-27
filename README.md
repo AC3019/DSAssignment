@@ -24,7 +24,18 @@ javac -cp ./src/ -d ./build/ **/*.java
 
 java -cp ./build dsassignment.DSAssignment
 ```
-TODO: or just use the script `buildRun`
+or just use the script `buildRun.sh`
+```sh
+# usage of buildRun.sh
+# one time only, add executable property to it
+chmod +x ./buildRun.sh
+
+# executing the file with default Main class (control.Main)
+./buildRun.sh
+
+# executing with custom main class
+./buildRun.sh ur.MainClass
+```
 
 ## Members
 - Xuan Bin

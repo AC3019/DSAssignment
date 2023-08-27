@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # compiling
-javac -cp ./src/ -d ./build **/*.java
+javac -cp ./src/ -d ./build $(find . -name '*.java')
 
 # running
 mainClass=control.Main
