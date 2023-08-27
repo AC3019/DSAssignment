@@ -142,7 +142,7 @@ public class Input {
                 int choice = Input.getInt(prompt);
 
                 if (choice >= newArr.length || choice < 0)
-                    throw new InputOutOfRangeException(0, newArr.length);
+                    throw new InputOutOfRangeException(0, newArr.length - 1);
                 
                 return choice;
             } catch (InputOutOfRangeException iiore) {
