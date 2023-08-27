@@ -36,7 +36,7 @@ public class TutorialGroupManagement {
     //function to add student in a tutGrp
     public void add(Student student){
         //display available tutGrp
-        int choice;//stall tutGrp selected
+        int choice = -1;//stall tutGrp selected
         //add student in a specific tutGrp
         studentList.insert(choice,student);
     }
