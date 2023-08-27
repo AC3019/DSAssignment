@@ -28,11 +28,25 @@ public interface ListInterface<T> {
      * @throws IndexOutOfBoundsException
      */
     public abstract ListInterface<T> insert(int index, T item) throws IndexOutOfBoundsException;
+    
+    /**
+     * Similar like a queue, this method removes the first element of the list
+     * @return element that is removed
+     */
+    public abstract T removeFront();
+
+    /**
+     * Similar like a stack, this method removes the last element inserted into the list
+     * If this arraylist were to be used like a stack, we recommend not using insert(index, item) else it will mess up the ordering
+     * @return element that is removed
+     */
+    public abstract T removeBack();
 
     /**
      * Removes the element at `index`, shifting every element on the right to the left
      * @param index The index of the element to remove
      * @throws IndexOutOfBoundsException
+     * @return element that is removed
      */
     public abstract T remove(int index) throws IndexOutOfBoundsException;
 

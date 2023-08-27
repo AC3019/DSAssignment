@@ -98,6 +98,16 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
         return this.numberOfEntries == 0;
     }
 
+    @Override
+    public T removeFront() {
+        return this.remove(0);
+    }
+
+    @Override
+    public T removeBack() {
+        return this.remove(this.getNumberOfEntries() - 1);
+    }
+
 
     @Override
     public T remove(int index) throws IndexOutOfBoundsException {
@@ -144,7 +154,6 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
         return this;
     }
 
-    // TODO: fix this
     @Override
     public <U> U[] toArray(Class<U> clazz) {
         // getNumberOfEntries because we don't want the additional nulls behind the array to be included
