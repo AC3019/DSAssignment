@@ -1,7 +1,5 @@
 package control;
 
-import java.util.Iterator;
-
 import adt.ArrayList;
 import adt.HashMap;
 import utility.Input;
