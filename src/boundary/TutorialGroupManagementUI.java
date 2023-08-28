@@ -4,10 +4,11 @@
  */
 package boundary; 
 import adt.ArrayList;
+import entity.Student;
 import entity.TutorialGroup;
 import utility.Input;
 import utility.TableBuilder;
-import entity.Student;
+
 /**
  *
  * @author Neoh Soon Chee
@@ -20,6 +21,7 @@ public class TutorialGroupManagementUI {
         System.out.println("    _|      _|_|_|_|  _|_|_|    _|    _|  _|  _|  _|      _|");
         System.out.println("    _|      _|    _|  _|    _|  _|    _|  _|      _|      _|");
         System.out.println("    _|      _|    _|  _|    _|    _|_|    _|      _|      _|");
+        System.out.println("");
     }
 
     public int mainMenu(){
@@ -30,26 +32,30 @@ public class TutorialGroupManagementUI {
             "Display all tutorial group",
             "Add a student to a tutorial group",
             "Remove a student from a tutorial group",
-            "Display all students in a tutorial group", 
+            "Change a student to another tutorial group",
+            "Find a student in a tutorial group",
+            "Display all students in a tutorial group",
+            "Filter tutorial group",
+            "Exit tutorial group management"
         }, (item) -> item);
         return choice;
     }
     
     public TutorialGroup createTutGrp(){
-        String tutGrpCode = Input.getString("Please enter the tutorial group code: ", false);
-        return new TutorialGroup(tutGrpCode);
+        String programmeCode = Input.getString("Please enter the programme code of the tutorial group: ", false);
+        String programmeName = Input.getString("Please enter the name of the programme: ",false);
+        String tutGrpCode = Input.getString("Please enter the tutorial group code: ", false); 
+        return new TutorialGroup(programmeCode, programmeName, tutGrpCode);
     }
     
+    //this is not required
     //display all tutGrp available in the arrayList
     public void displayTutGrp(ArrayList<TutorialGroup> tutGrp) {
-        //TutorialGroup[] tutGrp = grp.toArray(TutorialGroup.class);
-        //tutGrp.iterator(); //shud be can display all
         for(int i = 1; i <= tutGrp.getNumberOfEntries(); i++){
-            System.out.println(i + "  " + tutGrp.toString());
+            System.out.println(i + "  " + tutGrp.toArray(TutorialGroup.class).toString());
         }
     }
-
-
+    
     private int getTutGrpChoice(String prompt, ArrayList<TutorialGroup> tutGrp) {
         int choice = Input.getChoice(
             prompt,
@@ -87,38 +93,38 @@ public class TutorialGroupManagementUI {
     
     //ask where the user want to add the user to 
     //use after choiceOfTutGrp()
-    public int choiceOfExistGrp(){
-        System.out.print("Please enter the index number of tutorial group you want to insert: ");
-        int choice;
-        return choice;
+    public int choiceOfExistGrp(ArrayList<TutorialGroup> tutGrp){
+        return this.getTutGrpChoice(
+                "Please enter the index number of tutorial group you want to insert: ", tutGrp
+        );
     }
     
     //display all student in tutGrp
-    public void displayStudent(TutorialGroup tutGrp){
+    public void displayAllStudent(Student[] student){
+        for (int i = 1; i <= student.length; i++){
+            System.out.println(i + " " + student[i].getStudentID());
+        }
+
+        //TableBuilder tb = new TableBuilder();
+        //tb.addColumn("StudentID", student[i].getStudentID().toString());
         // for(int i = 1; i <= tutGrp.getStudent().getNumberOfEntries(); i++){
         //     System.out.println(i + "  " + tutGrp.getStudent().toArray(Student.class)[i].toString());
         // }
-        int choice = Input.getChoice("", new Student[] {
+
+        //int choice = Input.getChoice("", new Student[] {
             
-        }, (Student item) -> { return item.getStudentID() + item.getStudentName(); });
+        //}, (Student item) -> { return item.getStudentID() + item.getStudentName(); });
     }
     
     //ask which student the user want to delete
-    //use after choiceOfTutGrp()
-    public int choiceOfStudent(){
-        System.out.print("Please enter the index number of student you want to delete: ");
-        int choice;
-        return choice;
+    public void choiceOfStudent(){//should be int to return choice
+        //int choice = Input.getChoice("Please enter the index number of student you want to delete: ", choices, c);
+        //return choice;
     }
     
     //message to prompt error
     public void errorChoice(){
         System.out.println("The choice enter is not available.");
     }
-
-    public void listAllStudent(Student[] std) {
-
-    }
-
 
 }

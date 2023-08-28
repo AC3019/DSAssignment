@@ -21,8 +21,21 @@ public class TutorialGroupManagement {
     //main menu display for select function
     public void displayTutGrpManagement() {
         display.header();
-        display.mainMenu();
-        int choice;
+        int choice = 999;
+        do {
+        choice = display.mainMenu();  
+            switch(choice){
+                case 0:
+                    create();
+                    break;
+                case 1:
+                    delete();
+                    break;
+                case 2:
+                    //display.displayTutGrp(tutGrpList);
+                default:
+            }
+        } while(choice != 9);
     }
     
     //function to create a new tutGrp
@@ -49,8 +62,7 @@ public class TutorialGroupManagement {
         int tutGrp = 0;//declare variable to stall tutGrp
         switch (choice) {
             case 1: 
-                display.displayTutGrp(tutGrpList);//display all tutGrp available
-                tutGrp = display.choiceOfExistGrp();//stall the tutGrp selected
+                tutGrp = display.choiceOfExistGrp(tutGrpList);//stall the tutGrp selected
                 break;
             case 2: 
                 create();//create a new tutGrp
@@ -68,14 +80,14 @@ public class TutorialGroupManagement {
     //function to remove a student in a tutGrp
     public void remove(){
         display.header();
-        display.displayTutGrp(tutGrpList);
         //return and stall the tutGrp obj
-        TutorialGroup tutGrp = tutGrpList.get(display.choiceOfExistGrp());
+        TutorialGroup tutGrp = tutGrpList.get(display.choiceOfExistGrp(tutGrpList));
+        Student[] student = tutGrp.getStudent().toArray(Student.class);
         //display all the students in the tutGrp selected
         //tutGrp.getStudent().iterator();
-        display.displayStudent(tutGrp);
+        display.displayAllStudent(student);
         //remove the student based on selected
-        tutGrp.getStudent().remove(display.choiceOfStudent());
+        //tutGrp.getStudent().remove(display.choiceOfStudent());
     }
     
     //main method

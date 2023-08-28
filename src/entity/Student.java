@@ -23,15 +23,15 @@ public class Student {
         numberOfStudents++;
     }
     
-    private void setStudentID(String studentID){
+    public void setStudentID(String studentID){
         this.studentID = studentID;
     }
     
-    private void setStudentName(String studentName){
+    public void setStudentName(String studentName){
         this.studentName = studentName;
     }
     
-    private void setAge(int age){
+    public void setAge(int age){
         this.age = age;
     }
     
