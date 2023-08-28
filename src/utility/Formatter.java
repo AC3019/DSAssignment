@@ -1,6 +1,7 @@
 package utility;
 
 /**
+ * Provides utility function to format strings
  * @author xuanbin
  */
 public class Formatter {

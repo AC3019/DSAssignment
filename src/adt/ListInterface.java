@@ -5,7 +5,7 @@ import utility.Findable;
 import utility.Mappable;
 
 /**
- * @author hanyue1014
+ * @author xuanbin, Neoh Soon Chee, yong
  */
 public interface ListInterface<T> {
 

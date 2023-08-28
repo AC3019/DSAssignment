@@ -5,7 +5,9 @@ import adt.HashMap;
 /**
  * Every column should have the same number of elements to print, ideally not too long
  * Please use null to pad the column array until same size with every other column to not risk losing display of some data 
- * Box drawing ascii chars: https://en.wikipedia.org/wiki/Box-drawing_character
+ * @ref Box drawing ascii chars: https://en.wikipedia.org/wiki/Box-drawing_character
+ * 
+ * @author xuanbin
  */
 public class TableBuilder {
 

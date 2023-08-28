@@ -1,5 +1,9 @@
 package utility;
 
+/**
+ * Provides utility to perform stuffs with String
+ * @author xuanbin
+ */
 public class StringUtil {
     /**
      * Finds the longest string in a string array

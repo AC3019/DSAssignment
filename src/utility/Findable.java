@@ -1,5 +1,8 @@
 package utility;
 
+/**
+ * @author xuanbin
+ */
 @FunctionalInterface
 public interface Findable<T> {
     /**

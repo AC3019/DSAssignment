@@ -8,11 +8,12 @@ import utility.Filterable;
 import utility.Findable;
 import utility.Mappable;
 
-@SuppressWarnings("unchecked") // casting Object[] -> T[] will be complained by compiler as it can't guarantee type safety, surpress it abo noisy
 /**
  * There will be no nulls in between elements at all times, therefore inserting items at very far to the end of the array is not possible
  * Optimal for memory (no space wasted to store null in between the elements)
+ * @author xuanbin
  */
+@SuppressWarnings("unchecked") // casting Object[] -> T[] will be complained by compiler as it can't guarantee type safety, surpress it abo noisy
 public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
 
     private T[] arr;

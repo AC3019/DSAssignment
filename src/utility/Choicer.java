@@ -3,6 +3,7 @@ package utility;
 @FunctionalInterface
 /**
  * Used by Input.getChoice() to easily convert an object to become a Choicer, to let user select among the choices
+ * @author xuanbin
  */
 public interface Choicer<T> {
     /**

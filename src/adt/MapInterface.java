@@ -1,5 +1,8 @@
 package adt;
 
+/**
+ * @author xuanbin, Neoh Soon Chee, yong
+ */
 public interface MapInterface<K extends Comparable<K>, V> {
 
     /**

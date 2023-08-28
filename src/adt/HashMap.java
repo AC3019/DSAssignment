@@ -6,6 +6,9 @@ import java.util.Iterator;
 import utility.NoNoArgConstructorException;
 import utility.NotSameInstanceException;
 
+/**
+ * @author xuanbin
+ */
 @SuppressWarnings("unchecked")
 public class HashMap<K extends Comparable<K>, V> 
     implements MapInterface<K, V>, Iterable<HashMap<K, V>.Pair> {
