@@ -14,6 +14,7 @@ import entity.Tutor;
 import java.util.Scanner;
 import utility.Input;
 public class TutorManagementUI {
+    String [] amendDetails=new String[100];
     public int printMenu() {
         System.out.println("1. Add a new tutor");
         System.out.println("2. Remove a tutor");
@@ -91,6 +92,6 @@ public class TutorManagementUI {
         String newName = scan.nextLine();
         System.out.print("New subject: ");
         String newSubject = scan.nextLine();
-        
+        return amendDetails[];
     }
 }
