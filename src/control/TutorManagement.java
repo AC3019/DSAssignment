@@ -54,4 +54,15 @@ public class TutorManagement {
          return tutors.get(id);
 
     }
+    public void amendTutorDetails(){
+        Tutor tutor = tutors.get(id);
+        TutorManagementUI.amendTutorDetailsData();
+        if (tutor != null) {
+            tutor.setName(newName);
+            tutor.setSubject(newSubject);
+            System.out.println("Tutor details amended successfully.");
+        } else {
+            System.out.println("Tutor not found.");
+        }
+    }
 }
