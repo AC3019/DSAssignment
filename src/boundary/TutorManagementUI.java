@@ -12,6 +12,7 @@ package boundary;
 import utility.Input;
 import entity.Tutor;
 import java.util.Scanner;
+import utility.Input;
 public class TutorManagementUI {
     public int printMenu() {
         System.out.println("1. Add a new tutor");
@@ -66,7 +67,30 @@ public class TutorManagementUI {
             }
              } while (invalidInput);
 
-        Tutor tutorObj = new Tutor(getId(), name, subject, gender, age, phoneNum);
+        Tutor tutorObj = new Tutor(id, name, subject, gender, age, phoneNum);
         return tutorObj;
+    }
+    public Integer removeTutorData(){
+         Scanner scan = new Scanner(System.in);
+        Integer id = scan.nextInt();
+        scan.nextLine();
+       return id;
+    }
+    public int searchTutorId(){
+        Scanner scan = new Scanner(System.in);
+        int id = scan.nextInt();
+        scan.nextLine();
+        return id;
+    }
+    public String[] amendTutorDetailsData(){
+        Scanner scan = new Scanner(System.in);
+        System.out.print("Tutor ID: ");
+        int id = scan.nextInt();
+        scan.nextLine();
+        System.out.print("New name: ");
+        String newName = scan.nextLine();
+        System.out.print("New subject: ");
+        String newSubject = scan.nextLine();
+        
     }
 }
