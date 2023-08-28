@@ -25,6 +25,7 @@ public class HashMap<K extends Comparable<K>, V>
     public HashMap(int bucketNum) {
         this.bucketNum = bucketNum;
         this.buckets = (BinarySearchTree[]) Array.newInstance(BinarySearchTree.class, this.bucketNum);
+        // init all buckets
         for (int i = 0; i < this.bucketNum; i++) {
             this.buckets[i] = new BinarySearchTree<Pair>();
         }
@@ -62,9 +63,8 @@ public class HashMap<K extends Comparable<K>, V>
 
     @Override
     public V remove(K key) {
-        if (!this.keys.contains(key)) {
+        if (!this.contains(key))
             return null;
-        }
         
         int position = this.getHashModulo(key);
         return this.buckets[position].delete(new Pair(key, null)).getValue();
@@ -73,6 +73,20 @@ public class HashMap<K extends Comparable<K>, V>
     @Override
     public K[] getKeys(Class<K> clazz) {
         return this.keys.toArray(clazz);
+    }
+
+    @Override
+    public boolean contains(K key) {
+        return this.keys.contains(key);
+    }
+
+    @Override
+    public int size() {
+        int size = 0;
+        for (BinarySearchTree bucket: this.buckets) {
+            size += bucket.getNumberOfElements();
+        }
+        return size;
     }
 
     // we store key value pairs in form of Nodes

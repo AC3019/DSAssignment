@@ -29,6 +29,25 @@ public interface MapInterface<K extends Comparable<K>, V> {
      * @return `value` the associated value of the key
      */
     public abstract V remove(K key);
+
+    /**
+     * Returns all the keys in the Map, converted into primitive arrays of clazz
+     * @param clazz
+     * @return
+     */
     public abstract K[] getKeys(Class<K> clazz);
+
+    /**
+     * Tests whether `key` is in the map
+     * @param key
+     * @return
+     */
+    public abstract boolean contains(K key);
+
+    /**
+     * Returns the size of the map (number of key value pairs)
+     * @return
+     */
+    public abstract int size();
     // TODO: add more functions (see kua got or not)
 }
