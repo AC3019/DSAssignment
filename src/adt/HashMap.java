@@ -55,8 +55,9 @@ public class HashMap<K extends Comparable<K>, V>
     public void put(K key, V value) {
         int position = getHashModulo(key);
 
-        // if the elements in the bucket is the same as the bucket number, it is probably too crowded, need expand the bucket numbers
-        if (this.buckets[position].getNumberOfElements() >= this.bucketNum) {
+        // if the elements in the bucket is the same as the bucket number * 2 (since we use binary search tree to search), it is probably too crowded, need expand the bucket numbers
+        // although expanding takes time it will pay off int the future during search time
+        if (this.buckets[position].getNumberOfElements() >= this.bucketNum * 2) {
             this.expand();
             position = getHashModulo(key); // recalculate the new position
         }
