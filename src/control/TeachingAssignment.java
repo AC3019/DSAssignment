@@ -90,15 +90,26 @@ public class TeachingAssignment {
         // tb.printTable(true);
 
         // test input choice
-        Input.getChoice(
-            "Please enter your choice: ", 
-            new String[] {
-                "Abc",
-                "Def",
-                "GHIJKLMNOP"
-            },
-            (item) -> item // simply return the item since it is string alrd
-        );
+        // Input.getChoice(
+        //     "Please enter your choice: ", 
+        //     new String[] {
+        //         "Abc",
+        //         "Def",
+        //         "GHIJKLMNOP"
+        //     },
+        //     (item) -> item // simply return the item since it is string alrd
+        // );
 
+        // test arraylist map
+        // ArrayList<Integer> ar = new ArrayList<>() {{
+        //     insert(123);
+        //     insert(456);
+        //     insert(789);
+        // }};
+
+        // ar.forEach(System.out::println);
+
+        // ArrayList<String> ars = ar.map((item) -> String.valueOf(item) + " FaQ");
+        // ars.forEach(System.out::println);
     }
 }

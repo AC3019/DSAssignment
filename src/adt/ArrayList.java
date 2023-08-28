@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import utility.Filterable;
 import utility.Findable;
+import utility.Mappable;
 
 @SuppressWarnings("unchecked") // casting Object[] -> T[] will be complained by compiler as it can't guarantee type safety, surpress it abo noisy
 /**
@@ -174,6 +175,17 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
         }
 
         return resList;
+    }
+
+    @Override
+    public <U> ArrayList<U> map(Mappable<T, U> m) {
+        ArrayList<U> res = new ArrayList<>();
+
+        for (T item: this) {
+            res.insert(m.map(item));
+        }
+
+        return res;
     }
 
     @Override

@@ -2,6 +2,7 @@ package adt;
 
 import utility.Filterable;
 import utility.Findable;
+import utility.Mappable;
 
 /**
  * @author hanyue1014
@@ -75,6 +76,8 @@ public interface ListInterface<T> {
      * @return T[] primitive java array containing items that passes the filter
      */
     public abstract ListInterface<T> filter(Filterable<T> f);
+
+    public abstract <U> ListInterface<U> map(Mappable<T, U> m);
 
     /**
      * Search for the index of the certain objectm using the `.equals()` method on the object
