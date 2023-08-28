@@ -158,7 +158,9 @@ public class HashMap<K extends Comparable<K>, V>
         @Override
         public int compareTo(HashMap<K, V>.Pair o) throws NotSameInstanceException {
             if (!(o instanceof HashMap<K, V>.Pair))
-                throw new NotSameInstanceException("Fk u");
+                throw new NotSameInstanceException(
+                    "The instance of o (" + o.getClass().getSimpleName() + ") is not of Pair"
+                );
             return this.key.compareTo(o.getKey());
         }
 
