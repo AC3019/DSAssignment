@@ -24,20 +24,19 @@ public class TutorialGroupManagementUI {
 
     public int mainMenu(){
         System.out.println("Welcome to TARUMT system");
-        System.out.println("1. Create new tutorial group");
-        System.out.println("2. Delete tutorial group");
-        System.out.println("3. Display all tutorial group");
-        System.out.println("4. Add a student to a tutorial group");
-        System.out.println("5. Remove a student from a tutorial group");
-        System.out.println("8. Display all students in a tutorial group");
-        System.out.println("Enter your choice: ");
-        int choice;
+        int choice = Input.getChoice("Enter your choice: ", new String[] {
+            "Create new tutorial group",
+            "Delete tutorial group",
+            "Display all tutorial group",
+            "Add a student to a tutorial group",
+            "Remove a student from a tutorial group",
+            "Display all students in a tutorial group", 
+        }, (item) -> item);
         return choice;
     }
     
     public TutorialGroup createTutGrp(){
-        System.out.println("Please enter the tutorial group code:");
-        String tutGrpCode;
+        String tutGrpCode = Input.getString("Please enter the tutorial group code: ", false);
         return new TutorialGroup(tutGrpCode);
     }
     
@@ -79,9 +78,11 @@ public class TutorialGroupManagementUI {
     //use after student obj create
     public int choiceOfTutGrp(){
         System.out.println("Where do you want to add the student to:");
-        System.out.println("1. Create new tutorial group");
-        System.out.println("2. Existing tutorial group");
-        return Input.getChoice();
+        int choice = Input.getChoice("Enter your choice: ", new String[]{
+            "Create new tutorial group",
+            "Existing tutorial group",
+        }, (item) -> item);
+        return choice;
     }
     
     //ask where the user want to add the user to 
@@ -99,7 +100,7 @@ public class TutorialGroupManagementUI {
         // }
         int choice = Input.getChoice("", new Student[] {
             
-        }, (item) -> { return item.getStudentID() + item.getStudentName(); });
+        }, (Student item) -> { return item.getStudentID() + item.getStudentName(); });
     }
     
     //ask which student the user want to delete
