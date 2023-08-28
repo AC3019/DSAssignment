@@ -20,6 +20,25 @@ public class HashMap<K extends Comparable<K>, V>
         return key.hashCode() % this.bucketNum;
     }
 
+    // expands the hashmap by 2 * bucketNum, rehash everything at the same time
+    private void expand() {
+        BinarySearchTree<Pair>[] temp = this.buckets;
+
+        this.bucketNum *= 2;
+        this.buckets = (BinarySearchTree[]) Array.newInstance(BinarySearchTree.class, this.bucketNum);
+        
+        // rehash and reinsert
+        for (BinarySearchTree<Pair> b: temp) {
+            if (b.getNumberOfElements() == 0)
+                continue;
+            for (Pair p: b) {
+                // recalculate the hash and put it in the new buckets
+                int position = this.getHashModulo(p.getKey());
+                this.buckets[position].insert(p);
+            }
+        }
+    }
+
     public HashMap() { this(DEFAULT_BUCKET_NUM); }
 
     public HashMap(int bucketNum) {
@@ -36,7 +55,11 @@ public class HashMap<K extends Comparable<K>, V>
     public void put(K key, V value) {
         int position = getHashModulo(key);
 
-        // TODO: implement rehash for better performance
+        // if the elements in the bucket is the same as the bucket number, it is probably too crowded, need expand the bucket numbers
+        if (this.buckets[position].getNumberOfElements() >= this.bucketNum) {
+            this.expand();
+            position = getHashModulo(key); // recalculate the new position
+        }
         this.buckets[position].insert(new Pair(key, value));
         this.keys.insert(key);
     }
@@ -83,7 +106,8 @@ public class HashMap<K extends Comparable<K>, V>
     @Override
     public int size() {
         int size = 0;
-        for (BinarySearchTree bucket: this.buckets) {
+        // the inner node type is not needed
+        for (BinarySearchTree<?> bucket: this.buckets) {
             size += bucket.getNumberOfElements();
         }
         return size;

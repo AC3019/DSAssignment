@@ -61,6 +61,7 @@ public class TeachingAssignment {
         // test HashMap
         HashMap<String, Integer> hs = new HashMap<>() {{
             put("abc", 123);
+            put("ABC", 123);
             put("def", 456);
             put("ghi", 789);
         }};
@@ -109,7 +110,7 @@ public class TeachingAssignment {
 
         // ar.forEach(System.out::println);
 
-        // ArrayList<String> ars = ar.map((item) -> String.valueOf(item) + " FaQ");
+        // ArrayList<String> ars = ar.map((Integer item) -> String.valueOf(item) + " FaQ");
         // ars.forEach(System.out::println);
     }
 }
