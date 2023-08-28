@@ -14,4 +14,14 @@ public class StringUtil {
 
         return currLongest;
     }
+
+    /**
+     * Fills the string with s eg. `fillString("-", 3)` -> "---"
+     * @param s
+     * @param len
+     * @return
+     */
+    public static String fillString(String s, int len) {
+        return String.format("%" + len + "s", " ").replace(" ", s);
+    }
 }
