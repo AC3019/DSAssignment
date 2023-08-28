@@ -14,15 +14,16 @@ import adt.MapInterface;
 import boundary.TutorManagementUI;
 public class TutorManagement {
     MapInterface<Integer, Tutor> tutors = new HashMap<>();
+    static int id=1;
     Tutor tutorObj=new Tutor();
     public static void main(String[] args) {
         TutorManagement tm = new TutorManagement();
         
     }
-    public static void addNewTutor(MapInterface<Integer,Tutor>tutors){
+    public  void addNewTutor(MapInterface<Integer,Tutor>tutors){
          if (tutors.size() > 0) {
             boolean containsDuplicate = false;
-            for (MapInterface.Entry<Integer, Tutor> tutor : tutors.entrySet()) {
+            for (MapInterface.ENTRY<Integer, Tutor> tutor : tutors.entrySet()) {
                 if (tutor.getValue().getName().equals(tutorObj.getName())) {// Duplicate name
                     containsDuplicate = true;
                     break;
@@ -41,5 +42,16 @@ public class TutorManagement {
             id++;
         }
     }
-    
+    public void removeTutor(){
+        if (tutors.containsKey(id)) {
+            tutors.remove(id);
+        } else {
+            System.out.println("Id invalid");
+        }
+
+    }
+    public Tutor searchTutor(){
+         return tutors.get(id);
+
+    }
 }
