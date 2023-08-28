@@ -27,7 +27,7 @@ public class TableBuilder {
         }
     }
 
-    public TableBuilder addColumn(String colName, String[] colData) {
+    public TableBuilder addColumn(String colName, Object[] colData) {
         this.table.put(colName, colData);
 
         return this;

@@ -35,15 +35,15 @@ public class Student {
         this.age = age;
     }
     
-    private String getStudentID(){
+    public String getStudentID(){
         return studentID;
     }
     
-    private String getStudentName(){
+    public String getStudentName(){
         return studentName;
     }
     
-    private int getStudentAge(){
+    public int getStudentAge(){
         return age;
     }
 }

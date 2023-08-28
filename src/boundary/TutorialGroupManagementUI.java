@@ -5,6 +5,8 @@
 package boundary; 
 import adt.ArrayList;
 import entity.TutorialGroup;
+import utility.Input;
+import utility.TableBuilder;
 import entity.Student;
 /**
  *
@@ -86,9 +88,12 @@ public class TutorialGroupManagementUI {
     
     //display all student in tutGrp
     public void displayStudent(TutorialGroup tutGrp){
-        for(int i = 1; i <= tutGrp.getStudent().getNumberOfEntries(); i++){
-            System.out.println(i + "  " + tutGrp.getStudent().toString());
-        }
+        // for(int i = 1; i <= tutGrp.getStudent().getNumberOfEntries(); i++){
+        //     System.out.println(i + "  " + tutGrp.getStudent().toArray(Student.class)[i].toString());
+        // }
+        int choice = Input.getChoice("", new Student[] {
+            
+        }, (item) -> {return item.getStudentID() + item.getStudentName()});
     }
     
     //ask which student the user want to delete
