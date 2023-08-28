@@ -35,10 +35,8 @@ public class TutorialGroupManagement {
     //function to delete a tutGrp
     public void delete(){
         display.header();
-        //display all tutGrp
-        display.displayTutGrp(tutGrpList);
         //remove tutGrp selected
-        tutGrpList.remove(display.deleteTutGrp());
+        tutGrpList.remove(display.deleteTutGrp(tutGrpList));
     }
     
     //function to add student in a tutGrp
@@ -50,16 +48,16 @@ public class TutorialGroupManagement {
         int choice = display.choiceOfTutGrp();
         int tutGrp = 0;//declare variable to stall tutGrp
         switch (choice) {
-            case 1 -> {
+            case 1: 
                 display.displayTutGrp(tutGrpList);//display all tutGrp available
                 tutGrp = display.choiceOfExistGrp();//stall the tutGrp selected
-            }
-            case 2 -> {
+                break;
+            case 2: 
                 create();//create a new tutGrp
                 //since new tutGrp will be added at last so just get numOfEntries
                 tutGrp = tutGrpList.getNumberOfEntries() - 1;//stall the tutGrp
-            }
-            default -> display.errorChoice();//prompt error
+                break;
+            default: display.errorChoice();//prompt error
         }
         //stall tutGrp obj selected
         TutorialGroup selectedTutGrp = tutGrpList.get(tutGrp);

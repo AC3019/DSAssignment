@@ -42,29 +42,36 @@ public class TutorialGroupManagementUI {
     }
     
     //display all tutGrp available in the arrayList
-    public void displayTutGrp(ArrayList<TutorialGroup> tutGrp){
-        //TutorialGroup[] tutGrp = grp.toArray(ArrayList<TutorialGroup>);
+    public void displayTutGrp(ArrayList<TutorialGroup> tutGrp) {
+        //TutorialGroup[] tutGrp = grp.toArray(TutorialGroup.class);
         //tutGrp.iterator(); //shud be can display all
         for(int i = 1; i <= tutGrp.getNumberOfEntries(); i++){
             System.out.println(i + "  " + tutGrp.toString());
         }
     }
+
+
+    private int getTutGrpChoice(String prompt, ArrayList<TutorialGroup> tutGrp) {
+        int choice = Input.getChoice(
+            prompt,
+            tutGrp.toArray(TutorialGroup.class),
+            (item) -> item.getTutGrpCode()
+        );
+        return choice;
+    }
     
     //receive tutGrp arrayList
-    public int deleteTutGrp(){
-        System.out.println("Enter the index number of tutorial group that you want to delete: ");
-        int choice;
-        return choice;
+    public int deleteTutGrp(ArrayList<TutorialGroup> tutGrp) {
+        return this.getTutGrpChoice(
+            "Enter the index number of tutorial group that you want to delete: ", tutGrp
+        );
     }
     
     //create a new student obj
     public Student addStudent(){
-        System.out.print("Please enter the student ID of the student(22PMR05):");
-        String studentID;
-        System.out.print("Please enter the name of the student: ");
-        String name;
-        System.out.print("Please enter the age of the student: ");
-        int age;
+        String studentID = Input.getString("Please enter the student ID of the student(22PMR05): ", false);
+        String name = Input.getString("Please enter the name of the student: ", false);
+        int age = Input.getInt("Please enter the age of the student: ");
         return new Student(studentID,name,age);
     }
     
@@ -74,8 +81,7 @@ public class TutorialGroupManagementUI {
         System.out.println("Where do you want to add the student to:");
         System.out.println("1. Create new tutorial group");
         System.out.println("2. Existing tutorial group");
-        int choice;
-        return choice;
+        return Input.getChoice();
     }
     
     //ask where the user want to add the user to 
@@ -93,7 +99,7 @@ public class TutorialGroupManagementUI {
         // }
         int choice = Input.getChoice("", new Student[] {
             
-        }, (item) -> {return item.getStudentID() + item.getStudentName()});
+        }, (item) -> { return item.getStudentID() + item.getStudentName(); });
     }
     
     //ask which student the user want to delete
@@ -107,6 +113,10 @@ public class TutorialGroupManagementUI {
     //message to prompt error
     public void errorChoice(){
         System.out.println("The choice enter is not available.");
+    }
+
+    public void listAllStudent(Student[] std) {
+
     }
 
 
