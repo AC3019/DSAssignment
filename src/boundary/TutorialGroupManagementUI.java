@@ -68,7 +68,7 @@ public class TutorialGroupManagementUI {
         int choice = Input.getChoice(
             prompt,
             tutGrp.toArray(TutorialGroup.class),
-            (item) -> item.getProgrammeCode() + item.getProgrammeName() + item.getTutGrpCode()
+            (item) -> item.getProgrammeCode() + " " + item.getProgrammeName() + " " + item.getTutGrpCode()
         );
         return choice;
     }
@@ -108,7 +108,7 @@ public class TutorialGroupManagementUI {
         int choice = Input.getChoice(
                 "Please enter the index number of the student you want to remove: ", 
                 student, 
-                (Student item) -> item.getStudentID()+ item.getStudentName()
+                (Student item) -> item.getStudentID() + item.getStudentName()
         );
         return choice;
         //TableBuilder tb = new TableBuilder();
