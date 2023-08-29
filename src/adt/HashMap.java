@@ -20,7 +20,8 @@ public class HashMap<K extends Comparable<K>, V>
 
     // util to calculate hash of the key specific to hashmap size
     private int getHashModulo(K key) {
-        return key.hashCode() % this.bucketNum;
+        // hashCodes can return negative values
+        return Math.abs(key.hashCode()) % this.bucketNum;
     }
 
     // expands the hashmap by 2 * bucketNum, rehash everything at the same time

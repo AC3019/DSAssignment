@@ -126,7 +126,7 @@ public class TableBuilder {
                 // (
                 //     "\u2500\u253C\u2500" + Formatter.padRight(" ", spaceForColumn[i])
                 // ).replace(" ", "\u2500")
-                "-|-" + Formatter.padRight("-", spaceForColumn[i])
+                "-|-" + StringUtil.fillString("-", spaceForColumn[i])
             );
         }
         // System.out.print("\u2500\u2524\n");

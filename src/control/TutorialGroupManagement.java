@@ -15,8 +15,10 @@ public class TutorialGroupManagement {
 
     //variables
     private ArrayList<TutorialGroup> tutGrpList = new ArrayList<>();
-    private ArrayList<Student> studentList = new ArrayList<>();//if wan will be student management
-    private TutorialGroupManagementUI display = new TutorialGroupManagementUI();
+    private ArrayList<Student> studentList = new ArrayList<>(new Student[] {
+        new Student("12345", "ABCD", 12),
+    });//if wan will be student management
+    private static TutorialGroupManagementUI display = new TutorialGroupManagementUI();
     
     //main menu display for select function
     public void displayTutGrpManagement() {
@@ -93,6 +95,7 @@ public class TutorialGroupManagement {
     //main method
     public static void main(String[] args) {
         TutorialGroupManagement tutGrpManagement = new TutorialGroupManagement();
-        tutGrpManagement.displayTutGrpManagement();
+        // tutGrpManagement.displayTutGrpManagement();
+        display.displayAllStudent(tutGrpManagement.studentList.toArray(Student.class));
     }
 }

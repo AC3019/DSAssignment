@@ -65,6 +65,18 @@ public class TutorialGroupManagementUI {
         );
         return choice;
     }
+
+    //print all student
+    private void printAllStudent(ArrayList<Student> stud) {
+        TableBuilder tb = new TableBuilder();
+        String[] ids = stud.map((Student s) -> s.getStudentID()).toArray(String.class);
+        tb.addColumn("Student ID", ids);
+        String[] names = stud.map((Student s) -> s.getStudentName()).toArray(String.class);
+        tb.addColumn("Student Name", names);
+        Integer[] ages = stud.map((Student s) -> s.getStudentAge()).toArray(Integer.class);
+        tb.addColumn("Student Age", ages);
+        tb.printTable(true);
+    }
     
     //receive tutGrp arrayList
     public int deleteTutGrp(ArrayList<TutorialGroup> tutGrp) {
@@ -102,9 +114,8 @@ public class TutorialGroupManagementUI {
     
     //display all student in tutGrp
     public void displayAllStudent(Student[] student){
-        for (int i = 1; i <= student.length; i++){
-            System.out.println(i + " " + student[i].getStudentID());
-        }
+        printAllStudent(new ArrayList<>(student));
+        Input.getInt("ashjdga", 0, student.getNumberOfEntries());
 
         //TableBuilder tb = new TableBuilder();
         //tb.addColumn("StudentID", student[i].getStudentID().toString());
