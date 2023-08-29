@@ -14,7 +14,6 @@ import entity.Tutor;
 import java.util.Scanner;
 import utility.Input;
 public class TutorManagementUI {
-    String [] amendDetails=new String[100];
     public int printMenu() {
         // System.out.println("1. Add a new tutor");
         // System.out.println("2. Remove a tutor");
@@ -35,9 +34,11 @@ public class TutorManagementUI {
         );
          
     }
-    public Tutor tutorInput(){
+        public Tutor tutorInput(){
         Scanner scan = new Scanner(System.in);
         boolean invalidInput = false;
+        Tutor tutor;
+        int id=tutor.getId();
         String name = "";
         String subject = "";
         char gender;
@@ -83,7 +84,7 @@ public class TutorManagementUI {
         scan.nextLine();
         return id;
     }
-    public String[] amendTutorDetailsData(){
+    public Tutor amendTutorDetailsData(){
         Scanner scan = new Scanner(System.in);
         System.out.print("Tutor ID: ");
         int id = scan.nextInt();
@@ -92,6 +93,7 @@ public class TutorManagementUI {
         String newName = scan.nextLine();
         System.out.print("New subject: ");
         String newSubject = scan.nextLine();
-        return amendDetails[];
+        Tutor tu=new Tutor(id,newName,newSubject);
+        return tu ;
     }
 }

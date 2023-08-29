@@ -32,7 +32,11 @@ public class Tutor implements Comparable<Tutor> {
         this.phoneNum = phoneNum;
 
     }
-
+    public Tutor (int id,String name, String subject){
+        this.id=id;
+        this.name=name;
+        this.subject=subject;
+    }
     public String getName() {
         return name;
 

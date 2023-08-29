@@ -49,12 +49,13 @@ public class TutorManagement {
     public Tutor searchTutor(){
          return tutors.get(tutorCount);
 
-    }TutorMan
+    }
     public void amendTutorDetails(){
+        Tutor t=tmu.amendTutorDetailsData();
+       
         Tutor tutor = tutors.get(tutorCount);
-        TutorManagementUI.amendTutorDetailsData();
         if (tutor != null) {
-            tutor.setName(newName);
+            tutor.setName(t.newName);
             tutor.setSubject(newSubject);
             System.out.println("Tutor details amended successfully.");
         } else {
