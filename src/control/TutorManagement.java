@@ -13,49 +13,45 @@ import adt.HashMap;
 import adt.MapInterface;
 import boundary.TutorManagementUI;
 public class TutorManagement {
-    MapInterface<Integer, Tutor> tutors = new HashMap<>();
-    static int id=1;
-    Tutor tutorObj=new Tutor();
+    HashMap<Integer, Tutor> tutors = new HashMap<>();
+    TutorManagementUI tmu = new TutorManagementUI();
+    static int tutorCount=1;
+    
     public static void main(String[] args) {
         TutorManagement tm = new TutorManagement();
         
     }
-    public  void addNewTutor(MapInterface<Integer,Tutor>tutors){
+    public  void addNewTutor(){
+        Tutor tutorObj = tmu.tutorInput();
          if (tutors.size() > 0) {
-            boolean containsDuplicate = false;
-            for (MapInterface.ENTRY<Integer, Tutor> tutor : tutors.entrySet()) {
-                if (tutor.getValue().getName().equals(tutorObj.getName())) {// Duplicate name
-                    containsDuplicate = true;
-                    break;
-                }
-            }
+            boolean containsDuplicate = tutors.contains(tutorCount);
 
             if (containsDuplicate) {
                 System.out.println("This tutor already exists in the list.");
             } else {
-                tutors.put(id, tutorObj);
-                id++;
+                tutors.put(tutorCount, tutorObj);
+                tutorCount++;
             }
         } else {
             // Will only come here for first tutor addition
-            tutors.put(id, tutorObj);
-            id++;
+            tutors.put(tutorCount, tutorObj);
+            tutorCount++;
         }
     }
     public void removeTutor(){
-        if (tutors.containsKey(id)) {
-            tutors.remove(id);
+        if (tutors.containsKey(tutorCount)) {
+            tutors.remove(tutorCount);
         } else {
             System.out.println("Id invalid");
         }
 
     }
     public Tutor searchTutor(){
-         return tutors.get(id);
+         return tutors.get(tutorCount);
 
-    }
+    }TutorMan
     public void amendTutorDetails(){
-        Tutor tutor = tutors.get(id);
+        Tutor tutor = tutors.get(tutorCount);
         TutorManagementUI.amendTutorDetailsData();
         if (tutor != null) {
             tutor.setName(newName);
@@ -65,4 +61,5 @@ public class TutorManagement {
             System.out.println("Tutor not found.");
         }
     }
+    public void find
 }
