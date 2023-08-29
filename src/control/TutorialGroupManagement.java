@@ -74,14 +74,14 @@ public class TutorialGroupManagement {
         Student student = display.addStudent();//stall the student obj created
         //display where to stall the student 
         int choice = display.choiceOfTutGrp();
-        int tutGrp = 0;//declare variable to stall tutGrp
+        int tutGrp = 999;//declare variable to stall tutGrp
         switch (choice) {
             //insert in exist tutGrp
-            case 1: 
+            case 0: 
                 tutGrp = display.choiceOfExistGrp(tutGrpList);//stall the tutGrp selected
                 break;
             //insert in new tutGrp
-            case 2: 
+            case 1: 
                 createTutGrp();//create a new tutGrp
                 //since new tutGrp will be added at last so just get numOfEntries
                 tutGrp = tutGrpList.getNumberOfEntries() - 1;//stall the tutGrp
@@ -91,7 +91,8 @@ public class TutorialGroupManagement {
         //stall tutGrp obj selected
         TutorialGroup selectedTutGrp = tutGrpList.get(tutGrp);
         //add student to tutGrp obj selected
-        selectedTutGrp.getStudent().insert(student);
+        selectedTutGrp.getStudent().insert(student);//ERROR occur
+        //Cannot invoke "adt.ArrayList.insert(Object)" because the return value of "entity.TutorialGroup.getStudent()" is null
     }
     
     //function to remove a student in a tutGrp

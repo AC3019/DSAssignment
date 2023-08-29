@@ -86,8 +86,8 @@ public class TutorialGroupManagementUI {
     public int choiceOfTutGrp(){
         System.out.println("Where do you want to add the student to:");
         int choice = Input.getChoice("Enter your choice: ", new String[]{
-            "Create new tutorial group",
             "Existing tutorial group",
+            "Create new tutorial group"
         }, (item) -> item);
         return choice;
     }
