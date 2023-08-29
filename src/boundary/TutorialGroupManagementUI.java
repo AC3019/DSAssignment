@@ -38,6 +38,7 @@ public class TutorialGroupManagementUI {
             "Filter tutorial group",
             "Exit tutorial group management"
         }, (item) -> item);
+        Input.cleanBuffer();
         return choice;
     }
     

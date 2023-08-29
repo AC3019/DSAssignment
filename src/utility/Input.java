@@ -13,7 +13,17 @@ public class Input {
      * Reinitialises scanner
      */
     public static void reinit() {
+        s.close();
         s = new Scanner(System.in);
+    }
+
+    /**
+     * Consumes all remaining tokens
+     * @param prompt
+     * @return
+     */
+    public static void cleanBuffer() {
+        s.nextLine();
     }
 
     /**
