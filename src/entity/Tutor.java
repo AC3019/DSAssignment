@@ -8,7 +8,7 @@ package entity;
  *
  * @author yong
  */
-public class Tutor {
+public class Tutor implements Comparable<Tutor> {
     private String name;
     private String subject;
     private int id = 0;
@@ -88,6 +88,33 @@ public class Tutor {
         return String.format(
                 "Tutor's id: %d\nTutor's name:%s\nTutor's Subject:%s\nTutor's gender: %s\nTutor's age:%d\nTutor's phone num:%s\n",
                 id, name, subject, gender, age, phoneNum);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + id;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof Tutor))
+            return false;
+        Tutor other = (Tutor) obj;
+        if (id != other.id)
+            return false;
+        return true;
+    }
+
+    @Override
+    public int compareTo(Tutor o) {
+        return ((Integer) this.id).compareTo((Integer) o.getId());
     }
 
 }

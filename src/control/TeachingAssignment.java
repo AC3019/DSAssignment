@@ -2,13 +2,23 @@ package control;
 
 import adt.ArrayList;
 import adt.HashMap;
+import entity.Course;
+import entity.Tutor;
+import entity.TutorialGroup;
 import utility.Input;
-import utility.TableBuilder;
 
 /**
  * @author hanyue1014
  */
 public class TeachingAssignment {
+
+    private HashMap<Course, ArrayList<Tutor>> courseTutorMap;
+    private HashMap<Tutor, ArrayList<TutorialGroup>> tutorTutorialGrouMap;
+
+    public TeachingAssignment() {
+        this.courseTutorMap = new HashMap<>();
+        
+    }
     public static void main(String[] args) {
         // ArrayList<Integer> a = new ArrayList<>();
 
@@ -89,15 +99,15 @@ public class TeachingAssignment {
         // tb.printTable(true);
 
         // test input choice
-        Input.getChoice(
-            "Please enter your choice: ", 
-            new String[] {
-                "Abc",
-                "Def",
-                "GHIJKLMNOP"
-            },
-            (item) -> item // simply return the item since it is string alrd
-        );
+        // Input.getChoice(
+        //     "Please enter your choice: ", 
+        //     new String[] {
+        //         "Abc",
+        //         "Def",
+        //         "GHIJKLMNOP"
+        //     },
+        //     (item) -> item // simply return the item since it is string alrd
+        // );
 
         // test arraylist map
         // ArrayList<Integer> ar = new ArrayList<>() {{
