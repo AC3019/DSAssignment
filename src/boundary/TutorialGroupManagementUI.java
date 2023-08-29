@@ -21,7 +21,7 @@ public class TutorialGroupManagementUI {
         System.out.println("    _|      _|_|_|_|  _|_|_|    _|    _|  _|  _|  _|      _|");
         System.out.println("    _|      _|    _|  _|    _|  _|    _|  _|      _|      _|");
         System.out.println("    _|      _|    _|  _|    _|    _|_|    _|      _|      _|");
-        System.out.println("");
+        System.out.println();
     }
 
     public int mainMenu(){
@@ -57,32 +57,20 @@ public class TutorialGroupManagementUI {
         }
     }
     
-    private int getTutGrpChoice(String prompt, ArrayList<TutorialGroup> tutGrp) {
-        int choice = Input.getChoice(
-            prompt,
-            tutGrp.toArray(TutorialGroup.class),
-            (item) -> item.getTutGrpCode()
-        );
-        return choice;
-    }
-
-    //print all student
-    private void printAllStudent(ArrayList<Student> stud) {
-        TableBuilder tb = new TableBuilder();
-        String[] ids = stud.map((Student s) -> s.getStudentID()).toArray(String.class);
-        tb.addColumn("Student ID", ids);
-        String[] names = stud.map((Student s) -> s.getStudentName()).toArray(String.class);
-        tb.addColumn("Student Name", names);
-        Integer[] ages = stud.map((Student s) -> s.getStudentAge()).toArray(Integer.class);
-        tb.addColumn("Student Age", ages);
-        tb.printTable(true);
-    }
-    
     //receive tutGrp arrayList
     public int deleteTutGrp(ArrayList<TutorialGroup> tutGrp) {
         return this.getTutGrpChoice(
             "Enter the index number of tutorial group that you want to delete: ", tutGrp
         );
+    }
+    
+    private int getTutGrpChoice(String prompt, ArrayList<TutorialGroup> tutGrp) {
+        int choice = Input.getChoice(
+            prompt,
+            tutGrp.toArray(TutorialGroup.class),
+            (item) -> item.getProgrammeCode() + item.getProgrammeName() + item.getTutGrpCode()
+        );
+        return choice;
     }
     
     //create a new student obj
@@ -113,10 +101,16 @@ public class TutorialGroupManagementUI {
     }
     
     //display all student in tutGrp
-    public void displayAllStudent(Student[] student){
-        printAllStudent(new ArrayList<>(student));
-        Input.getInt("ashjdga", 0, student.getNumberOfEntries());
-
+    public int displayAllStudent(Student[] student){
+        //printAllStudent(new ArrayList<>(student));
+        //Input.getInt("ashjdga", 0, student.getNumberOfEntries());
+        Input.cleanBuffer();
+        int choice = Input.getChoice(
+                "Please enter the index number of the student you want to remove: ", 
+                student, 
+                (Student item) -> item.getStudentID()+ item.getStudentName()
+        );
+        return choice;
         //TableBuilder tb = new TableBuilder();
         //tb.addColumn("StudentID", student[i].getStudentID().toString());
         // for(int i = 1; i <= tutGrp.getStudent().getNumberOfEntries(); i++){
@@ -128,15 +122,58 @@ public class TutorialGroupManagementUI {
         //}, (Student item) -> { return item.getStudentID() + item.getStudentName(); });
     }
     
-    //ask which student the user want to delete
-    public void choiceOfStudent(){//should be int to return choice
-        //int choice = Input.getChoice("Please enter the index number of student you want to delete: ", choices, c);
-        //return choice;
+    public int findStudentInTutGrp(ArrayList<TutorialGroup> tutGrp){
+        return this.getTutGrpChoice("Enter the index number of the tutorial group you want to find the student: ", tutGrp);
     }
     
-    //message to prompt error
+    public int insertStudentInTutGrp(ArrayList<TutorialGroup> tutGrp){
+        return this.getTutGrpChoice("Enter the index number of the tutorial group you want to enter the student that just selected: ", tutGrp);
+    }
+    
+    public int choiceOfSearchingStudent(){
+        int choice = Input.getChoice("Please enter the index number of the way you want to search the student with: ", new String []{
+            "By Student ID",
+            "By Name",
+            "By Age"
+        }, (String item) -> item);
+        return choice;
+    }
+    
+    public String findStudentID(){
+        String studentID = Input.getString("Enter the student ID of the student: ", false);
+        return studentID;
+    }
+    
+    public String findStudentName(){
+        String studentName = Input.getString("Enter the name of the student: ",false);
+        return studentName;
+    }
+    
+    public int findStudentAge(){
+        int studentAge = Input.getInt("Enter the age of the student: ");
+        return studentAge;
+    }
+    
+    public void studentNotFound(){
+        System.out.println("There is no match record found in the selected tutorial group");
+    }
+    
+    //print all selected student
+    public void displayAllSelectedStudent(ArrayList<Student> stud) {
+        TableBuilder tb = new TableBuilder();
+        String[] ids = stud.map((Student s) -> s.getStudentID()).toArray(String.class);
+        tb.addColumn("Student ID", ids);
+        String[] names = stud.map((Student s) -> s.getStudentName()).toArray(String.class);
+        tb.addColumn("Student Name", names);
+        Integer[] ages = stud.map((Student s) -> s.getStudentAge()).toArray(Integer.class);
+        tb.addColumn("Student Age", ages);
+        tb.printTable(true);
+    }
+    
+    //message to prompt error for choice
     public void errorChoice(){
         System.out.println("The choice enter is not available.");
     }
+    
 
 }

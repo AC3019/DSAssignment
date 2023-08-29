@@ -28,34 +28,47 @@ public class TutorialGroupManagement {
         choice = display.mainMenu();  
             switch(choice){
                 case 0:
-                    create();
+                    createTutGrp();
                     break;
                 case 1:
-                    delete();
+                    removeTutGrp();
                     break;
                 case 2:
                     //display.displayTutGrp(tutGrpList);
+                    break;
+                case 3:
+                    addStudent();
+                    break;
+                case 4:
+                    removeStudent();
+                    break;
+                case 5:
+                    changeTutGrp();
+                    break;
+                case 6:
+                    findStudent();
+                    break;
                 default:
             }
         } while(choice != 9);
     }
     
     //function to create a new tutGrp
-    public void create(){
+    public void createTutGrp(){
         display.header();
         //add tutGrp in the list
         tutGrpList.insert(display.createTutGrp());
     }
     
     //function to delete a tutGrp
-    public void delete(){
+    public void removeTutGrp(){
         display.header();
         //remove tutGrp selected
         tutGrpList.remove(display.deleteTutGrp(tutGrpList));
     }
     
     //function to add student in a tutGrp
-    public void add(){
+    public void addStudent(){
         display.header();
         //display output and get input required
         Student student = display.addStudent();//stall the student obj created
@@ -63,15 +76,17 @@ public class TutorialGroupManagement {
         int choice = display.choiceOfTutGrp();
         int tutGrp = 0;//declare variable to stall tutGrp
         switch (choice) {
+            //insert in exist tutGrp
             case 1: 
                 tutGrp = display.choiceOfExistGrp(tutGrpList);//stall the tutGrp selected
                 break;
+            //insert in new tutGrp
             case 2: 
-                create();//create a new tutGrp
+                createTutGrp();//create a new tutGrp
                 //since new tutGrp will be added at last so just get numOfEntries
                 tutGrp = tutGrpList.getNumberOfEntries() - 1;//stall the tutGrp
                 break;
-            default: display.errorChoice();//prompt error
+            default: display.errorChoice();//prompt error, should not be reach
         }
         //stall tutGrp obj selected
         TutorialGroup selectedTutGrp = tutGrpList.get(tutGrp);
@@ -80,22 +95,72 @@ public class TutorialGroupManagement {
     }
     
     //function to remove a student in a tutGrp
-    public void remove(){
+    public void removeStudent(){
         display.header();
         //return and stall the tutGrp obj
         TutorialGroup tutGrp = tutGrpList.get(display.choiceOfExistGrp(tutGrpList));
         Student[] student = tutGrp.getStudent().toArray(Student.class);
-        //display all the students in the tutGrp selected
-        //tutGrp.getStudent().iterator();
-        display.displayAllStudent(student);
-        //remove the student based on selected
-        //tutGrp.getStudent().remove(display.choiceOfStudent());
+        //display all the students and remove the student based on selected in the tutGrp selected
+        tutGrp.getStudent().remove(display.displayAllStudent(student));
+    }
+    
+    
+    //function to change a tutGrp for a student
+    public void changeTutGrp(){
+        display.header();
+        //display all tutGrp and find the tutGrp
+        TutorialGroup tutGrp = tutGrpList.get(display.findStudentInTutGrp(tutGrpList));
+        Student[] student = tutGrp.getStudent().toArray(Student.class);
+        //return and remove the student remove
+        Student selectedStudent = tutGrp.getStudent().remove(display.displayAllStudent(student));
+        tutGrp = tutGrpList.get(display.insertStudentInTutGrp(tutGrpList));
+        tutGrp.getStudent().insert(selectedStudent);
+    }
+    
+    public void findStudent(){
+        display.header();
+        TutorialGroup tutGrp = tutGrpList.get(display.findStudentInTutGrp(tutGrpList));
+        Student[] student = tutGrp.getStudent().toArray(Student.class);
+        int choice = display.choiceOfSearchingStudent();
+        switch (choice){
+            //search using studentID
+            case 1:
+                String selectedStudentID = display.findStudentID();
+                //loop through the whole student array to find the student that match the condition
+                for (int i = 0; i < student.length; i++){
+                    //if studentID match 
+                    if (student[i].getStudentID().equals(selectedStudentID))
+                        studentList.insert(student[i]);//insert the student into student ArrayList
+                    //else
+                        //display.studentNotFound();
+                }
+                break;
+            //search using studentName
+            case 2:
+                String selectedStudentName = display.findStudentName();
+                for (int i = 0; i < student.length; i++){
+                    //if studentName match 
+                    if (student[i].getStudentName().equals(selectedStudentName))
+                        studentList.insert(student[i]);//insert the student into student ArrayList
+                }
+            case 3:
+                int selectedStudentAge = display.findStudentAge();
+                for (int i = 0; i < student.length; i++){
+                    //if studentAge match 
+                    if (student[i].getStudentAge() == selectedStudentAge)//cannot use .equals bcuz is primitive type
+                        studentList.insert(student[i]);//insert the student into student ArrayList
+                }
+            default:
+                break;
+        }
+        //pass the student ArrayList into the method to print out in table form
+        display.displayAllSelectedStudent(studentList);
     }
     
     //main method
     public static void main(String[] args) {
         TutorialGroupManagement tutGrpManagement = new TutorialGroupManagement();
-        // tutGrpManagement.displayTutGrpManagement();
-        display.displayAllStudent(tutGrpManagement.studentList.toArray(Student.class));
+        tutGrpManagement.displayTutGrpManagement();
+        //display.displayAllStudent(tutGrpManagement.studentList.toArray(Student.class));
     }
 }
