@@ -9,7 +9,7 @@ package boundary;
  *
  * @author yong
  */
-import utility.Input;
+//import utility.Input;
 import entity.Tutor;
 import java.util.Scanner;
 import utility.Input;
@@ -33,6 +33,13 @@ public class TutorManagementUI {
             (item) -> item
         );
          
+    }
+    public int funcInput(){
+        Scanner scan = new Scanner(System.in);
+        int choice = scan.nextInt();
+            scan.nextLine(); // Consume newline
+
+        return choice;
     }
         public Tutor tutorInput(){
         Scanner scan = new Scanner(System.in);
