@@ -37,7 +37,7 @@ public class TutorManagementUI {
         public Tutor tutorInput(){
         Scanner scan = new Scanner(System.in);
         boolean invalidInput = false;
-        Tutor tutor;
+        Tutor tutor=new Tutor();
         int id=tutor.getId();
         String name = "";
         String subject = "";

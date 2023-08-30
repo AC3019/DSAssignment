@@ -39,7 +39,7 @@ public class TutorManagement {
         }
     }
     public void removeTutor(){
-        if (tutors.containsKey(tutorCount)) {
+        if (tutors.contains(tutorCount)) {
             tutors.remove(tutorCount);
         } else {
             System.out.println("Id invalid");
@@ -53,14 +53,14 @@ public class TutorManagement {
     public void amendTutorDetails(){
         Tutor t=tmu.amendTutorDetailsData();
        
-        Tutor tutor = tutors.get(tutorCount);
+        Tutor tutor = tutors.get(t.getId());
         if (tutor != null) {
-            tutor.setName(t.newName);
-            tutor.setSubject(newSubject);
+            tutor.setName(t.getName());
+            tutor.setSubject(t.getSubject());
             System.out.println("Tutor details amended successfully.");
         } else {
             System.out.println("Tutor not found.");
         }
     }
-    public void find
+    
 }
