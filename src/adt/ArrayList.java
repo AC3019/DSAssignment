@@ -2,12 +2,14 @@ package adt;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Formatter;
 import java.util.Iterator;
 
 import utility.ListFilterable;
 import utility.Findable;
 import utility.ListMappable;
 import utility.Sortable;
+import utility.StringUtil;
 
 /**
  * There will be no nulls in between elements at all times, therefore inserting items at very far to the end of the array is not possible
@@ -216,11 +218,46 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
         return this.indexOf(obj) != -1;
     }
 
-    @Override
-    public void sort(Sortable<T> s) {
+    // used recursively for mergeSort (take 2 array, arrange them and merge them into new one)
+    private T[] mergeAndSort(T[] left, T[] right, Sortable<T> s) {
+        T[] res = (T[]) new Object[left.length + right.length];
+        int leftIndex = 0;
+        int rightIndex = 0;
+
+        return res;
+    }
+
+    public T[] mergeSort(Sortable<T> s, T[] arrToSort) {
+        if (arrToSort.length <= 0)
+            return arrToSort;
+        
+        int middleIndex = arrToSort.length / 2; 
+        // from 0 up until middleIndex - 1
+        T[] leftSlice = (T[]) new Object[middleIndex];
+        System.arraycopy(arrToSort, 0, leftSlice, 0, middleIndex);
+        // from middleIndex up until arrToSort.length - 1
+        T[] rightSlice = (T[]) new Object[arrToSort.length - middleIndex];
+        System.arraycopy(arrToSort, middleIndex, rightSlice, 0, arrToSort.length - middleIndex);
+        
+        return null; // temp
         // s.order();
     }
-    
+
+    @Override
+    // sorts with merge sort, the official interface to sort the arraylist
+    public void sort(Sortable<T> s) {
+        // we don't need the back part nulls
+        T[] ts = (T[]) new Object[this.getNumberOfEntries()];
+
+        // copy
+        System.arraycopy(this.arr, 0, ts, 0, ts.length);
+
+        T[] res = mergeSort(s, ts);
+
+        // copy back
+        System.arraycopy(res, 0, this.arr, 0, res.length);
+    }
+
     @Override
     /**
      * Returns an iterator that allows traversing the list in one way, facilitates foreach loop

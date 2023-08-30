@@ -3,8 +3,6 @@ package utility;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import adt.ArrayList;
-
 /**
  * @author xuanbin, Neoh Soon Chee, yong
  */

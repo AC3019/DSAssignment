@@ -3,6 +3,7 @@ package adt;
 import utility.ListFilterable;
 import utility.Findable;
 import utility.ListMappable;
+import utility.Sortable;
 
 /**
  * @author xuanbin, Neoh Soon Chee, yong
@@ -106,4 +107,12 @@ public interface ListInterface<T> {
      * @return true if exist, false otherwise
      */
     public abstract boolean contains(Findable<T> f);
+
+    /**
+     * Sorts the list with the functional interface implemented, the list is altered
+     * Since we do not limit the generic to only types implementing Comparable, we cannot use `.compareTo()` internally
+     * We decided to leave the sort logic to user
+     * @param s
+     */
+    public abstract void sort(Sortable<T> s);
 }
