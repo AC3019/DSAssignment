@@ -7,6 +7,7 @@ import java.util.Iterator;
 import utility.ListFilterable;
 import utility.Findable;
 import utility.ListMappable;
+import utility.Sortable;
 
 /**
  * There will be no nulls in between elements at all times, therefore inserting items at very far to the end of the array is not possible
@@ -213,6 +214,11 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
     @Override
     public boolean contains(T obj) {
         return this.indexOf(obj) != -1;
+    }
+
+    @Override
+    public void sort(Sortable<T> s) {
+        // s.order();
     }
     
     @Override

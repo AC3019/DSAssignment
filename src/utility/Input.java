@@ -3,6 +3,8 @@ package utility;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import adt.ArrayList;
+
 /**
  * @author xuanbin, Neoh Soon Chee, yong
  */
@@ -158,6 +160,55 @@ public class Input {
                 System.out.println(iiore.getMessage());
             }
         }
+    }
+
+    /**
+     * reads stdin and returns the first character entered, the rest is left in the buffer
+     * @param prompt
+     * @param allowEmpty should the input be empty
+     * @return
+     */
+    public char getChar(String prompt, boolean allowEmpty) {
+        String s = getString(prompt, allowEmpty);
+        return s.charAt(0);
+    }
+
+    /**
+     * reads stdin and returns the first character entered (including empty), the rest is left in the buffer
+     * @param prompt
+     * @return
+     */
+    public char getChar(String prompt) {
+        return getChar(prompt, true);
+    }
+
+    /**
+     * Prompts user a message, if user input anything starting from 'y/Y' returns true, false otherwise, does not allow empty inputs
+     * When used, appends 
+     * [Y/y]es
+     * [Others] No
+     * Enter your choice: 
+     * to the command line
+     * @param prompt
+     * @return 'y/Y' returns true, false otherwise
+     */
+    public boolean confirm(String prompt) {
+        return Character.toLowerCase(
+            getChar(
+                prompt + "\n" +
+                "[Y/y]es\n" + 
+                "[Others] No\n" + 
+                "Enter your choice: ", 
+                false
+            )
+        ) == 'y';
+    }
+
+    /**
+     * Prompts user "Input anything to continue" and waits for the user to decide to continue to the next output
+     */
+    public void pause() {
+        getChar("Input anything to continue");
     }
 
     /**
