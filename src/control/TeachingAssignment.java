@@ -21,5 +21,14 @@ public class TeachingAssignment {
 
     public static void main(String[] args) {
         
+        ArrayList<Integer> arr = new ArrayList<>(new Integer[] {
+            20, 50, 10, 30, 25
+        });
+
+        arr.sort((i1, i2) -> {System.out.println(i1 + " " + i2); return i1 - i2;});
+
+        for (Integer i: arr) {
+            System.out.println(i);
+        }
     }
 }

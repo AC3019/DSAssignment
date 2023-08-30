@@ -105,6 +105,16 @@ public class HashMap<K extends Comparable<K>, V>
     }
 
     @Override
+    public V[] getValues(Class<V> clazz) {
+        ArrayList<V> res = new ArrayList<>();
+
+        for (K key: this.keys) 
+            res.insert(this.get(key));
+
+        return res.toArray(clazz);
+    }
+
+    @Override
     public boolean contains(K key) {
         return this.keys.contains(key);
     }

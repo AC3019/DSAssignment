@@ -221,14 +221,34 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
     // used recursively for mergeSort (take 2 array, arrange them and merge them into new one)
     private T[] mergeAndSort(T[] left, T[] right, Sortable<T> s) {
         T[] res = (T[]) new Object[left.length + right.length];
+        int currIndex = 0;
         int leftIndex = 0;
         int rightIndex = 0;
+
+        // compare elements from two arrays
+        while (leftIndex < left.length && rightIndex < right.length) {
+            // order func's contract -> if return less than 0 (negative), a is placed in front of b
+            if (s.order(left[leftIndex], right[rightIndex]) < 0) {
+                res[currIndex++] = left[leftIndex++];
+            } else {
+                res[currIndex++] = right[rightIndex++];
+            }
+        }
+
+        // copy the rest of the array into the array
+        while (leftIndex < left.length) {
+            res[currIndex++] = left[leftIndex++];
+        }
+
+        while (rightIndex < right.length) {
+            res[currIndex++] = right[rightIndex++];
+        }
 
         return res;
     }
 
     public T[] mergeSort(Sortable<T> s, T[] arrToSort) {
-        if (arrToSort.length <= 0)
+        if (arrToSort.length <= 1)
             return arrToSort;
         
         int middleIndex = arrToSort.length / 2; 
@@ -238,9 +258,12 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
         // from middleIndex up until arrToSort.length - 1
         T[] rightSlice = (T[]) new Object[arrToSort.length - middleIndex];
         System.arraycopy(arrToSort, middleIndex, rightSlice, 0, arrToSort.length - middleIndex);
+
+        // sort them
+        leftSlice = mergeSort(s, leftSlice);
+        rightSlice = mergeSort(s, rightSlice);
         
-        return null; // temp
-        // s.order();
+        return mergeAndSort(leftSlice, rightSlice, s); 
     }
 
     @Override

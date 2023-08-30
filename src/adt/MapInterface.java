@@ -43,6 +43,13 @@ public interface MapInterface<K extends Comparable<K>, V> {
     public abstract K[] getKeys(Class<K> clazz);
 
     /**
+     * Returns all the values in the Map, converted into primitive arrays of clazz
+     * @param clazz
+     * @return
+     */
+    public abstract V[] getValues(Class<V> clazz);
+
+    /**
      * Tests whether `key` is in the map
      * @param key
      * @return
