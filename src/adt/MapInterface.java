@@ -1,5 +1,7 @@
 package adt;
 
+import utility.MapFilterable;
+
 /**
  * @author xuanbin, Neoh Soon Chee, yong
  */
@@ -52,5 +54,11 @@ public interface MapInterface<K extends Comparable<K>, V> {
      * @return
      */
     public abstract int size();
-    // TODO: add more functions (see kua got or not)
+
+    /**
+     * Runs every key value pair of the map, returns a new map with every key value pair that passes the filter
+     * @param f functional interface with the function to apply the filter
+     * @return a new map that contains the key value pairs that passes the filter
+     */
+    public abstract MapInterface<K, V> filter(MapFilterable<K, V> f);
 }

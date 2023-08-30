@@ -1,8 +1,8 @@
 package adt;
 
-import utility.Filterable;
+import utility.ListFilterable;
 import utility.Findable;
-import utility.Mappable;
+import utility.ListMappable;
 
 /**
  * @author xuanbin, Neoh Soon Chee, yong
@@ -75,9 +75,9 @@ public interface ListInterface<T> {
      * @param f
      * @return T[] primitive java array containing items that passes the filter
      */
-    public abstract ListInterface<T> filter(Filterable<T> f);
+    public abstract ListInterface<T> filter(ListFilterable<T> f);
 
-    public abstract <U> ListInterface<U> map(Mappable<T, U> m);
+    public abstract <U> ListInterface<U> map(ListMappable<T, U> m);
 
     /**
      * Search for the index of the certain objectm using the `.equals()` method on the object

@@ -18,6 +18,8 @@ public class TutorialGroup {
         this.programmeCode = programmeCode;
         this.programmeName = programmeName;
         this.tutGrpCode = tutGrpCode;
+        // init student to be an empty arraylist
+        this.student = new ArrayList<>();
     }
     
     public void setProgrammeCode(String programmeCode){

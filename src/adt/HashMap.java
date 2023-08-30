@@ -3,6 +3,7 @@ package adt;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 
+import utility.MapFilterable;
 import utility.NoNoArgConstructorException;
 import utility.NotSameInstanceException;
 
@@ -116,6 +117,18 @@ public class HashMap<K extends Comparable<K>, V>
             size += bucket.getNumberOfElements();
         }
         return size;
+    }
+
+    @Override
+    public HashMap<K, V> filter(MapFilterable<K, V> f) {
+        HashMap<K, V> res = new HashMap<>();
+        
+        for (HashMap<K, V>.Pair p: this) {
+            if (f.apply(p.getKey(), p.getValue()))
+                res.put(p.getKey(), p.getValue());
+        }
+
+        return res;
     }
 
     // we store key value pairs in form of Nodes

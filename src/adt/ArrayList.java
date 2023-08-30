@@ -4,9 +4,9 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import utility.Filterable;
+import utility.ListFilterable;
 import utility.Findable;
-import utility.Mappable;
+import utility.ListMappable;
 
 /**
  * There will be no nulls in between elements at all times, therefore inserting items at very far to the end of the array is not possible
@@ -166,7 +166,7 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
     }
 
     @Override
-    public ArrayList<T> filter(Filterable<T> f) {
+    public ArrayList<T> filter(ListFilterable<T> f) {
         ArrayList<T> resList = new ArrayList<>();
 
         // loop over this instead of the underlying array so nulls wont be included
@@ -179,7 +179,7 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
     }
 
     @Override
-    public <U> ArrayList<U> map(Mappable<T, U> m) {
+    public <U> ArrayList<U> map(ListMappable<T, U> m) {
         ArrayList<U> res = new ArrayList<>();
 
         for (T item: this) {

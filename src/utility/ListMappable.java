@@ -8,6 +8,6 @@ package utility;
  * 
  * @author xuanbin
  */
-public interface Mappable<T, R> {
+public interface ListMappable<T, R> {
     public R map(T item);
 }
