@@ -49,6 +49,7 @@ public class TutorialGroupManagement {
                     findStudent();
                     break;
                 default:
+                    continue;
             }
         } while(choice != 9);
     }
@@ -135,6 +136,8 @@ public class TutorialGroupManagement {
                     //else
                         //display.studentNotFound();
                 }
+                int studentIndex = tutGrp.getStudent().indexOf((Student s) -> s.getStudentID().equals(selectedStudentID));
+                tutGrp.getStudent().get(studentIndex);
                 break;
             //search using studentName
             case 2:
