@@ -11,7 +11,7 @@ package entity;
 public class Tutor implements Comparable<Tutor> {
     private String name;
     private String subject;
-    private int id = 0;
+    private int id ;
     private char gender;
     // private TutorialGroup tutorialGroup;
     private int age;
@@ -21,9 +21,9 @@ public class Tutor implements Comparable<Tutor> {
     public Tutor() {
     }
 
-    public Tutor(int id, String name, String subject, char gender, /* TutorialGroup tutorialGroup */int age,
+    public Tutor(int id,String name, String subject, char gender, /* TutorialGroup tutorialGroup */int age,
             String phoneNum) {
-        this.id = id;
+        this.id=id;
         this.name = name;
         this.subject = subject;
         this.gender = gender;
@@ -32,6 +32,20 @@ public class Tutor implements Comparable<Tutor> {
         this.phoneNum = phoneNum;
 
     }
+    
+     public Tutor( String name, String subject, char gender, /* TutorialGroup tutorialGroup */int age,
+            String phoneNum) {
+       
+       this.name = name;
+       this.subject = subject;
+       this.gender = gender;
+        // this.tutorialGroup=tutorialGroup;
+      this.age = age;
+       this.phoneNum = phoneNum;
+
+    }
+    
+
     public Tutor (int id,String name, String subject){
         this.id=id;
         this.name=name;
