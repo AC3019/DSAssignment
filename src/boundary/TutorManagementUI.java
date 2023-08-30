@@ -56,13 +56,13 @@ public class TutorManagementUI {
                     //invalidInput = false;
                     System.out.print("Name: ");
                     name = scan.nextLine();
-
+                    //name.toUpperCase();
                     System.out.print("Subject: ");
                     subject = scan.nextLine();
-
+                    //subject.toUpperCase();
                     System.out.print("Gender(M/F): ");
                     gender = scan.next().toUpperCase().charAt(0);
-
+                    //Character.toUpperCase(gender);
                     System.out.print("Age: ");
                     age = scan.nextInt();
                     scan.nextLine();// clear buffer
@@ -108,5 +108,16 @@ public class TutorManagementUI {
         Tutor tu=new Tutor(id,newName,newSubject);
         return tu ;
     }
-    
+    public int filterTutorData(){
+      Scanner scan = new Scanner(System.in);
+        int choice;
+         
+        System.out.println("1. Filter by gender");
+        System.out.println("2. Filter by subject");
+        System.out.print("Select an option: ");
+
+        choice = scan.nextInt();
+        scan.nextLine();
+               return choice;
+    }
 }

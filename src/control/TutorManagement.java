@@ -10,9 +10,11 @@ package control;
  */
 import entity.Tutor;
 //import adt.HashMap;
-import adt.ArrayList;
-import adt.ListInterface;
+//import adt.ArrayList;
+//import adt.ListInterface;
+import java.util.List;
 import java.util.HashMap;
+import java.util.ArrayList;
 import boundary.TutorManagementUI;
 import java.util.Scanner;
 import java.util.Map;
@@ -44,7 +46,8 @@ public class TutorManagement {
         System.out.println("4. Amend tutor details");
         System.out.println("5. List all tutors");
         System.out.println("6. Filter Tutor");
-        System.out.println("7. Exit");
+        System.out.println("7. Get total number of tutors");
+        System.out.println("8. Exit");
 
         System.out.print("Select an option: ");
         int choice=tmu.funcInput();
@@ -57,7 +60,7 @@ public class TutorManagement {
                     removeTutor();
                     break;
                 case 3:
-                    System.out.print(searchTutor());
+                    searchTutor();
                     break;
                 case 4:
                     amendTutorDetails();
@@ -70,8 +73,10 @@ public class TutorManagement {
                 case 6:
                     filterTutor();
                     break;
-                    
                 case 7:
+                    getTotalNumOfTutor();
+                    break;
+                case 8:
                     running = false;
                     break;
                 default:
@@ -103,19 +108,31 @@ public class TutorManagement {
        // }
     }
     public void removeTutor(){
-        int id=tmu.removeTutorData();
+        //int id=tmu.removeTutorData();
+       if(tutors.size()>0){
+           int id=tmu.removeTutorData();
         if (tutors.containsKey(id)) {
             tutors.remove(id);
             System.out.println("Tutor removed successfully ");
         } else {
             System.out.println("Id invalid");
         }
+       }else{
+           System.out.println("pls add tutor only can removed");
+       }
 
     }
-    public Tutor searchTutor(){
-        int id=tmu.searchTutorId();
-         return tutors.get(id);
+    public void searchTutor(){
+        //int id=tmu.searchTutorId();
+        if(tutors.size()<=0){
+         //return tutors.get(id);  
+            System.out.println("Pls add tutor first");
+            
+        }else{
+                int id=tmu.searchTutorId();
 
+                 System.out.println(tutors.get(id)); 
+        }
     }
     
     public void amendTutorDetails(){
@@ -131,33 +148,62 @@ public class TutorManagement {
         }
     }
      public  void listAllTutor() {
+         if(tutors.size()>0){
         System.out.println(tutors.toString());
+         }else{
+             System.out.println("no tutor inside the system");
+         }
     }
      public  void filterTutor() {
-        Scanner scan = new Scanner(System.in);
-
-        int choice = scan.nextInt();
-        scan.nextLine();
+         if(tutors.size()>0){
+     
+        int choice=tmu.filterTutorData();
         switch (choice) {
             case 1:
                 findByGender();
                 break;
+            case 2:
+                findBySubject();
+                break;
             default:
                 System.out.println("Invalid choice. Please select again.");
         }
+         }else{
+             System.out.println("Pls add tutor first");
+         }
 
     }
      private  void findByGender() {
         Scanner scan = new Scanner(System.in);
         System.out.print("Gender to filter: ");
         char genderToFilter = scan.next().charAt(0);
-        ListInterface <Tutor> matchedTutors = new ArrayList<>();
+        //Character.toUpperCase(genderToFilter);
+        List <Tutor> matchedTutors = new ArrayList<>();
         for (Map.Entry<Integer, Tutor> tutor : tutors.entrySet()) {
             if (Character.valueOf(genderToFilter).compareTo(tutor.getValue().getGender()) == 0) {
-                matchedTutors.insert(tutor.getValue());
+                matchedTutors.add(tutor.getValue());
             }
         }
         System.out.println(matchedTutors);
+        System.out.println("The total number of tutors in this gender are "+matchedTutors.size());
     }
+     private void findBySubject(){
+         Scanner scan=new Scanner(System.in);
+          System.out.print("Subject to filter: ");
+        String subjectToFilter = scan.nextLine();
+        //subjectToFilter.toUpperCase();
+        List <Tutor> matchedTutors = new ArrayList<>();
+        for (Map.Entry<Integer, Tutor> tutor : tutors.entrySet()) {
+            if ((subjectToFilter).compareTo(tutor.getValue().getSubject()) == 0) {
+                matchedTutors.add(tutor.getValue());
+            }
+        }
+        System.out.println(matchedTutors);
+         System.out.println("The total number of tutors in this subject are "+matchedTutors.size());
+
+     }
+     public void getTotalNumOfTutor(){
+         System.out.println("The total number of tutors are"+tutors.size());
+     }
     
 }
