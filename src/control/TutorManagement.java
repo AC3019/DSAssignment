@@ -15,7 +15,7 @@ import boundary.TutorManagementUI;
 public class TutorManagement {
     HashMap<Integer, Tutor> tutors;
     TutorManagementUI tmu = new TutorManagementUI();
-    TutorManagement tm=new TutorManagement();
+    //TutorManagement tm=new TutorManagement();
     static int tutorCount=1;
     
     public TutorManagement() {
