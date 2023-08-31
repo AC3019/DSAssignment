@@ -76,7 +76,7 @@ public interface MapInterface<K, V> {
      * @param mf
      * @return
      */
-    public abstract K find(MapFindable<K, V> mf);
+    public abstract K keyOf(MapFindable<K, V> mf);
 
     /**
      * Returns the size of the map (number of key value pairs)

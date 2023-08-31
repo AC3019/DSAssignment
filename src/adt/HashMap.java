@@ -127,10 +127,10 @@ public class HashMap<K extends Comparable<K>, V>
 
     @Override
     public K keyOf(V value) {
-        return this.find((k, v) -> v.equals(value));
+        return this.keyOf((k, v) -> v.equals(value));
     }
 
-    public K find(MapFindable<K, V> mf) {
+    public K keyOf(MapFindable<K, V> mf) {
         for (Pair p: this) {
             if (mf.find(p.getKey(), p.getValue())) {
                 return p.getKey();
