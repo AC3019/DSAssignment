@@ -1,5 +1,6 @@
 package adt;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -15,7 +16,7 @@ import utility.Sortable;
  * @author xuanbin
  */
 @SuppressWarnings("unchecked") // casting Object[] -> T[] will be complained by compiler as it can't guarantee type safety, surpress it abo noisy
-public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
+public class ArrayList<T> implements ListInterface<T>, Iterable<T>, Serializable {
 
     private T[] arr;
     private int numberOfEntries = 0;
