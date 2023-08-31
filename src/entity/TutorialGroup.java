@@ -4,11 +4,12 @@
  */
 package entity;
 import adt.ArrayList;
+import java.io.Serializable;
 /**
  *
  * @author Neoh Soon Chee
  */
-public class TutorialGroup {
+public class TutorialGroup implements Serializable {
     private String programmeCode;
     private String programmeName;
     private String tutGrpCode;

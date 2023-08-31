@@ -63,7 +63,7 @@ public class TutorialGroupManagementUI {
             "Enter the index number of tutorial group that you want to delete: ", tutGrp
         );
     }
-    
+        
     private int getTutGrpChoice(String prompt, ArrayList<TutorialGroup> tutGrp) {
         int choice = Input.getChoice(
             prompt,
@@ -98,6 +98,11 @@ public class TutorialGroupManagementUI {
         return this.getTutGrpChoice(
                 "Please enter the index number of tutorial group you want to insert: ", tutGrp
         );
+    }
+    
+    //ask which tutGrp user want to display the student
+    public int choiceOfTutGrp(ArrayList<TutorialGroup> tutGrp){
+        return this.getTutGrpChoice("Please enter the index number of tutorial group you want to display", tutGrp);
     }
     
     //display all student in tutGrp
@@ -168,6 +173,58 @@ public class TutorialGroupManagementUI {
         Integer[] ages = stud.map((Student s) -> s.getStudentAge()).toArray(Integer.class);
         tb.addColumn("Student Age", ages);
         tb.printTable(true);
+    }
+    
+    //choice of filter tutGrp
+    public int choiceOfFilterTutGrp(){
+        int choice = Input.getChoice("Please enter the index number of the way you want to filter with: ", new String[] {
+            "By Programme Code",
+            "By Programme Name",
+            "By Tutorial Group Code",
+            "All criteria above"
+        }, (String item) -> item);
+        return choice;
+    }
+    
+    public String getProgCode(){
+        String progCode = Input.getString("Please enter the programme code you want to filter: ", false);
+        return progCode;
+    }
+    
+    public String getProgName(){
+        String progName = Input.getString("Please enter the programme name you want to filter: ",false);
+        return progName;
+    }
+    
+    public String getTutGrpCode(){
+        String tutGrpCode = Input.getString("Please enter the tutorial group code you want to filter: ", false);
+        return tutGrpCode;
+    }
+    
+    //get choice of filter tutGrp again
+    public int reChoiceOfFilterTutGrp(){
+        int choice = Input.getChoice("Please enter the index number of the way you want to filter with: ", new String[] {
+            "By Programme Code",
+            "By Programme Name",
+            "By Tutorial Group Code",
+        }, (String item) -> item);
+        return choice;
+    }
+    public String continueFilter(){
+        String choice = Input.getString("Do you want to continue filter(Y/N): ", false);
+        return choice;
+    }
+    
+    public void printAllSelectedTutGrp(ArrayList<TutorialGroup> tutGrp){
+        TableBuilder tb = new TableBuilder();
+        String[] progCodes = tutGrp.map((TutorialGroup tutGrps) -> tutGrps.getProgrammeCode()).toArray(String.class);
+        tb.addColumn("Program Code", progCodes);
+        String[] progNames = tutGrp.map((TutorialGroup tutGrps) -> tutGrps.getProgrammeName()).toArray(String.class);
+        tb.addColumn("Program Name", progNames);
+        String[] tutGrpCodes = tutGrp.map((TutorialGroup tutGrps) -> tutGrps.getTutGrpCode()).toArray(String.class);
+        tb.addColumn("Tutorial Group Code", tutGrpCodes);
+        String[] numOfStudents = tutGrp.map((TutorialGroup tutGrps) -> tutGrps.getStudent().getNumberOfEntries()).toArray(String.class);
+        tb.addColumn("Number of Students", numOfStudents);
     }
     
     //message to prompt error for choice

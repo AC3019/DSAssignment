@@ -7,11 +7,12 @@ import adt.*;
 import boundary.TutorialGroupManagementUI;
 import entity.Student;
 import entity.TutorialGroup;
+import java.io.Serializable;
 /**
  *
  * @author Neoh Soon Chee
  */
-public class TutorialGroupManagement {
+public class TutorialGroupManagement implements Serializable {
 
     //variables
     private ArrayList<TutorialGroup> tutGrpList = new ArrayList<>();
@@ -34,7 +35,7 @@ public class TutorialGroupManagement {
                     removeTutGrp();
                     break;
                 case 2:
-                    //display.displayTutGrp(tutGrpList);
+                    display.displayTutGrp(tutGrp);
                     break;
                 case 3:
                     addStudent();
@@ -47,6 +48,12 @@ public class TutorialGroupManagement {
                     break;
                 case 6:
                     findStudent();
+                    break;
+                case 7:
+                    displayAllStudent();
+                    break;
+                case 8:
+                    filterTutGrp();
                     break;
                 default:
                     continue;
@@ -119,6 +126,7 @@ public class TutorialGroupManagement {
         tutGrp.getStudent().insert(selectedStudent);
     }
     
+    //try change logic to search through all tutGrp shud be btr
     public void findStudent(){
         display.header();
         TutorialGroup tutGrp = tutGrpList.get(display.findStudentInTutGrp(tutGrpList));
@@ -133,20 +141,20 @@ public class TutorialGroupManagement {
                     //if studentID match 
                     if (student[i].getStudentID().equals(selectedStudentID))
                         studentList.insert(student[i]);//insert the student into student ArrayList
-                    //else
-                        //display.studentNotFound();
                 }
+                //using method to search
                 int studentIndex = tutGrp.getStudent().indexOf((Student s) -> s.getStudentID().equals(selectedStudentID));
-                tutGrp.getStudent().get(studentIndex);
+                studentList.insert(tutGrp.getStudent().get(studentIndex));
                 break;
             //search using studentName
             case 2:
                 String selectedStudentName = display.findStudentName();
-                for (int i = 0; i < student.length; i++){
+                studentList.insert(tutGrp.getStudent().filter((Student item) -> item.getStudentName().equals(selectedStudentName)));
+                /*for (int i = 0; i < student.length; i++){
                     //if studentName match 
                     if (student[i].getStudentName().equals(selectedStudentName))
                         studentList.insert(student[i]);//insert the student into student ArrayList
-                }
+                }*/
             case 3:
                 int selectedStudentAge = display.findStudentAge();
                 for (int i = 0; i < student.length; i++){
@@ -158,13 +166,82 @@ public class TutorialGroupManagement {
                 break;
         }
         //pass the student ArrayList into the method to print out in table form
-        display.displayAllSelectedStudent(studentList);
+        if (studentList.isEmpty())
+            display.studentNotFound();
+        else
+            display.displayAllSelectedStudent(studentList);
     }
     
+    public void displayAllStudent(){
+        display.header();
+        int choice = display.choiceOfTutGrp(tutGrpList);
+        TutorialGroup tutGrp = tutGrpList.get(choice);
+        display.displayAllSelectedStudent(tutGrp.getStudent());
+    }
+    
+    public void filterTutGrp() {
+        display.header();
+        //create a new arrayList to stall filter result
+        private ArrayList<TutorialGroup> selectedTutGrpList = new ArrayList<>();
+        char decision = 'Y';
+        int choice = display.choiceOfFilterTutGrp();
+        //filter first time
+        switch (choice){
+            case 0://filter by progCode
+                String progCode = display.getProgCode();
+                selectedTutGrpList = tutGrpList.filter((TutorialGroup item) -> item.getProgrammeCode().equals(progCode));
+                break;
+            case 1://filter by progName
+                String progName = display.getProgName();
+                selectedTutGrpList = tutGrpList.filter((TutorialGroup item) -> item.getProgrammeName().equals(progName));
+                break;
+            case 2://filter by tutGrpCode
+                String tutGrpCode = display.getTutGrpCode();
+                selectedTutGrpList = tutGrpList.filter((TutorialGroup item) -> item.getTutGrpCode().equals(tutGrpCode));
+                break;
+            case 3://filter by all criteria above
+                String reProgCode = display.getProgCode();
+                String reProgName = display.getProgName();
+                String reTutGrpCode = display.getTutGrpCode();
+                selectedTutGrpList = tutGrpList.filter((TutorialGroup item) -> item.getProgrammeCode().equals(reProgCode));
+                selectedTutGrpList = selectedTutGrpList.filter((TutorialGroup item) -> item.getProgrammeName().equals(reProgName));
+                selectedTutGrpList = selectedTutGrpList.filter((TutorialGroup item) -> item.getTutGrpCode().equals(reTutGrpCode));
+                break;
+            default:
+        }
+        //ask whether want to contiue filter
+        decision = display.continueFilter().toUpperCase().charAt(0);
+        //if yes 
+        while (decision == 'Y'){
+            choice = display.reChoiceOfFilterTutGrp();
+            switch (choice){
+                case 0:
+                    String progCode = display.getProgCode();
+                    selectedTutGrpList = selectedTutGrpList.filter((TutorialGroup item) -> item.getProgrammeCode().equals(progCode));
+                    break;
+                case 1:
+                    String progName = display.getProgName();
+                    selectedTutGrpList = selectedTutGrpList.filter((TutorialGroup item) -> item.getProgrammeName().equals(progName));
+                    break;
+                case 2:
+                    String tutGrpCode = display.getTutGrpCode();
+                    selectedTutGrpList = selectedTutGrpList.filter((TutorialGroup item) -> item.getTutGrpCode().equals(tutGrpCode));
+                    break;
+                default:
+            }
+            //ask whether want to continue filter
+            decision = display.continueFilter().toUpperCase().charAt(0);
+        }
+        //display the filter result
+        display.displayTutGrp(selectedTutGrpList);
+    }
+        
     //main method
     public static void main(String[] args) {
         TutorialGroupManagement tutGrpManagement = new TutorialGroupManagement();
         tutGrpManagement.displayTutGrpManagement();
         //display.displayAllStudent(tutGrpManagement.studentList.toArray(Student.class));
     }
+
+
 }
