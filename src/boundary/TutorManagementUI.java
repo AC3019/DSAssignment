@@ -9,7 +9,7 @@ package boundary;
  *
  * @author yong
  */
-//import utility.Input;
+import utility.Input;
 import entity.Tutor;
 import java.util.Scanner;
 import utility.Input;
@@ -39,18 +39,18 @@ public class TutorManagementUI {
        // Scanner scan = new Scanner(System.in);
         //        System.out.println("Enter the function u want to perform:");
         int choice = scan.nextInt();
-            scan.nextLine(); // Consume newline
+            Input.cleanBuffer(); // Consume newline
 
         return choice;
     }
     public Tutor tutorInput(){
                 //Scanner scan = new Scanner(System.in);
-                boolean invalidInput = false;
-                String name = "";
-                String subject = "";
-                char gender='m';
-                int age=0;
-                String phoneNum="";
+                boolean invalidInput ;
+                String name ;
+                String subject ;
+                char gender;
+                int age;
+                String phoneNum;
                 
                 
                     //invalidInput = false;
