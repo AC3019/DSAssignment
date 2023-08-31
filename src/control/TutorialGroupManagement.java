@@ -35,7 +35,7 @@ public class TutorialGroupManagement implements Serializable {
                     removeTutGrp();
                     break;
                 case 2:
-                    display.displayTutGrp(tutGrp);
+                    display.displayTutGrp(tutGrpList);
                     break;
                 case 3:
                     addStudent();
@@ -149,7 +149,8 @@ public class TutorialGroupManagement implements Serializable {
             //search using studentName
             case 2:
                 String selectedStudentName = display.findStudentName();
-                studentList.insert(tutGrp.getStudent().filter((Student item) -> item.getStudentName().equals(selectedStudentName)));
+                ArrayList<Student> temp = tutGrp.getStudent();
+                studentList.insert(temp.get(temp.indexOf((Student item) -> item.getStudentName().equals(selectedStudentName))));
                 /*for (int i = 0; i < student.length; i++){
                     //if studentName match 
                     if (student[i].getStudentName().equals(selectedStudentName))
@@ -182,7 +183,7 @@ public class TutorialGroupManagement implements Serializable {
     public void filterTutGrp() {
         display.header();
         //create a new arrayList to stall filter result
-        private ArrayList<TutorialGroup> selectedTutGrpList = new ArrayList<>();
+        ArrayList<TutorialGroup> selectedTutGrpList = new ArrayList<>();
         char decision = 'Y';
         int choice = display.choiceOfFilterTutGrp();
         //filter first time
