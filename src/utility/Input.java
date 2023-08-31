@@ -166,7 +166,7 @@ public class Input {
      * @param allowEmpty should the input be empty
      * @return
      */
-    public char getChar(String prompt, boolean allowEmpty) {
+    public static char getChar(String prompt, boolean allowEmpty) {
         String s = getString(prompt, allowEmpty);
         return s.charAt(0);
     }
@@ -176,7 +176,7 @@ public class Input {
      * @param prompt
      * @return
      */
-    public char getChar(String prompt) {
+    public static char getChar(String prompt) {
         return getChar(prompt, true);
     }
 
@@ -190,7 +190,7 @@ public class Input {
      * @param prompt
      * @return 'y/Y' returns true, false otherwise
      */
-    public boolean confirm(String prompt) {
+    public static boolean confirm(String prompt) {
         return Character.toLowerCase(
             getChar(
                 prompt + "\n" +
