@@ -2,14 +2,12 @@ package adt;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Formatter;
 import java.util.Iterator;
 
 import utility.ListFilterable;
-import utility.Findable;
+import utility.ListFindable;
 import utility.ListMappable;
 import utility.Sortable;
-import utility.StringUtil;
 
 /**
  * There will be no nulls in between elements at all times, therefore inserting items at very far to the end of the array is not possible
@@ -193,7 +191,7 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
     }
 
     @Override
-    public int indexOf(Findable<T> f) {
+    public int indexOf(ListFindable<T> f) {
         for (int i = 0; i < this.getNumberOfEntries(); i++) {
             if (f.find(this.get(i))) {
                 return i;
@@ -209,7 +207,7 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T> {
     }
 
     @Override
-    public boolean contains(Findable<T> f) {
+    public boolean contains(ListFindable<T> f) {
         return this.indexOf(f) != -1;
     }
 

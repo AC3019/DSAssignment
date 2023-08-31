@@ -1,7 +1,7 @@
 package adt;
 
 import utility.ListFilterable;
-import utility.Findable;
+import utility.ListFindable;
 import utility.ListMappable;
 import utility.Sortable;
 
@@ -92,7 +92,7 @@ public interface ListInterface<T> {
      * @param f
      * @return -1 if not found, otherwise the index of the object in the list
      */
-    public abstract int indexOf(Findable<T> f);
+    public abstract int indexOf(ListFindable<T> f);
 
     /**
      * Checks if the obj exists in the list
@@ -106,7 +106,7 @@ public interface ListInterface<T> {
      * @param f
      * @return true if exist, false otherwise
      */
-    public abstract boolean contains(Findable<T> f);
+    public abstract boolean contains(ListFindable<T> f);
 
     /**
      * Sorts the list with the functional interface implemented, the list is altered

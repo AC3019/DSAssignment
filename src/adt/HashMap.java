@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.util.Iterator;
 
 import utility.MapFilterable;
+import utility.MapFindable;
 import utility.NoNoArgConstructorException;
 import utility.NotSameInstanceException;
 
@@ -92,7 +93,7 @@ public class HashMap<K extends Comparable<K>, V>
 
     @Override
     public V remove(K key) {
-        if (!this.contains(key))
+        if (!this.containsKey(key))
             return null;
         
         int position = this.getHashModulo(key);
@@ -115,8 +116,27 @@ public class HashMap<K extends Comparable<K>, V>
     }
 
     @Override
-    public boolean contains(K key) {
+    public boolean containsKey(K key) {
         return this.keys.contains(key);
+    }
+
+    @Override
+    public boolean containsValue(V value) {
+        return keyOf(value) != null;
+    }
+
+    @Override
+    public K keyOf(V value) {
+        return this.find((k, v) -> v.equals(value));
+    }
+
+    public K find(MapFindable<K, V> mf) {
+        for (Pair p: this) {
+            if (mf.find(p.getKey(), p.getValue())) {
+                return p.getKey();
+            }
+        }
+        return null;
     }
 
     @Override

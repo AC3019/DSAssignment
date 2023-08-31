@@ -1,11 +1,12 @@
 package adt;
 
 import utility.MapFilterable;
+import utility.MapFindable;
 
 /**
  * @author xuanbin, Neoh Soon Chee, yong
  */
-public interface MapInterface<K extends Comparable<K>, V> {
+public interface MapInterface<K, V> {
 
     /**
      * Associates the value with the key and put it into the map
@@ -54,7 +55,28 @@ public interface MapInterface<K extends Comparable<K>, V> {
      * @param key
      * @return
      */
-    public abstract boolean contains(K key);
+    public abstract boolean containsKey(K key);
+
+    /**
+     * Tests whether `value` is in the map
+     * @param value
+     * @return
+     */
+    public abstract boolean containsValue(V value);
+
+    /**
+     * Finds the key of the value (if any)
+     * @param value
+     * @return
+     */
+    public abstract K keyOf(V value);
+
+    /**
+     * Finds the key of anything that agrees to what is being found
+     * @param mf
+     * @return
+     */
+    public abstract K find(MapFindable<K, V> mf);
 
     /**
      * Returns the size of the map (number of key value pairs)
