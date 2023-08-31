@@ -31,8 +31,15 @@ public class TableBuilder {
         }
     }
 
+    // return itself to facilitate method chaining
     public TableBuilder addColumn(String colName, Object[] colData) {
         this.table.put(colName, colData);
+
+        return this;
+    }
+
+    public TableBuilder removeColumn(String colName) {
+        this.table.remove(colName);
 
         return this;
     }

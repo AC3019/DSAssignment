@@ -66,6 +66,7 @@ public interface ListInterface<T> {
 
     /**
      * Converts the list back to a java array
+     * Thank you java for your unintuitive type erasure to make me make sure the user always tells u what type of item the arraylist is storing :)))
      * @param Class<U> the class to cast to
      * @return U[] the array containing every item in the list, except null (with the class)
      */

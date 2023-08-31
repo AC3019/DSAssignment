@@ -12,16 +12,19 @@ public class Course implements Comparable<Course>, Serializable {
 
     private String id; 
     private String name;
+    private String department; 
+
     private int creditHour;
     private static final int DEFAULT_CREDIT_HOUR = 1;
 
-    public Course(String id, String name, int creditHour) {
+    public Course(String id, String name, String department, int creditHour) {
         this.id = id;
         this.name = name;
+        this.department = department;
         this.creditHour = creditHour;
     }
 
-    public Course(String id, String name) { this(id, name, Course.DEFAULT_CREDIT_HOUR); }
+    public Course(String id, String name, String department) { this(id, name, department, Course.DEFAULT_CREDIT_HOUR); }
 
     public String getId() {
         return this.id;
@@ -37,6 +40,14 @@ public class Course implements Comparable<Course>, Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     public int getCreditHour() {
@@ -88,5 +99,13 @@ public class Course implements Comparable<Course>, Serializable {
         // id will need to be unique, compare id will do
         return this.id.compareTo(o.getId());
     }
+
+    @Override
+    public String toString() {
+        return id + " " + name + " (Department: " + department + ") [Credit Hour: " + creditHour
+                + "]";
+    }
+
+    
     
 }

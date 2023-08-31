@@ -12,8 +12,12 @@ public class Programme {
     private String programmeCode;
     private String programmeName;
     private TutorialGroup[] tutGrp;
-    private static int numberOfProgramme;
+    private static int numberOfProgramme = 0;
     
+    public static int getNumberOfProgramme() {
+        return numberOfProgramme;
+    }
+
     public Programme(){};
     
     public Programme(String programmeCode, String ProgrammeName){
