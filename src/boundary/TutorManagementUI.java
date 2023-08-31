@@ -41,7 +41,8 @@ public class TutorManagementUI {
        // Scanner scan = new Scanner(System.in);
         //        System.out.println("Enter the function u want to perform:");
         int choice = scan.nextInt();
-            scan.nextLine(); // Consume newline
+           scan.nextLine(); // Consume newline
+           //Input.cleanBuffer();
             //Input.cleanBuffer();
         return choice;
     }
@@ -67,8 +68,11 @@ public class TutorManagementUI {
                     //Character.toUpperCase(gender);
                     //System.out.print("Age: ");
                     //age = scan.nextInt();
+                    scan.nextLine();
+                   //Input.cleanBuffer();
                     age=Input.getInt("Age: ");
                     scan.nextLine();// clear buffer
+                   //Input.cleanBuffer();
                     //System.out.print("Phone: ");
                     //phoneNum = scan.nextLine();
                     phoneNum=Input.getString("Phone: ", false);
@@ -80,6 +84,7 @@ public class TutorManagementUI {
                         System.out.println("Gender should be either M or F. Please re-enter...");
                         invalidInput = true;
                     }
+                    
                 }while(invalidInput);     
                    
 
@@ -88,14 +93,14 @@ public class TutorManagementUI {
     }
     public int removeTutorData(){
          //Scanner scan = new Scanner(System.in);
-         System.out.println("Enter a id u wan to remove: ");
-            int id = scan.nextInt();
+        // System.out.println("Enter a id u wan to remove: ");
+            int id = Input.getInt("Enter an id you want to remove: ");
             return id;
     }
     public int searchTutorId(){
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Enter id u wan to find: ");
-        int id = scan.nextInt();
+        //Scanner scan = new Scanner(System.in);
+       // System.out.println("Enter id u wan to find: ");
+        int id = Input.getInt("Enter tutor's id that you want to find : ");
         scan.nextLine();
         return id;
     }
