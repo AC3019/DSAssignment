@@ -16,13 +16,15 @@ public class Tutor implements Comparable<Tutor> {
     // private TutorialGroup tutorialGroup;
     private int age;
     private String phoneNum;
+    private String icNo;
+    
 
     // default constructor
     public Tutor() {
     }
 
     public Tutor(int id,String name, String subject, char gender, /* TutorialGroup tutorialGroup */int age,
-            String phoneNum) {
+            String phoneNum,String icNo) {
         this.id=id;
         this.name = name;
         this.subject = subject;
@@ -30,11 +32,12 @@ public class Tutor implements Comparable<Tutor> {
         // this.tutorialGroup=tutorialGroup;
         this.age = age;
         this.phoneNum = phoneNum;
+        this.icNo=icNo;
 
     }
     
      public Tutor( String name, String subject, char gender, /* TutorialGroup tutorialGroup */int age,
-            String phoneNum) {
+            String phoneNum,String icNo) {
        
        this.name = name;
        this.subject = subject;
@@ -42,7 +45,7 @@ public class Tutor implements Comparable<Tutor> {
         // this.tutorialGroup=tutorialGroup;
       this.age = age;
        this.phoneNum = phoneNum;
-
+       this.icNo=icNo;
     }
     
 
@@ -77,7 +80,9 @@ public class Tutor implements Comparable<Tutor> {
     public int getId() {
         return id;
     }
-
+    public String getIcNO(){
+        return icNo;
+    }
     public void setName(String name) {
         this.name = name;
     }
@@ -85,7 +90,9 @@ public class Tutor implements Comparable<Tutor> {
     public void setSubject(String subject) {
         this.subject = subject;
     }
-
+    public void setIcNo(String icNo){
+        this.icNo=icNo;
+    }
     public void setGender(char gender) {
         this.gender = gender;
     }
@@ -104,8 +111,8 @@ public class Tutor implements Comparable<Tutor> {
 
     public String toString() {
         return String.format(
-                "Tutor's id: %d\nTutor's name:%s\nTutor's Subject:%s\nTutor's gender: %s\nTutor's age:%d\nTutor's phone num:%s\n",
-                id, name, subject, gender, age, phoneNum);
+                "Tutor's id: %d\nTutor's name:%s\nTutor's Subject:%s\nTutor's gender: %s\nTutor's age:%d\nTutor's phone num:%s\n IcNo:%s\n",
+                id, name, subject, gender, age, phoneNum, icNo);
     }
 
     @Override
