@@ -1,12 +1,14 @@
 package entity;
 
+import java.io.Serializable;
+
 import utility.NotSameInstanceException;
 
 /**
  * Just a stub entity
  * @author xuanbin
  */
-public class Course implements Comparable<Course> {
+public class Course implements Comparable<Course>, Serializable {
 
     private String id; 
     private String name;

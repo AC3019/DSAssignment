@@ -1,5 +1,6 @@
 package adt;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 
@@ -13,7 +14,7 @@ import utility.NotSameInstanceException;
  */
 @SuppressWarnings("unchecked")
 public class HashMap<K extends Comparable<K>, V> 
-    implements MapInterface<K, V>, Iterable<HashMap<K, V>.Pair> {
+    implements MapInterface<K, V>, Iterable<HashMap<K, V>.Pair>, Serializable {
 
     private ArrayList<K> keys;
     private BinarySearchTree<Pair>[] buckets;
