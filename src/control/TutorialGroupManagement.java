@@ -242,6 +242,4 @@ public class TutorialGroupManagement implements Serializable {
         tutGrpManagement.displayTutGrpManagement();
         //display.displayAllStudent(tutGrpManagement.studentList.toArray(Student.class));
     }
-
-
 }
