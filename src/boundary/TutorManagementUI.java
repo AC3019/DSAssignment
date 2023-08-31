@@ -9,12 +9,14 @@ package boundary;
  *
  * @author yong
  */
-//import utility.Input;
+import utility.Input;
 import entity.Tutor;
 import java.util.Scanner;
 import utility.Input;
 public class TutorManagementUI {
     Scanner scan=new Scanner(System.in);
+   // TutorManagementUI tmu=new TutorManagementUI();
+    Tutor tutor=new Tutor();
     public int printMenu() {
         // System.out.println("1. Add a new tutor");
         // System.out.println("2. Remove a tutor");
@@ -40,45 +42,48 @@ public class TutorManagementUI {
         //        System.out.println("Enter the function u want to perform:");
         int choice = scan.nextInt();
             scan.nextLine(); // Consume newline
-
+            //Input.cleanBuffer();
         return choice;
     }
     public Tutor tutorInput(){
                 //Scanner scan = new Scanner(System.in);
-                boolean invalidInput = false;
-                String name = "";
-                String subject = "";
-                char gender='m';
-                int age=0;
-                String phoneNum="";
-                
-                
-                    //invalidInput = false;
-                    System.out.print("Name: ");
-                    name = scan.nextLine();
+                boolean invalidInput ;
+                String name ;
+                String subject ;
+                char gender;
+                int age;
+                String phoneNum;
+                String icNo;
+                do{
+                    invalidInput = false;
+                    name=Input.getString("Name:",false);
+                    subject=Input.getString("Subject: ",false);
                     //name.toUpperCase();
-                    System.out.print("Subject: ");
-                    subject = scan.nextLine();
+                   
                     //subject.toUpperCase();
+                    //gender=tmu.getChar("Gender(M/F): ",false);
                     System.out.print("Gender(M/F): ");
                     gender = scan.next().toUpperCase().charAt(0);
                     //Character.toUpperCase(gender);
-                    System.out.print("Age: ");
-                    age = scan.nextInt();
+                    //System.out.print("Age: ");
+                    //age = scan.nextInt();
+                    age=Input.getInt("Age: ");
                     scan.nextLine();// clear buffer
-                    System.out.print("Phone: ");
-                    phoneNum = scan.nextLine();
+                    //System.out.print("Phone: ");
+                    //phoneNum = scan.nextLine();
+                    phoneNum=Input.getString("Phone: ", false);
+                    icNo=Input.getString("Ic No:", false);
                     // validate gender
-                    /*
+                    
                     if (Character.valueOf(gender).compareTo("M".charAt(0)) != 0
                             && Character.valueOf(gender).compareTo("F".charAt(0)) != 0) {
                         System.out.println("Gender should be either M or F. Please re-enter...");
                         invalidInput = true;
                     }
-                       */
+                }while(invalidInput);     
                    
 
-                Tutor tutorObj = new Tutor( name, subject, gender, age, phoneNum);
+                Tutor tutorObj = new Tutor( tutor.getId(),name, subject, gender, age, phoneNum,icNo);
                 return tutorObj;
     }
     public int removeTutorData(){
