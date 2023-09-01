@@ -35,6 +35,11 @@ public class TutorManagement {
         tm.displayMenu();
 
     }
+
+    // TODO: gud job why use java default collection, sila convert to ours
+    public Tutor[] getTutors() {
+        return this.tutors.values().toArray(new Tutor[] {});
+    }
     
     public void displayMenu() {
         boolean running = true;

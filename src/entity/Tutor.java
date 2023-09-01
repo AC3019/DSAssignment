@@ -4,11 +4,13 @@
  */
 package entity;
 
+import java.io.Serializable;
+
 /**
  *
  * @author yong
  */
-public class Tutor implements Comparable<Tutor> {
+public class Tutor implements Comparable<Tutor>, Serializable{
     private String name;
     private String subject;
     private int id ;

@@ -77,8 +77,11 @@ public class TeachingAssignment implements Serializable {
     public void assignTutorsToCourse(CourseManagement cm, TutorManagement tm) {
         Course selectedCourse = this.selectCourse(cm.getCourses());
         while (true) {
-            // TODO: require TutorManagement to implement getTutors() method
-            ArrayList<Tutor> filteredTutors = this.filterTutorSuitableForCourse(selectedCourse, tm.getTutors());
+            // TODO: see yi kit got change to use our own eh or not
+            ArrayList<Tutor> filteredTutors = this.filterTutorSuitableForCourse(
+                selectedCourse, 
+                new ArrayList<Tutor>(tm.getTutors())
+            );
             Tutor selectedTutor = this.selectTutor(selectedCourse, filteredTutors);
 
             this.assignTutorToCourse(selectedCourse, selectedTutor);
