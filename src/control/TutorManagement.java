@@ -9,16 +9,16 @@ package control;
  * @author yong
  */
 import entity.Tutor;
-//import adt.HashMap;
-//import adt.ArrayList;
-//import adt.ListInterface;
-import java.util.List;
-import java.util.HashMap;
+import adt.HashMap;
+import adt.ArrayList;
+import adt.ListInterface;
+//import java.util.List;
+//import java.util.HashMap;
 import java.io.Serializable;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import boundary.TutorManagementUI;
 import java.util.Scanner;
-import java.util.Map;
+//import java.util.Map;
 public class TutorManagement implements Serializable {
     HashMap<Integer, Tutor> tutors=new HashMap<>();
     TutorManagementUI tmu = new TutorManagementUI();
@@ -38,7 +38,7 @@ public class TutorManagement implements Serializable {
 
     // TODO: gud job why use java default collection, sila convert to ours
     public Tutor[] getTutors() {
-        return this.tutors.values().toArray(new Tutor[] {});
+        return this.tutors.getValues(Tutor.class);
     }
     
     public void displayMenu() {
@@ -152,7 +152,7 @@ public class TutorManagement implements Serializable {
         }
     }
      public  void listAllTutor() {
-        adt.ArrayList<Tutor> arl = new adt.ArrayList<>(this.tutors.values().toArray(new Tutor[] {}));
+        adt.ArrayList<Tutor> arl = new adt.ArrayList<>(this.tutors.getValues(Tutor.class));
         arl.sort((Tutor t1, Tutor t2) -> t2.getName().compareTo(t1.getName()));
          if(tutors.size()>0){
         System.out.println(tutors.toString());
@@ -184,7 +184,7 @@ public class TutorManagement implements Serializable {
         System.out.print("Gender to filter: ");
         char genderToFilter = scan.next().charAt(0);
         //Character.toUpperCase(genderToFilter);
-        List <Tutor> matchedTutors = new ArrayList<>();
+        ListInterface <Tutor> matchedTutors = new ArrayList<>();
         for (Map.Entry<Integer, Tutor> tutor : tutors.entrySet()) {
             if (Character.valueOf(genderToFilter).compareTo(tutor.getValue().getGender()) == 0) {
                 matchedTutors.add(tutor.getValue());
@@ -198,11 +198,11 @@ public class TutorManagement implements Serializable {
         System.out.print("Subject to filter: ");
         String subjectToFilter = scan.nextLine();
         //subjectToFilter.toUpperCase();
-        List <Tutor> matchedTutors = new ArrayList<>();
+        Tutor[] matchedTutors = tutors.filter(
+                (Integer k, Tutor v) -> v.getDepartment().equals(subjectToFilter)
+        ).getValues(Tutor.class);
         for (Map.Entry<Integer, Tutor> tutor : tutors.entrySet()) {
-            if ((subjectToFilter).compareTo(tutor.getValue().getDepartment()) == 0) {
-                matchedTutors.add(tutor.getValue());
-            }
+            
         }
         System.out.println(matchedTutors);
          System.out.println("The total number of tutors in this subject are "+matchedTutors.size());
