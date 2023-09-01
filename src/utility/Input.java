@@ -205,7 +205,7 @@ public class Input {
     /**
      * Prompts user "Input anything to continue" and waits for the user to decide to continue to the next output
      */
-    public void pause() {
+    public static void pause() {
         getChar("Input anything to continue");
     }
 

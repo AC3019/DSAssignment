@@ -38,7 +38,7 @@ public class TutorialGroupManagement implements Serializable {
                     removeTutGrp();
                     break;
                 case 2:
-                    display.printAllSelectedTutGrp(tutGrpList);
+                    sortTutGrpList();
                     break;
                 case 3:
                     addStudent();
@@ -53,7 +53,7 @@ public class TutorialGroupManagement implements Serializable {
                     findStudent();
                     break;
                 case 7:
-                    displayAllStudent();
+                    displayAndEditAllStudent();
                     break;
                 case 8:
                     filterTutGrp();
@@ -75,9 +75,43 @@ public class TutorialGroupManagement implements Serializable {
     //function to delete a tutGrp
     public TutorialGroup removeTutGrp(){
         display.header();
-        //remove tutGrp selected
-        TutorialGroup tutGrpRemoved = tutGrpList.remove(display.deleteTutGrp(tutGrpList));
-        return tutGrpRemoved;
+        //if(!tutGrpList.isEmpty()){
+            //remove tutGrp selected
+            TutorialGroup tutGrpRemoved = tutGrpList.remove(display.deleteTutGrp(tutGrpList));
+            return tutGrpRemoved;
+        //}else
+            //display.noTutGrp();
+    }
+    
+    public void sortTutGrpList(){
+        display.header();
+        //display all tutGrp first
+        display.printAllSelectedTutGrp(tutGrpList);
+        //ask whether want to sort
+        char decision = display.sortChoice().toUpperCase().charAt(0);
+        if (decision == 'Y'){
+            //ask for sort type
+            int choice = display.sortChoiceType();
+            if(choice == 0){//sort by ProgrammeCode
+                tutGrpList.sort((TutorialGroup t1, TutorialGroup t2) -> t1.getProgrammeCode().compareTo(t2.getProgrammeCode()));
+                    if(!tutGrpList.isEmpty()){
+                        for (TutorialGroup t : tutGrpList){
+                            //print in table form
+                            System.out.println(t);
+                        }
+                    }else{
+                        display.noTutGrp();
+                    }
+            }else if (choice == 1){//sort by numOfStudents
+                
+            }else{
+                display.errorChoice();
+            }
+        }else{
+            display.continueEnter();//if dw sort direct ask for input to continue
+            //ERROR occur
+        }
+
     }
     
     //function to add student in a tutGrp
@@ -105,8 +139,7 @@ public class TutorialGroupManagement implements Serializable {
         //stall tutGrp obj selected
         TutorialGroup selectedTutGrp = tutGrpList.get(tutGrp);
         //add student to tutGrp obj selected
-        selectedTutGrp.getStudent().insert(student);//ERROR occur
-        //Cannot invoke "adt.ArrayList.insert(Object)" because the return value of "entity.TutorialGroup.getStudent()" is null
+        selectedTutGrp.getStudent().insert(student);
     }
     
     //function to remove a student in a tutGrp
@@ -115,8 +148,13 @@ public class TutorialGroupManagement implements Serializable {
         //return and stall the tutGrp obj
         TutorialGroup tutGrp = tutGrpList.get(display.choiceOfExistGrp(tutGrpList));
         Student[] student = tutGrp.getStudent().toArray(Student.class);
-        //display all the students and remove the student based on selected in the tutGrp selected
-        tutGrp.getStudent().remove(display.displayAllStudent(student));
+        //check is the tutGrp selected got student
+        if(student.length > 0){
+            //display all the students and remove the student based on selected in the tutGrp selected
+            tutGrp.getStudent().remove(display.displayAllStudentForRemove(student));
+        }else{
+            display.noStudent();
+        }
     }
     
     
@@ -126,30 +164,46 @@ public class TutorialGroupManagement implements Serializable {
         //display all tutGrp and find the tutGrp
         TutorialGroup tutGrp = tutGrpList.get(display.findStudentInTutGrp(tutGrpList));
         Student[] student = tutGrp.getStudent().toArray(Student.class);
-        //return and remove the student remove
-        Student selectedStudent = tutGrp.getStudent().remove(display.displayAllStudent(student));
-        tutGrp = tutGrpList.get(display.insertStudentInTutGrp(tutGrpList));
-        tutGrp.getStudent().insert(selectedStudent);
+        //check is the tutGrp selected got student
+        if(student.length > 0){
+            //return and remove the student remove
+            Student selectedStudent = tutGrp.getStudent().remove(display.displayAllStudent(student));
+            tutGrp = tutGrpList.get(display.insertStudentInTutGrp(tutGrpList));
+            tutGrp.getStudent().insert(selectedStudent);
+        }else{
+            display.noStudent();
+        }
     }
     
     //try change logic to search through all tutGrp shud be btr
     public void findStudent(){
         display.header();
         int choice = display.choiceOfSearchingStudent();
-
-        /*tutGrpList.indexOf((t) -> {if (searchBy == "ID") {
-            return a.getID().equals(...)
-          } else {
-            return a.getName().equals(...)
-          }})*/
-        //TutorialGroup tutGrp = tutGrpList.get(i);
-        //Student[] student = tutGrpList.get(i).getStudent().toArray(Student.class);
+        /*
+        if (choice == 0){
+            String selectedStudentID = display.findStudentID();
+        }else if (choice == 1){
+            String selectedStudentName = display.findStudentName();
+        }else{
+            display.errorChoice();
+        }
+        
+        for (int i = 0; i < tutGrpList.getNumberOfEntries(); i++){
+            tutGrpList.get(i).getStudent().indexOf((t) -> {
+                if (choice == 0) {
+                    return t.getStudentID().equals(selectedStudentID);
+                }else{
+                    return t.getStudentName().equals(selectedStudentName);
+                }   
+            });
+        }
+        */
 
         switch (choice){
             //search using studentID
             case 0:
                 String selectedStudentID = display.findStudentID();
-                    for (int i = 0; i <= tutGrpList.getNumberOfEntries(); i++){
+                    for (int i = 0; i < tutGrpList.getNumberOfEntries(); i++){
                         //loop through the whole student array to find the student that match the condition
                         /*for (int j = 0; j < student.length; i++){
                             //if studentID match 
@@ -164,7 +218,7 @@ public class TutorialGroupManagement implements Serializable {
             //search using studentName
             case 1:
                 String selectedStudentName = display.findStudentName();
-                    for (int i = 0; i <= tutGrpList.getNumberOfEntries(); i++){
+                    for (int i = 0; i < tutGrpList.getNumberOfEntries(); i++){
                         ArrayList<Student> temp = tutGrpList.get(i).getStudent();
                         studentList.insert(temp.get(temp.indexOf((Student item) -> item.getStudentName().equals(selectedStudentName))));
                         /*for (int i = 0; i < student.length; i++){
@@ -176,19 +230,32 @@ public class TutorialGroupManagement implements Serializable {
             default:
                 break;
         }
-        
         //pass the student ArrayList into the method to print out in table form
         if (studentList.isEmpty())
-            display.studentNotFound();
+            display.studentNotFound();//ERROR occur
         else
             display.displayAllSelectedStudent(studentList);
     }
     
-    public void displayAllStudent(){
+    public void displayAndEditAllStudent(){
         display.header();
-        int choice = display.choiceOfTutGrp(tutGrpList);
-        TutorialGroup tutGrp = tutGrpList.get(choice);
-        display.displayAllSelectedStudent(tutGrp.getStudent());
+        if(tutGrpList.getNumberOfEntries() > 0){
+            int choice = display.choiceOfTutGrp(tutGrpList);
+            TutorialGroup tutGrp = tutGrpList.get(choice);
+            display.displayAllSelectedStudent(tutGrp.getStudent());
+            //if number of student > 0
+            if(tutGrp.getStudent().getNumberOfEntries() > 0){
+                char decision = display.edit().toUpperCase().charAt(0);
+                if(decision == 'Y'){
+                    //ask for index of student to edit
+                    int indexStudent = display.editStudent(tutGrp.getStudent());
+                    tutGrp.getStudent().get(indexStudent).setStudentName(display.findStudentName());
+                    tutGrp.getStudent().get(indexStudent).setAge(display.findStudentAge());
+                }
+            }
+        }else{
+            display.noTutGrp();
+        }
     }
     
     public void filterTutGrp() {
@@ -203,20 +270,14 @@ public class TutorialGroupManagement implements Serializable {
                 String progCode = display.getProgCode();
                 selectedTutGrpList = tutGrpList.filter((TutorialGroup item) -> item.getProgrammeCode().equals(progCode));
                 break;
-            case 1://filter by progName
-                String progName = display.getProgName();
-                selectedTutGrpList = tutGrpList.filter((TutorialGroup item) -> item.getProgrammeName().equals(progName));
-                break;
-            case 2://filter by tutGrpCode
+            case 1://filter by tutGrpCode
                 String tutGrpCode = display.getTutGrpCode();
                 selectedTutGrpList = tutGrpList.filter((TutorialGroup item) -> item.getTutGrpCode().equals(tutGrpCode));
                 break;
-            case 3://filter by all criteria above
+            case 2://filter by all criteria above
                 String reProgCode = display.getProgCode();
-                String reProgName = display.getProgName();
                 String reTutGrpCode = display.getTutGrpCode();
                 selectedTutGrpList = tutGrpList.filter((TutorialGroup item) -> item.getProgrammeCode().equals(reProgCode));
-                selectedTutGrpList = selectedTutGrpList.filter((TutorialGroup item) -> item.getProgrammeName().equals(reProgName));
                 selectedTutGrpList = selectedTutGrpList.filter((TutorialGroup item) -> item.getTutGrpCode().equals(reTutGrpCode));
                 break;
             default:
@@ -232,10 +293,6 @@ public class TutorialGroupManagement implements Serializable {
                     selectedTutGrpList = selectedTutGrpList.filter((TutorialGroup item) -> item.getProgrammeCode().equals(progCode));
                     break;
                 case 1:
-                    String progName = display.getProgName();
-                    selectedTutGrpList = selectedTutGrpList.filter((TutorialGroup item) -> item.getProgrammeName().equals(progName));
-                    break;
-                case 2:
                     String tutGrpCode = display.getTutGrpCode();
                     selectedTutGrpList = selectedTutGrpList.filter((TutorialGroup item) -> item.getTutGrpCode().equals(tutGrpCode));
                     break;

@@ -50,7 +50,32 @@ public class TutorialGroupManagementUI implements Serializable {
         String tutGrpCode = Input.getString("Please enter the tutorial group code: ", false); 
         return new TutorialGroup(programmeCode, programmeName, tutGrpCode);
     }
-
+    
+    public void noTutGrp(){
+        System.out.println("No Tutorial Group being stored in the system.");
+    }
+    
+    public String sortChoice(){
+        String choice = Input.getString("Did you want to sort the result(Y/N): ", false);
+        return choice;
+    }
+    
+    public void continueEnter(){
+        Input.pause();
+    }
+    
+    public int sortChoiceType(){
+        int choice = Input.getChoice("Please enter the sort choice: ", new String[] {
+            "Sort by Programme Code",
+            "Sort by Number of Students"
+        }, (String item) -> item);
+        return choice;
+    }
+    
+    public void noStudent(){
+        System.out.println("No student found in the selected tutorial group.");
+    }
+    
     //receive tutGrp arrayList
     public int deleteTutGrp(ArrayList<TutorialGroup> tutGrp) {
         return this.getTutGrpChoice(
@@ -99,10 +124,8 @@ public class TutorialGroupManagementUI implements Serializable {
         return this.getTutGrpChoice("Please enter the index number of tutorial group you want to display: ", tutGrp);
     }
     
-    //display all student in tutGrp
-    public int displayAllStudent(Student[] student){
-        //printAllStudent(new ArrayList<>(student));
-        //Input.getInt("ashjdga", 0, student.getNumberOfEntries());
+    //display all student in tutGrp for remove the student purpose
+    public int displayAllStudentForRemove(Student[] student){
         Input.cleanBuffer();
         int choice = Input.getChoice(
                 "Please enter the index number of the student you want to remove: ", 
@@ -110,15 +133,17 @@ public class TutorialGroupManagementUI implements Serializable {
                 (Student item) -> item.getStudentID() + " " + item.getStudentName()
         );
         return choice;
-        //TableBuilder tb = new TableBuilder();
-        //tb.addColumn("StudentID", student[i].getStudentID().toString());
-        // for(int i = 1; i <= tutGrp.getStudent().getNumberOfEntries(); i++){
-        //     System.out.println(i + "  " + tutGrp.getStudent().toArray(Student.class)[i].toString());
-        // }
-
-        //int choice = Input.getChoice("", new Student[] {
-            
-        //}, (Student item) -> { return item.getStudentID() + item.getStudentName(); });
+    }
+    
+    //display all student in tutGrp for change the student tutGrp purpose
+    public int displayAllStudent(Student[] student){
+        Input.cleanBuffer();
+        int choice = Input.getChoice(
+                "Please enter the index number of the student you want to switch tutorial group: ", 
+                student, 
+                (Student item) -> item.getStudentID() + " " + item.getStudentName()
+        );
+        return choice;
     }
     
     public int findStudentInTutGrp(ArrayList<TutorialGroup> tutGrp){
@@ -139,23 +164,34 @@ public class TutorialGroupManagementUI implements Serializable {
     
     public String findStudentID(){
         Input.cleanBuffer();
-        String studentID = Input.getString("Enter the student ID of the student: ", false);
+        String studentID = Input.getString("Please enter the student ID of the student: ", false);
         return studentID;
     }
     
     public String findStudentName(){
         Input.cleanBuffer();
-        String studentName = Input.getString("Enter the name of the student: ",false);
+        String studentName = Input.getString("Please enter the name of the student: ",false);
         return studentName;
     }
     
     public int findStudentAge(){
-        int studentAge = Input.getInt("Enter the age of the student: ");
+        int studentAge = Input.getInt("Please enter the age of the student: ");
         return studentAge;
     }
     
     public void studentNotFound(){
-        System.out.println("There is no match record found in the selected tutorial group");
+        System.out.println("There is no match record found in the selected tutorial group.");
+    }
+    
+    public String edit(){
+        String decision = Input.getString("Did you want to edit the student detail(Y/N): ", false);
+        return decision;
+    }
+    
+    public int editStudent(ArrayList<Student> studentList){
+        Input.cleanBuffer();
+        int choice = Input.getInt("Enter the index number of the student you want to edit: ", 0, studentList.getNumberOfEntries()-1);
+        return choice;
     }
     
     //print all selected student
@@ -174,7 +210,6 @@ public class TutorialGroupManagementUI implements Serializable {
     public int choiceOfFilterTutGrp(){
         int choice = Input.getChoice("Please enter the index number of the way you want to filter with: ", new String[] {
             "By Programme Code",
-            "By Programme Name",
             "By Tutorial Group Code",
             "All criteria above"
         }, (String item) -> item);
@@ -187,10 +222,11 @@ public class TutorialGroupManagementUI implements Serializable {
         return progCode;
     }
     
+    /*
     public String getProgName(){
         String progName = Input.getString("Please enter the programme name you want to filter: ",false);
         return progName;
-    }
+    }*/
     
     public String getTutGrpCode(){
         Input.cleanBuffer();
@@ -202,8 +238,7 @@ public class TutorialGroupManagementUI implements Serializable {
     public int reChoiceOfFilterTutGrp(){
         int choice = Input.getChoice("Please enter the index number of the way you want to filter with: ", new String[] {
             "By Programme Code",
-            "By Programme Name",
-            "By Tutorial Group Code",
+            "By Tutorial Group Code"
         }, (String item) -> item);
         return choice;
     }
