@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public class Tutor implements Comparable<Tutor>, Serializable{
     private String name;
-    private String subject;
+    private String department;
     private int id ;
     private char gender;
     // private TutorialGroup tutorialGroup;
@@ -26,11 +26,11 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     public Tutor() {
     }
 
-    public Tutor(int id,String name, String subject, char gender, /* TutorialGroup tutorialGroup */int age,
+    public Tutor(int id,String name, String department, char gender, /* TutorialGroup tutorialGroup */int age,
             String phoneNum,String icNo) {
         this.id=id;
         this.name = name;
-        this.subject = subject;
+        this.department = department;
         this.gender = gender;
         // this.tutorialGroup=tutorialGroup;
         this.age = age;
@@ -39,25 +39,25 @@ public class Tutor implements Comparable<Tutor>, Serializable{
 
     }
     
-     public Tutor( String name, String subject, char gender, /* TutorialGroup tutorialGroup */int age,
+     public Tutor( String name, String department, char gender, /* TutorialGroup tutorialGroup */int age,
             String phoneNum,String icNo) {
        
-        this(currentID++, name, subject, gender, age, phoneNum, icNo);
+        this(currentID++, name, department, gender, age, phoneNum, icNo);
     }
     
 
     public Tutor (int id,String name, String subject){
         this.id=id;
         this.name=name;
-        this.subject=subject;
+        this.department=subject;
     }
     public String getName() {
         return name;
 
     }
 
-    public String getSubject() {
-        return subject;
+    public String getDepartment() {
+        return department;
 
     }
 
@@ -84,8 +84,8 @@ public class Tutor implements Comparable<Tutor>, Serializable{
         this.name = name;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setDepartment(String subject) {
+        this.department = subject;
     }
     public void setIcNo(String icNo){
         this.icNo=icNo;
@@ -109,7 +109,7 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     public String toString() {
         return String.format(
                 "Tutor's id: %d\nTutor's name:%s\nTutor's Subject:%s\nTutor's gender: %s\nTutor's age:%d\nTutor's phone num:%s\n IcNo:%s\n",
-                id, name, subject, gender, age, phoneNum, icNo);
+                id, name, department, gender, age, phoneNum, icNo);
     }
 
     @Override

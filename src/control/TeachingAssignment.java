@@ -40,7 +40,7 @@ public class TeachingAssignment implements Serializable {
         // filter out the tutors that has already been assigned to the course
         return tutors.filter(
             // TODO: might wanna change subject of tutor to become department
-            (Tutor t) -> !this.courseTutorMap.get(c).contains(t) && t.getSubject().equals(c.getDepartment())
+            (Tutor t) -> !this.courseTutorMap.get(c).contains(t) && t.getDepartment().equals(c.getDepartment())
         );
     }
 
