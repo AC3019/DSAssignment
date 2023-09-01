@@ -381,6 +381,7 @@ class BinarySearchTree<T extends Comparable<T>> implements Iterable<T>, Serializ
         // since in delete we will set the key and value to the node, pointing to the node is not enough, we have to clone it
         T toBeDelete = this.find(value);
         this.root = this.delete(this.root, value);
+        this.numberOfElements--;
         return toBeDelete;
     }
 
