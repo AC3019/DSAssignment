@@ -1,5 +1,7 @@
 package control;
 
+import utility.Input;
+
 /**
  * Just a stub, to let course and tutor choose department
  */
