@@ -63,6 +63,13 @@ public interface MapInterface<K, V> {
      * @return
      */
     public abstract boolean containsValue(V value);
+    
+    /**
+     * Check if the map has anything that matches the criteria given by mf
+     * @param mf
+     * @return
+     */
+    public abstract boolean containsValue(MapFindable<K, V> mf);
 
     /**
      * Finds the key of the value (if any)
