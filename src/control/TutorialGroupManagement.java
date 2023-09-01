@@ -8,6 +8,7 @@ import boundary.TutorialGroupManagementUI;
 import entity.Student;
 import entity.TutorialGroup;
 import java.io.Serializable;
+import utility.Input;
 /**
  *
  * @author Neoh Soon Chee
@@ -16,9 +17,7 @@ public class TutorialGroupManagement implements Serializable {
 
     //variables
     private ArrayList<TutorialGroup> tutGrpList = new ArrayList<>();
-    private ArrayList<Student> studentList = new ArrayList<>(new Student[] {
-        new Student("12345", "ABCD", 12),
-    });//if wan will be student management
+    private ArrayList<Student> studentList = new ArrayList<>();
     private static TutorialGroupManagementUI display = new TutorialGroupManagementUI();
 
     public ArrayList<TutorialGroup> getTutorialGroups() {
@@ -39,7 +38,7 @@ public class TutorialGroupManagement implements Serializable {
                     removeTutGrp();
                     break;
                 case 2:
-                    display.displayTutGrp(tutGrpList);
+                    display.printAllSelectedTutGrp(tutGrpList);
                     break;
                 case 3:
                     addStudent();
@@ -63,6 +62,7 @@ public class TutorialGroupManagement implements Serializable {
                     continue;
             }
         } while(choice != 9);
+        System.out.println("Exiting tutorial group management....");
     }
     
     //function to create a new tutGrp
@@ -73,10 +73,11 @@ public class TutorialGroupManagement implements Serializable {
     }
     
     //function to delete a tutGrp
-    public void removeTutGrp(){
+    public TutorialGroup removeTutGrp(){
         display.header();
         //remove tutGrp selected
-        tutGrpList.remove(display.deleteTutGrp(tutGrpList));
+        TutorialGroup tutGrpRemoved = tutGrpList.remove(display.deleteTutGrp(tutGrpList));
+        return tutGrpRemoved;
     }
     
     //function to add student in a tutGrp
@@ -94,6 +95,7 @@ public class TutorialGroupManagement implements Serializable {
                 break;
             //insert in new tutGrp
             case 1: 
+                Input.cleanBuffer();
                 createTutGrp();//create a new tutGrp
                 //since new tutGrp will be added at last so just get numOfEntries
                 tutGrp = tutGrpList.getNumberOfEntries() - 1;//stall the tutGrp
@@ -133,43 +135,48 @@ public class TutorialGroupManagement implements Serializable {
     //try change logic to search through all tutGrp shud be btr
     public void findStudent(){
         display.header();
-        TutorialGroup tutGrp = tutGrpList.get(display.findStudentInTutGrp(tutGrpList));
-        Student[] student = tutGrp.getStudent().toArray(Student.class);
         int choice = display.choiceOfSearchingStudent();
+
+        /*tutGrpList.indexOf((t) -> {if (searchBy == "ID") {
+            return a.getID().equals(...)
+          } else {
+            return a.getName().equals(...)
+          }})*/
+        //TutorialGroup tutGrp = tutGrpList.get(i);
+        //Student[] student = tutGrpList.get(i).getStudent().toArray(Student.class);
+
         switch (choice){
             //search using studentID
-            case 1:
+            case 0:
                 String selectedStudentID = display.findStudentID();
-                //loop through the whole student array to find the student that match the condition
-                for (int i = 0; i < student.length; i++){
-                    //if studentID match 
-                    if (student[i].getStudentID().equals(selectedStudentID))
-                        studentList.insert(student[i]);//insert the student into student ArrayList
-                }
-                //using method to search
-                int studentIndex = tutGrp.getStudent().indexOf((Student s) -> s.getStudentID().equals(selectedStudentID));
-                studentList.insert(tutGrp.getStudent().get(studentIndex));
+                    for (int i = 0; i <= tutGrpList.getNumberOfEntries(); i++){
+                        //loop through the whole student array to find the student that match the condition
+                        /*for (int j = 0; j < student.length; i++){
+                            //if studentID match 
+                            if (student[j].getStudentID().equals(selectedStudentID))
+                                studentList.insert(student[j]);//insert the student into student ArrayList
+                        }*/
+                        //using method to search
+                        int studentIndex = tutGrpList.get(i).getStudent().indexOf((Student s) -> s.getStudentID().equals(selectedStudentID));
+                        studentList.insert(tutGrpList.get(i).getStudent().get(studentIndex));
+                    }
                 break;
             //search using studentName
-            case 2:
+            case 1:
                 String selectedStudentName = display.findStudentName();
-                ArrayList<Student> temp = tutGrp.getStudent();
-                studentList.insert(temp.get(temp.indexOf((Student item) -> item.getStudentName().equals(selectedStudentName))));
-                /*for (int i = 0; i < student.length; i++){
-                    //if studentName match 
-                    if (student[i].getStudentName().equals(selectedStudentName))
-                        studentList.insert(student[i]);//insert the student into student ArrayList
-                }*/
-            case 3:
-                int selectedStudentAge = display.findStudentAge();
-                for (int i = 0; i < student.length; i++){
-                    //if studentAge match 
-                    if (student[i].getStudentAge() == selectedStudentAge)//cannot use .equals bcuz is primitive type
-                        studentList.insert(student[i]);//insert the student into student ArrayList
-                }
+                    for (int i = 0; i <= tutGrpList.getNumberOfEntries(); i++){
+                        ArrayList<Student> temp = tutGrpList.get(i).getStudent();
+                        studentList.insert(temp.get(temp.indexOf((Student item) -> item.getStudentName().equals(selectedStudentName))));
+                        /*for (int i = 0; i < student.length; i++){
+                            //if studentName match 
+                            if (student[i].getStudentName().equals(selectedStudentName))
+                                studentList.insert(student[i]);//insert the student into student ArrayList
+                        }*/
+                    }
             default:
                 break;
         }
+        
         //pass the student ArrayList into the method to print out in table form
         if (studentList.isEmpty())
             display.studentNotFound();
@@ -238,7 +245,8 @@ public class TutorialGroupManagement implements Serializable {
             decision = display.continueFilter().toUpperCase().charAt(0);
         }
         //display the filter result
-        display.displayTutGrp(selectedTutGrpList);
+        System.out.println("Hello");
+        display.printAllSelectedTutGrp(selectedTutGrpList);
     }
         
     //main method
