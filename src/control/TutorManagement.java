@@ -14,15 +14,15 @@ import entity.Tutor;
 //import adt.ListInterface;
 import java.util.List;
 import java.util.HashMap;
+import java.io.Serializable;
 import java.util.ArrayList;
 import boundary.TutorManagementUI;
 import java.util.Scanner;
 import java.util.Map;
-public class TutorManagement {
+public class TutorManagement implements Serializable {
     HashMap<Integer, Tutor> tutors=new HashMap<>();
     TutorManagementUI tmu = new TutorManagementUI();
     //TutorManagement tm=new TutorManagement();
-    static int id=1;
     Scanner scan=new Scanner(System.in);
     /*
     public TutorManagement() {
@@ -103,8 +103,7 @@ public class TutorManagement {
            // if (containsDuplicate) {
               // System.out.println("This tutor already exists in the list.");
            // } else {
-                tutors.put(id, tutorObj);
-                id++;
+                tutors.put(tutorObj.getId(), tutorObj);
             
          //}else {
             // Will only come here for first tutor addition

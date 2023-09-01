@@ -20,6 +20,10 @@ public class TutorialGroupManagement implements Serializable {
         new Student("12345", "ABCD", 12),
     });//if wan will be student management
     private static TutorialGroupManagementUI display = new TutorialGroupManagementUI();
+
+    public ArrayList<TutorialGroup> getTutorialGroups() {
+        return this.tutGrpList;
+    }
     
     //main menu display for select function
     public void displayTutGrpManagement() {

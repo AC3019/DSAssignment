@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package boundary; 
+import java.io.Serializable;
+
 import adt.ArrayList;
 import entity.Student;
 import entity.TutorialGroup;
@@ -13,7 +15,7 @@ import utility.TableBuilder;
  *
  * @author Neoh Soon Chee
  */
-public class TutorialGroupManagementUI {
+public class TutorialGroupManagementUI implements Serializable {
     
     public void header(){
         System.out.println("_|_|_|_|_|    _|_|    _|_|_|    _|    _|  _|      _|  _|_|_|_|_|");

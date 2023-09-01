@@ -1,10 +1,12 @@
 package boundary;
 
+import java.io.Serializable;
+
 import entity.Course;
 import entity.Tutor;
 import utility.Input;
 
-public class TeachingAssignmentUI {
+public class TeachingAssignmentUI implements Serializable {
     
     public int getMenuChoice() {
         return Input.getChoice("Enter your choice: ", new String[] {

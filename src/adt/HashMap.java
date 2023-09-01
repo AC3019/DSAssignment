@@ -163,7 +163,7 @@ public class HashMap<K extends Comparable<K>, V>
     }
 
     // we store key value pairs in form of Nodes
-    public class Pair implements Comparable<Pair> {
+    public class Pair implements Comparable<Pair>, Serializable {
         private K key;
         private V value;
 
@@ -220,7 +220,7 @@ public class HashMap<K extends Comparable<K>, V>
     }
 
     // iterates through HashMap, with no particular order
-    private class Itr implements Iterator<Pair> {
+    private class Itr implements Iterator<Pair>, Serializable {
 
         private int currentBucket = 0;
         private Iterator<Pair> currentIterating;
@@ -276,7 +276,7 @@ public class HashMap<K extends Comparable<K>, V>
  * Can be it's own ADT but I only use it in this hashmap to work as (buckets, for collision)
  * So this is gonna be a nerfed version of BinarySearchTree (no reordering)
  */
-class BinarySearchTree<T extends Comparable<T>> implements Iterable<T> {
+class BinarySearchTree<T extends Comparable<T>> implements Iterable<T>, Serializable {
 
     private BSTNode root;
     private int numberOfElements;
@@ -384,7 +384,7 @@ class BinarySearchTree<T extends Comparable<T>> implements Iterable<T> {
     }
 
     // simply performs inorder search
-    private class Itr implements Iterator<T> {
+    private class Itr implements Iterator<T>, Serializable {
         // thanks to me the arrayList can be used as a Stack as well
         private ArrayList<BSTNode> traverseList;
 
@@ -419,7 +419,7 @@ class BinarySearchTree<T extends Comparable<T>> implements Iterable<T> {
     }
 
     @SuppressWarnings("unused")
-    private class BSTNode {
+    private class BSTNode implements Serializable {
         private BSTNode left;
         private BSTNode right;
         private T value;

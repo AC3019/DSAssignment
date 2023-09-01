@@ -19,6 +19,7 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     private int age;
     private String phoneNum;
     private String icNo;
+    private static int currentID = 1;
     
 
     // default constructor
@@ -41,13 +42,7 @@ public class Tutor implements Comparable<Tutor>, Serializable{
      public Tutor( String name, String subject, char gender, /* TutorialGroup tutorialGroup */int age,
             String phoneNum,String icNo) {
        
-       this.name = name;
-       this.subject = subject;
-       this.gender = gender;
-        // this.tutorialGroup=tutorialGroup;
-      this.age = age;
-       this.phoneNum = phoneNum;
-       this.icNo=icNo;
+        this(currentID++, name, subject, gender, age, phoneNum, icNo);
     }
     
 

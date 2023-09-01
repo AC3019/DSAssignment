@@ -11,12 +11,14 @@ package boundary;
  */
 import utility.Input;
 import entity.Tutor;
+
+import java.io.Serializable;
 import java.util.Scanner;
 import utility.Input;
-public class TutorManagementUI {
+public class TutorManagementUI implements Serializable {
     Scanner scan=new Scanner(System.in);
    // TutorManagementUI tmu=new TutorManagementUI();
-    Tutor tutor=new Tutor();
+    
     public int printMenu() {
         // System.out.println("1. Add a new tutor");
         // System.out.println("2. Remove a tutor");
@@ -63,16 +65,15 @@ public class TutorManagementUI {
                    
                     //subject.toUpperCase();
                     //gender=tmu.getChar("Gender(M/F): ",false);
-                    System.out.print("Gender(M/F): ");
-                    gender = scan.next().toUpperCase().charAt(0);
+                    gender = Character.toUpperCase(Input.getChar("Gender(M/F): ", false));
                     //Character.toUpperCase(gender);
                     //System.out.print("Age: ");
                     //age = scan.nextInt();
-                    scan.nextLine();
+                    Input.cleanBuffer();
                    //Input.cleanBuffer();
                     age=Input.getInt("Age: ");
-                    scan.nextLine();// clear buffer
-                   //Input.cleanBuffer();
+                    // scan.nextLine();// clear buffer
+                    Input.cleanBuffer();
                     //System.out.print("Phone: ");
                     //phoneNum = scan.nextLine();
                     phoneNum=Input.getString("Phone: ", false);
@@ -88,7 +89,7 @@ public class TutorManagementUI {
                 }while(invalidInput);     
                    
 
-                Tutor tutorObj = new Tutor( tutor.getId(),name, subject, gender, age, phoneNum,icNo);
+                Tutor tutorObj = new Tutor(name, subject, gender, age, phoneNum,icNo);
                 return tutorObj;
     }
     public int removeTutorData(){
