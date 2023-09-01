@@ -184,14 +184,14 @@ public class TutorManagement implements Serializable {
         System.out.print("Gender to filter: ");
         char genderToFilter = scan.next().charAt(0);
         //Character.toUpperCase(genderToFilter);
-        ListInterface <Tutor> matchedTutors = new ArrayList<>();
+        ArrayList <Tutor> matchedTutors = new ArrayList<>();
         for (Map.Entry<Integer, Tutor> tutor : tutors.entrySet()) {
             if (Character.valueOf(genderToFilter).compareTo(tutor.getValue().getGender()) == 0) {
                 matchedTutors.add(tutor.getValue());
             }
         }
         System.out.println(matchedTutors);
-        System.out.println("The total number of tutors in this gender are "+matchedTutors.size());
+        System.out.println("The total number of tutors in this gender are "+matchedTutors.getNumberOfEntries());
     }
      private void findBySubject(){
         Scanner scan=new Scanner(System.in);
@@ -201,9 +201,9 @@ public class TutorManagement implements Serializable {
         Tutor[] matchedTutors = tutors.filter(
                 (Integer k, Tutor v) -> v.getDepartment().equals(subjectToFilter)
         ).getValues(Tutor.class);
-        for (Map.Entry<Integer, Tutor> tutor : tutors.entrySet()) {
+        //for (Map.Entry<Integer, Tutor> tutor : tutors.entrySet()) {
             
-        }
+        //}
         System.out.println(matchedTutors);
          System.out.println("The total number of tutors in this subject are "+matchedTutors.size());
 
