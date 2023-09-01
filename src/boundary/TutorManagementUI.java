@@ -80,7 +80,7 @@ public class TutorManagementUI implements Serializable {
                     Input.cleanBuffer();
                     //System.out.print("Phone: ");
                     //phoneNum = scan.nextLine();
-                    phoneNum=Input.getString("Phone: ", false);
+                    phoneNum=Input.getString("Phone (0123456789):  ", false);
                     icNo=Input.getString("Ic No:", false);
                     // validate gender
                     
@@ -90,7 +90,7 @@ public class TutorManagementUI implements Serializable {
                         invalidInput = true;
                     }
                     if(m.matches()){
-                        System.out.println("phone num not mstched");
+                        System.out.println("phone num not matched");
                         invalidInput=true;
                     }
                 }while(invalidInput);     
@@ -114,7 +114,7 @@ public class TutorManagementUI implements Serializable {
     }
     
     public Tutor amendTutorDetailsData(){
-        Scanner scan = new Scanner(System.in);
+        //Scanner scan = new Scanner(System.in);
         
         System.out.print("Tutor ID: ");
         int id = scan.nextInt();
@@ -127,7 +127,7 @@ public class TutorManagementUI implements Serializable {
         return tu ;
     }
     public int filterTutorData(){
-      Scanner scan = new Scanner(System.in);
+      //Scanner scan = new Scanner(System.in);
         int choice;
          
         System.out.println("1. Filter by gender");
