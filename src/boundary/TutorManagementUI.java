@@ -11,6 +11,7 @@ package boundary;
  */
 import utility.Input;
 import entity.Tutor;
+import java.util.regex.*;
 
 import java.io.Serializable;
 import java.util.Scanner;
@@ -55,8 +56,12 @@ public class TutorManagementUI implements Serializable {
                 String subject ;
                 char gender;
                 int age;
-                String phoneNum;
+                String phoneNum="";
                 String icNo;
+                String regexHp = "^(\\+?6?01)[02-46-9][-][0-9]{7}$|^(\\+?6?01)[1][-][0-9]{8}$";
+                Pattern p = Pattern.compile(regexHp);
+                Matcher m = p.matcher(phoneNum);
+
                 do{
                     invalidInput = false;
                     name=Input.getString("Name:",false);
@@ -69,14 +74,13 @@ public class TutorManagementUI implements Serializable {
                     //Character.toUpperCase(gender);
                     //System.out.print("Age: ");
                     //age = scan.nextInt();
-                    Input.cleanBuffer();
                    //Input.cleanBuffer();
                     age=Input.getInt("Age: ");
                     // scan.nextLine();// clear buffer
                     Input.cleanBuffer();
                     //System.out.print("Phone: ");
                     //phoneNum = scan.nextLine();
-                    phoneNum=Input.getString("Phone: ", false);
+                    phoneNum=Input.getString("Phone (0123456789):  ", false);
                     icNo=Input.getString("Ic No:", false);
                     // validate gender
                     
@@ -85,7 +89,10 @@ public class TutorManagementUI implements Serializable {
                         System.out.println("Gender should be either M or F. Please re-enter...");
                         invalidInput = true;
                     }
-                    
+                    if(m.matches()){
+                        System.out.println("phone num not matched");
+                        invalidInput=true;
+                    }
                 }while(invalidInput);     
                    
 
@@ -102,12 +109,12 @@ public class TutorManagementUI implements Serializable {
         //Scanner scan = new Scanner(System.in);
        // System.out.println("Enter id u wan to find: ");
         int id = Input.getInt("Enter tutor's id that you want to find : ");
-        scan.nextLine();
+        //scan.nextLine();
         return id;
     }
     
     public Tutor amendTutorDetailsData(){
-        Scanner scan = new Scanner(System.in);
+        //Scanner scan = new Scanner(System.in);
         
         System.out.print("Tutor ID: ");
         int id = scan.nextInt();
@@ -120,7 +127,7 @@ public class TutorManagementUI implements Serializable {
         return tu ;
     }
     public int filterTutorData(){
-      Scanner scan = new Scanner(System.in);
+      //Scanner scan = new Scanner(System.in);
         int choice;
          
         System.out.println("1. Filter by gender");

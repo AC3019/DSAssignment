@@ -97,19 +97,19 @@ public class TutorManagement implements Serializable {
     
     public  void addNewTutor(){
         Tutor tutorObj = tmu.tutorInput();
-        // if (tutors.size() > 0) {
-           // boolean containsDuplicate = tutors.contains(id);
+         if (tutors.size() > 0) {
+           boolean containsDuplicate = tutors.containsValue((Integer k, Tutor t) -> t.getIcNO().equals(tutorObj.getIcNO()));
 
-           // if (containsDuplicate) {
-              // System.out.println("This tutor already exists in the list.");
-           // } else {
+           if (containsDuplicate) {
+              System.out.println("This tutor already exists in the list.");
+            } else {
                 tutors.put(tutorObj.getId(), tutorObj);
-            
-         //}else {
+           }
+         }else {
             // Will only come here for first tutor addition
-          //  tutors.put(id, tutorObj);
+           tutors.put(tutorObj.getId(),tutorObj);
            // id++;
-       // }
+       }
     }
     public void removeTutor(){
         //int id=tmu.removeTutorData();
@@ -126,6 +126,7 @@ public class TutorManagement implements Serializable {
        }
 
     }
+    //got prob
     public void searchTutor(){
         //int id=tmu.searchTutorId();
         if(tutors.size()<=0){
@@ -135,7 +136,9 @@ public class TutorManagement implements Serializable {
         }else{
                 int id=tmu.searchTutorId();
 
-                 System.out.println(tutors.get(id)); 
+                 System.out.println(tutors.get(id));
+                 //got prob
+                 scan.nextLine();
         }
     }
     
@@ -153,9 +156,11 @@ public class TutorManagement implements Serializable {
     }
      public  void listAllTutor() {
         adt.ArrayList<Tutor> arl = new adt.ArrayList<>(this.tutors.getValues(Tutor.class));
-        arl.sort((Tutor t1, Tutor t2) -> t2.getName().compareTo(t1.getName()));
+        arl.sort((Tutor t1, Tutor t2) -> t1.getName().compareTo(t2.getName()));
          if(tutors.size()>0){
-        System.out.println(tutors.toString());
+             for (Tutor t : arl) {
+                 System.out.println(t);
+             }
          }else{
              System.out.println("no tutor inside the system");
          }
@@ -184,14 +189,21 @@ public class TutorManagement implements Serializable {
         System.out.print("Gender to filter: ");
         char genderToFilter = scan.next().charAt(0);
         //Character.toUpperCase(genderToFilter);
-        ArrayList <Tutor> matchedTutors = new ArrayList<>();
+        //ArrayList <Tutor> matchedTutors = new ArrayList<>();
+        /*
         for (Map.Entry<Integer, Tutor> tutor : tutors.entrySet()) {
             if (Character.valueOf(genderToFilter).compareTo(tutor.getValue().getGender()) == 0) {
                 matchedTutors.add(tutor.getValue());
             }
         }
-        System.out.println(matchedTutors);
-        System.out.println("The total number of tutors in this gender are "+matchedTutors.getNumberOfEntries());
+*/
+        Tutor [] matchedTutors=tutors.filter(
+                (Integer k,Tutor v)-> v.getGender()==(genderToFilter)
+        ).getValues(Tutor.class);
+        for(int i=0;i<matchedTutors.length;i++){
+            System.out.println(matchedTutors[i]);
+        }
+        System.out.println("The total number of tutors in this gender are "+matchedTutors.length);
     }
      private void findBySubject(){
         Scanner scan=new Scanner(System.in);
@@ -204,8 +216,10 @@ public class TutorManagement implements Serializable {
         //for (Map.Entry<Integer, Tutor> tutor : tutors.entrySet()) {
             
         //}
-        System.out.println(matchedTutors);
-         System.out.println("The total number of tutors in this subject are "+matchedTutors.size());
+        for(int i=0;i<matchedTutors.length;i++){
+            System.out.println(matchedTutors[i]);
+        }
+         System.out.println("The total number of tutors in this subject are "+matchedTutors.length);
 
      }
      public void getTotalNumOfTutor(){
