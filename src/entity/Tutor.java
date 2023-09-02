@@ -46,10 +46,10 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     }
     
 
-    public Tutor (int id,String name, String subject){
+    public Tutor (int id,String name, String department){
         this.id=id;
         this.name=name;
-        this.department=subject;
+        this.department=department;
     }
     public String getName() {
         return name;
@@ -84,8 +84,8 @@ public class Tutor implements Comparable<Tutor>, Serializable{
         this.name = name;
     }
 
-    public void setDepartment(String subject) {
-        this.department = subject;
+    public void setDepartment(String department) {
+        this.department = department;
     }
     public void setIcNo(String icNo){
         this.icNo=icNo;
@@ -108,7 +108,7 @@ public class Tutor implements Comparable<Tutor>, Serializable{
 
     public String toString() {
         return String.format(
-                "Tutor's id: %d\nTutor's name:%s\nTutor's Subject:%s\nTutor's gender: %s\nTutor's age:%d\nTutor's phone num:%s\n IcNo:%s\n",
+                "Tutor's id: %d\nTutor's name:%s\nTutor's department:%s\nTutor's gender: %s\nTutor's age:%d\nTutor's phone num:%s\n IcNo:%s\n",
                 id, name, department, gender, age, phoneNum, icNo);
     }
 

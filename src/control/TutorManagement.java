@@ -175,7 +175,7 @@ public class TutorManagement implements Serializable {
                 findByGender();
                 break;
             case 2:
-                findBySubject();
+                findByDepartment();
                 break;
             case 3:
                 findByName();
@@ -210,13 +210,13 @@ public class TutorManagement implements Serializable {
         }
         System.out.println("The total number of tutors in this gender are "+matchedTutors.length);
     }
-     private void findBySubject(){
+     private void findByDepartment(){
         //Scanner scan=new Scanner(System.in);
-        System.out.print("Subject to filter: ");
-        String subjectToFilter = scan.nextLine();
+        //System.out.print("Department to filter: ");
+        String departmentToFilter = tmu.getDepartment();
         //subjectToFilter.toUpperCase();
         Tutor[] matchedTutors = tutors.filter(
-                (Integer k, Tutor v) -> v.getDepartment().equals(subjectToFilter)
+                (Integer k, Tutor v) -> v.getDepartment().equals(departmentToFilter)
         ).getValues(Tutor.class);
         //for (Map.Entry<Integer, Tutor> tutor : tutors.entrySet()) {
             
