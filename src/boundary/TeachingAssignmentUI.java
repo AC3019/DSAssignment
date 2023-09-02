@@ -32,7 +32,6 @@ public class TeachingAssignmentUI implements Serializable {
         return Input.getChoice(
             prompt,
             tutors,
-            // TODO: maybe can add one years of experience to tutor
             (Tutor t) -> t.getId() + " " + t.getName()
         );
     }

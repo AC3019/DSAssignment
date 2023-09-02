@@ -168,6 +168,8 @@ public class Input {
      */
     public static char getChar(String prompt, boolean allowEmpty) {
         String s = getString(prompt, allowEmpty);
+        if (allowEmpty && s.isBlank())
+            return ' ';
         return s.charAt(0);
     }
 

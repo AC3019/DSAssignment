@@ -82,7 +82,6 @@ public class TeachingAssignment implements Serializable {
     public void assignTutorsToCourse(CourseManagement cm, TutorManagement tm) {
         Course selectedCourse = this.selectCourse(cm.getCourses());
         while (true) {
-            // TODO: see yi kit got change to use our own eh or not
             ArrayList<Tutor> filteredTutors = this.filterTutorSuitableForCourse(
                 selectedCourse, 
                 new ArrayList<Tutor>(tm.getTutors())
@@ -143,6 +142,12 @@ public class TeachingAssignment implements Serializable {
         }
     }
 
+    public Course[] searchCoursesUnderTutor() {
+        ArrayList<Course> coursesOfTutor = new ArrayList<>();
+
+        return coursesOfTutor.toArray(Course.class);
+    }
+
     // due to java's referencing properties, we need to clean up data when tutor is removed by the tutor management submodule
     // don't need to implement cleanUp for Course for now becuz the course subsystem is just a stub
     public void cleanUp(Tutor tutor) {
@@ -164,7 +169,9 @@ public class TeachingAssignment implements Serializable {
                 break;
         
             case 1:
+                this.assignTutorialGroupsToTutor(tm, tgm);
                 break;
+            
             case 2:
                 break;
             case 3: 
