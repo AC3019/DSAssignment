@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public class Tutor implements Comparable<Tutor>, Serializable{
     private String name;
-    private String department;
+    private int department;
     private int id ;
     private char gender;
     // private TutorialGroup tutorialGroup;
@@ -26,7 +26,7 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     public Tutor() {
     }
 
-    public Tutor(int id,String name, String department, char gender, /* TutorialGroup tutorialGroup */int age,
+    public Tutor(int id,String name, int department, char gender, /* TutorialGroup tutorialGroup */int age,
             String phoneNum,String icNo) {
         this.id=id;
         this.name = name;
@@ -39,24 +39,24 @@ public class Tutor implements Comparable<Tutor>, Serializable{
 
     }
     
-     public Tutor( String name, String department, char gender, /* TutorialGroup tutorialGroup */int age,
+     public Tutor( String name, int department, char gender, /* TutorialGroup tutorialGroup */int age,
             String phoneNum,String icNo) {
        
         this(currentID++, name, department, gender, age, phoneNum, icNo);
     }
     
 
-    public Tutor (int id,String name, String subject){
+    public Tutor (int id,String name, int department){
         this.id=id;
         this.name=name;
-        this.department=subject;
+        this.department=department;
     }
     public String getName() {
         return name;
 
     }
 
-    public String getDepartment() {
+    public int getDepartment() {
         return department;
 
     }
@@ -84,8 +84,8 @@ public class Tutor implements Comparable<Tutor>, Serializable{
         this.name = name;
     }
 
-    public void setDepartment(String subject) {
-        this.department = subject;
+    public void setDepartment(int department) {
+        this.department = department;
     }
     public void setIcNo(String icNo){
         this.icNo=icNo;
@@ -108,7 +108,7 @@ public class Tutor implements Comparable<Tutor>, Serializable{
 
     public String toString() {
         return String.format(
-                "Tutor's id: %d\nTutor's name:%s\nTutor's Subject:%s\nTutor's gender: %s\nTutor's age:%d\nTutor's phone num:%s\n IcNo:%s\n",
+                "Tutor's id: %d\nTutor's name:%s\nTutor's department:%s\nTutor's gender: %s\nTutor's age:%d\nTutor's phone num:%s\n IcNo:%s\n",
                 id, name, department, gender, age, phoneNum, icNo);
     }
 

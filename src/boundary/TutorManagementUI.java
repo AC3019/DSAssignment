@@ -53,21 +53,32 @@ public class TutorManagementUI implements Serializable {
                 //Scanner scan = new Scanner(System.in);
                 boolean invalidInput ;
                 String name ;
-                String subject ;
+                int department ;
                 char gender;
                 int age;
                 String phoneNum="";
                 String icNo;
-                String regexHp = "^(\\+?6?01)[02-46-9][-][0-9]{7}$|^(\\+?6?01)[1][-][0-9]{8}$";
-                Pattern p = Pattern.compile(regexHp);
-                Matcher m = p.matcher(phoneNum);
+                String regexHp = "^(\\+?6?01)[0-9]{7,9}$";
+            Pattern pattern = Pattern.compile(regexHp);
+                Matcher m ;
+                        //= pattern.matcher(phoneNum);
 
                 do{
                     invalidInput = false;
                     name=Input.getString("Name:",false);
-                    subject=Input.getString("Subject: ",false);
+                    System.out.println("1. FOCS");
+                    System.out.println("2. FOAS");
+                    System.out.println("3. FAFB");
+                    System.out.println("4. FOBE");
+                    System.out.println("5. FOET");
+                    System.out.println("6. FCCI");
+                    System.out.println("7. FSSH");
+
+
+
+                    department=Input.getInt("Department: ");
                     //name.toUpperCase();
-                   
+                   Input.cleanBuffer();
                     //subject.toUpperCase();
                     //gender=tmu.getChar("Gender(M/F): ",false);
                     gender = Character.toUpperCase(Input.getChar("Gender(M/F): ", false));
@@ -81,6 +92,8 @@ public class TutorManagementUI implements Serializable {
                     //System.out.print("Phone: ");
                     //phoneNum = scan.nextLine();
                     phoneNum=Input.getString("Phone (0123456789):  ", false);
+                     m = pattern.matcher(phoneNum);
+
                     icNo=Input.getString("Ic No:", false);
                     // validate gender
                     
@@ -89,14 +102,16 @@ public class TutorManagementUI implements Serializable {
                         System.out.println("Gender should be either M or F. Please re-enter...");
                         invalidInput = true;
                     }
+                    
                     if(!m.matches()){
                         System.out.println("phone num not matched");
                         invalidInput=true;
                     }
+                    
                 }while(invalidInput);     
                    
 
-                Tutor tutorObj = new Tutor(name, subject, gender, age, phoneNum,icNo);
+                Tutor tutorObj = new Tutor(name, department, gender, age, phoneNum,icNo);
                 return tutorObj;
     }
     public int removeTutorData(){
@@ -109,7 +124,9 @@ public class TutorManagementUI implements Serializable {
         //Scanner scan = new Scanner(System.in);
        // System.out.println("Enter id u wan to find: ");
         int id = Input.getInt("Enter tutor's id that you want to find : ");
-        //scan.nextLine();
+        
+        
+        scan.nextLine();
         
         return id;
     }
@@ -122,9 +139,9 @@ public class TutorManagementUI implements Serializable {
         scan.nextLine();
         System.out.print("New name: ");
         String newName = scan.nextLine();
-        System.out.print("New subject: ");
-        String newSubject = scan.nextLine();
-        Tutor tu=new Tutor(id,newName,newSubject);
+       // System.out.print("New department: ");
+        int newDepartment = Input.getInt("New Department: ");
+        Tutor tu=new Tutor(id,newName,newDepartment);
         return tu ;
     }
     public int filterTutorData(){
@@ -132,7 +149,7 @@ public class TutorManagementUI implements Serializable {
         int choice;
          
         System.out.println("1. Filter by gender");
-        System.out.println("2. Filter by subject");
+        System.out.println("2. Filter by department");
         System.out.println("3. Filter by name ");
         //System.out.print("Select an option: ");
 
