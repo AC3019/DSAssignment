@@ -89,7 +89,7 @@ public class TutorManagementUI implements Serializable {
                         System.out.println("Gender should be either M or F. Please re-enter...");
                         invalidInput = true;
                     }
-                    if(m.matches()){
+                    if(!m.matches()){
                         System.out.println("phone num not matched");
                         invalidInput=true;
                     }
@@ -110,14 +110,15 @@ public class TutorManagementUI implements Serializable {
        // System.out.println("Enter id u wan to find: ");
         int id = Input.getInt("Enter tutor's id that you want to find : ");
         //scan.nextLine();
+        
         return id;
     }
     
     public Tutor amendTutorDetailsData(){
         //Scanner scan = new Scanner(System.in);
         
-        System.out.print("Tutor ID: ");
-        int id = scan.nextInt();
+        //System.out.print("Tutor ID: ");
+        int id = Input.getInt("Tutor ID: ");
         scan.nextLine();
         System.out.print("New name: ");
         String newName = scan.nextLine();
@@ -132,10 +133,11 @@ public class TutorManagementUI implements Serializable {
          
         System.out.println("1. Filter by gender");
         System.out.println("2. Filter by subject");
-        System.out.print("Select an option: ");
+        System.out.println("3. Filter by name ");
+        //System.out.print("Select an option: ");
 
-        choice = scan.nextInt();
-        scan.nextLine();
+        choice = Input.getInt("Enter your choice: ");
+        Input.cleanBuffer();
                return choice;
     }
 }

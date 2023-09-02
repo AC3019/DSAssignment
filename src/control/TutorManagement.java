@@ -12,6 +12,7 @@ import entity.Tutor;
 import adt.HashMap;
 import adt.ArrayList;
 import adt.ListInterface;
+import utility.Input;
 //import java.util.List;
 //import java.util.HashMap;
 import java.io.Serializable;
@@ -176,6 +177,9 @@ public class TutorManagement implements Serializable {
             case 2:
                 findBySubject();
                 break;
+            case 3:
+                findByName();
+                break;
             default:
                 System.out.println("Invalid choice. Please select again.");
         }
@@ -187,7 +191,8 @@ public class TutorManagement implements Serializable {
      private  void findByGender() {
         Scanner scan = new Scanner(System.in);
         System.out.print("Gender to filter: ");
-        char genderToFilter = scan.next().charAt(0);
+        char genderToFilter = scan.next().toUpperCase().charAt(0);
+        scan.nextLine();
         //Character.toUpperCase(genderToFilter);
         //ArrayList <Tutor> matchedTutors = new ArrayList<>();
         /*
@@ -206,7 +211,7 @@ public class TutorManagement implements Serializable {
         System.out.println("The total number of tutors in this gender are "+matchedTutors.length);
     }
      private void findBySubject(){
-        Scanner scan=new Scanner(System.in);
+        //Scanner scan=new Scanner(System.in);
         System.out.print("Subject to filter: ");
         String subjectToFilter = scan.nextLine();
         //subjectToFilter.toUpperCase();
@@ -220,6 +225,18 @@ public class TutorManagement implements Serializable {
             System.out.println(matchedTutors[i]);
         }
          System.out.println("The total number of tutors in this subject are "+matchedTutors.length);
+
+     }
+     private void findByName(){
+         //System.out.print("name to filter: ");
+         String nameToFilter=Input.getString("Name to filter: ", false);
+         Tutor[] matchedTutors=tutors.filter(
+                 (Integer k,Tutor v)-> v.getName().equals(nameToFilter)
+         ).getValues(Tutor.class);
+         for(int i=0;i<matchedTutors.length;i++){
+            System.out.println(matchedTutors[i]);
+        }
+         System.out.println("The total number of tutors with this name are "+matchedTutors.length);
 
      }
      public void getTotalNumOfTutor(){
