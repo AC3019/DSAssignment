@@ -213,10 +213,10 @@ public class TutorManagement implements Serializable {
      private void findByDepartment(){
         //Scanner scan=new Scanner(System.in);
         //System.out.print("Department to filter: ");
-        int departmentToFilter = Input.getInt("Department to filter: ");
+        String departmentToFilter = tmu.getDepartment();
         //subjectToFilter.toUpperCase();
         Tutor[] matchedTutors = tutors.filter(
-                (Integer k, Tutor v) -> v.getDepartment()==(departmentToFilter)
+                (Integer k, Tutor v) -> v.getDepartment().equals(departmentToFilter)
         ).getValues(Tutor.class);
         //for (Map.Entry<Integer, Tutor> tutor : tutors.entrySet()) {
             

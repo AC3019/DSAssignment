@@ -9,6 +9,7 @@ package boundary;
  *
  * @author yong
  */
+import control.DepartmentManagement;
 import utility.Input;
 import entity.Tutor;
 import java.util.regex.*;
@@ -49,11 +50,20 @@ public class TutorManagementUI implements Serializable {
             //Input.cleanBuffer();
         return choice;
     }
+    public String getDepartment() {
+        return DepartmentManagement.departments[
+                Input.getChoice(
+                    "Enter department", 
+                    DepartmentManagement.departments, 
+                    (s) -> s
+                )
+        ];
+    }
     public Tutor tutorInput(){
                 //Scanner scan = new Scanner(System.in);
                 boolean invalidInput ;
                 String name ;
-                int department ;
+                String department ;
                 char gender;
                 int age;
                 String phoneNum="";
@@ -66,19 +76,9 @@ public class TutorManagementUI implements Serializable {
                 do{
                     invalidInput = false;
                     name=Input.getString("Name:",false);
-                    System.out.println("1. FOCS");
-                    System.out.println("2. FOAS");
-                    System.out.println("3. FAFB");
-                    System.out.println("4. FOBE");
-                    System.out.println("5. FOET");
-                    System.out.println("6. FCCI");
-                    System.out.println("7. FSSH");
-
-
-
-                    department=Input.getInt("Department: ");
+                    department = getDepartment();
                     //name.toUpperCase();
-                   Input.cleanBuffer();
+                    Input.cleanBuffer();
                     //subject.toUpperCase();
                     //gender=tmu.getChar("Gender(M/F): ",false);
                     gender = Character.toUpperCase(Input.getChar("Gender(M/F): ", false));
@@ -126,11 +126,11 @@ public class TutorManagementUI implements Serializable {
         int id = Input.getInt("Enter tutor's id that you want to find : ");
         
         
-        scan.nextLine();
+       // scan.nextLine();
         
         return id;
     }
-    
+    //extra buffer error
     public Tutor amendTutorDetailsData(){
         //Scanner scan = new Scanner(System.in);
         
@@ -140,7 +140,7 @@ public class TutorManagementUI implements Serializable {
         System.out.print("New name: ");
         String newName = scan.nextLine();
        // System.out.print("New department: ");
-        int newDepartment = Input.getInt("New Department: ");
+        String newDepartment = Input.getString("New Department: ",false);
         Tutor tu=new Tutor(id,newName,newDepartment);
         return tu ;
     }

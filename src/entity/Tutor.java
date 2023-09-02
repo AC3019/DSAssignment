@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public class Tutor implements Comparable<Tutor>, Serializable{
     private String name;
-    private int department;
+    private String department;
     private int id ;
     private char gender;
     // private TutorialGroup tutorialGroup;
@@ -26,7 +26,7 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     public Tutor() {
     }
 
-    public Tutor(int id,String name, int department, char gender, /* TutorialGroup tutorialGroup */int age,
+    public Tutor(int id,String name, String department, char gender, /* TutorialGroup tutorialGroup */int age,
             String phoneNum,String icNo) {
         this.id=id;
         this.name = name;
@@ -39,14 +39,14 @@ public class Tutor implements Comparable<Tutor>, Serializable{
 
     }
     
-     public Tutor( String name, int department, char gender, /* TutorialGroup tutorialGroup */int age,
+     public Tutor( String name, String department, char gender, /* TutorialGroup tutorialGroup */int age,
             String phoneNum,String icNo) {
        
         this(currentID++, name, department, gender, age, phoneNum, icNo);
     }
     
 
-    public Tutor (int id,String name, int department){
+    public Tutor (int id,String name, String department){
         this.id=id;
         this.name=name;
         this.department=department;
@@ -56,7 +56,7 @@ public class Tutor implements Comparable<Tutor>, Serializable{
 
     }
 
-    public int getDepartment() {
+    public String getDepartment() {
         return department;
 
     }
@@ -84,7 +84,7 @@ public class Tutor implements Comparable<Tutor>, Serializable{
         this.name = name;
     }
 
-    public void setDepartment(int department) {
+    public void setDepartment(String department) {
         this.department = department;
     }
     public void setIcNo(String icNo){
