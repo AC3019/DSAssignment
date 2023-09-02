@@ -39,17 +39,22 @@ public class TeachingAssignment implements Serializable {
     private ArrayList<Tutor> filterTutorSuitableForCourse(Course c, ArrayList<Tutor> tutors) {
         // filter out the tutors that has already been assigned to the course
         return tutors.filter(
-            // TODO: might wanna change subject of tutor to become department
-            (Tutor t) -> !this.courseTutorMap.get(c).contains(t) && t.getDepartment().equals(c.getDepartment())
+            (Tutor t) -> {
+                ArrayList<Tutor> cts = this.courseTutorMap.get(c);
+                if (cts == null)
+                    return false;
+                return !cts.contains(t) && t.getDepartment().equals(c.getDepartment());
+            }
         );
     }
 
-    private Tutor selectTutor(Course c, ArrayList<Tutor> tutors) {
+    private Tutor selectTutorForCourse(Course c, ArrayList<Tutor> tutors) {
         int selection = ui.getTutorChoice(
             tutors.filter(
                 // TODO: this requires tweaking Tutor class's `.equals()` method
                 (Tutor t) -> !this.courseTutorMap.get(c).contains(t)
-            ).toArray(Tutor.class)
+            ).toArray(Tutor.class),
+            "Which tutor to assign for this course[" + c.getId() + " " + c.getName() + "]: "
         );
 
         return tutors.get(selection);
@@ -72,7 +77,7 @@ public class TeachingAssignment implements Serializable {
      *   - finding tutor (filter tutor for that subject)
      *   - selecting that tutor 
      *   - ask if want to assign more tutor
-     * asking , those three are subbed to another two methods above
+     * those three are subbed to another two methods above
      */
     public void assignTutorsToCourse(CourseManagement cm, TutorManagement tm) {
         Course selectedCourse = this.selectCourse(cm.getCourses());
@@ -82,17 +87,60 @@ public class TeachingAssignment implements Serializable {
                 selectedCourse, 
                 new ArrayList<Tutor>(tm.getTutors())
             );
-            Tutor selectedTutor = this.selectTutor(selectedCourse, filteredTutors);
+            Tutor selectedTutor = this.selectTutorForCourse(selectedCourse, filteredTutors);
 
             this.assignTutorToCourse(selectedCourse, selectedTutor);
             
-            if (!ui.wantAssignMoreTutor())
+            if (!ui.wantAssignMore("TUTOR"))
                 break;
         }
     }
 
-    public void assignTutorialGroupsToTutor() {
+    public Tutor selectTutor(ArrayList<Tutor> ts) {
+        int selection = ui.getTutorChoice(ts.toArray(Tutor.class), "Which tutor to assign tutorial groups to: ");
+        return ts.get(selection);
+    }
 
+    public TutorialGroup selectTutorialGroupForTutor(Tutor t, ArrayList<TutorialGroup> tgs) {
+        int selection = ui.getTutorialGroupChoice(
+            tgs.filter((TutorialGroup tg) -> {
+                ArrayList<TutorialGroup> hmTg = this.tutorTutorialGroupMap.get(t);
+                if (hmTg == null) 
+                    return false;
+                return hmTg.contains(tg);
+            }).toArray(TutorialGroup.class),
+            "Which tutorial group to assign to this tutor[" + t.getId() + " " + t.getName() + "]: "
+        );
+
+        return tgs.get(selection);
+    }
+
+    private void assignTutorialGroupToTutor(Tutor t, TutorialGroup tg) {
+        if (!this.tutorTutorialGroupMap.containsKey(t)) {
+            this.tutorTutorialGroupMap.put(t, new ArrayList<TutorialGroup>() {{ insert(tg); }});
+        } else {
+            this.tutorTutorialGroupMap.get(t).insert(tg);
+        }
+    }
+
+    /**
+     * although it requires 
+     *   - selecting tutor
+     *   - selecting tutorial group for a list of groups
+     *   - ask if want to assign more tutorial groups
+     * those three are subbed to another two methods above
+     */
+    public void assignTutorialGroupsToTutor(TutorManagement tm, TutorialGroupManagement tgm) {
+        Tutor selectedTutor = this.selectTutor(new ArrayList<Tutor>(tm.getTutors()));
+
+        while (true) {
+            TutorialGroup tg = this.selectTutorialGroupForTutor(selectedTutor, tgm.getTutorialGroups());
+
+            this.assignTutorialGroupToTutor(selectedTutor, tg);
+
+            if (!ui.wantAssignMore("TUTORIALGROUP"))
+                break;
+        }
     }
 
     // due to java's referencing properties, we need to clean up data when tutor is removed by the tutor management submodule

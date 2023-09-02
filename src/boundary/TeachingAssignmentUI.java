@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import entity.Course;
 import entity.Tutor;
+import entity.TutorialGroup;
 import utility.Input;
 
 public class TeachingAssignmentUI implements Serializable {
@@ -27,18 +28,33 @@ public class TeachingAssignmentUI implements Serializable {
         );
     }
 
-    public int getTutorChoice(Tutor[] tutors) {
+    public int getTutorChoice(Tutor[] tutors, String prompt) {
         return Input.getChoice(
-            "Which tutor to assign for this course: ",
+            prompt,
             tutors,
             // TODO: maybe can add one years of experience to tutor
             (Tutor t) -> t.getId() + " " + t.getName()
         );
     }
 
-    // asks user whether they wanna insert more tutor
-    public boolean wantAssignMoreTutor() {
-        return Input.confirm("Do you want to assign more tutor to the course?");
+    public int getTutorialGroupChoice(TutorialGroup[] tgs, String prompt) {
+        return Input.getChoice(
+            prompt,
+            tgs,
+            (TutorialGroup tg) -> tg.getProgrammeName() + " " + tg.getTutGrpCode()
+        );
+    }
+
+    /**
+     * asks user whether they wanna insert more tutor
+     * @param type "TUTOR" or "TUTORIALGROUP"
+     * @return
+     */
+    public boolean wantAssignMore(String type) {
+        if (type.equals("TUTOR"))
+            return Input.confirm("Do you want to assign more tutor to the course?");
+        else 
+            return Input.confirm("Do you want to assign more tutorial groups to the tutor?");
     }
 
 }

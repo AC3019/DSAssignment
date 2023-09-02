@@ -17,7 +17,6 @@ public class TutorialGroupManagement implements Serializable {
 
     //variables
     private ArrayList<TutorialGroup> tutGrpList = new ArrayList<>();
-    private ArrayList<Student> studentList = new ArrayList<>();
     private static TutorialGroupManagementUI display = new TutorialGroupManagementUI();
 
     public ArrayList<TutorialGroup> getTutorialGroups() {
@@ -179,62 +178,78 @@ public class TutorialGroupManagement implements Serializable {
     public void findStudent(){
         display.header();
         int choice = display.choiceOfSearchingStudent();
-        /*
-        if (choice == 0){
-            String selectedStudentID = display.findStudentID();
-        }else if (choice == 1){
-            String selectedStudentName = display.findStudentName();
-        }else{
-            display.errorChoice();
-        }
+        String tempFilterWith = "";
         
-        for (int i = 0; i < tutGrpList.getNumberOfEntries(); i++){
-            tutGrpList.get(i).getStudent().indexOf((t) -> {
-                if (choice == 0) {
-                    return t.getStudentID().equals(selectedStudentID);
-                }else{
-                    return t.getStudentName().equals(selectedStudentName);
-                }   
-            });
+        while (true) {
+            if (choice == 0){
+                tempFilterWith = display.findStudentID();
+                break;
+            }else if (choice == 1){
+                tempFilterWith = display.findStudentName();
+                break;
+            }else{
+                display.errorChoice();
+            }
         }
-        */
 
-        switch (choice){
-            //search using studentID
-            case 0:
-                String selectedStudentID = display.findStudentID();
-                    for (int i = 0; i < tutGrpList.getNumberOfEntries(); i++){
-                        //loop through the whole student array to find the student that match the condition
-                        /*for (int j = 0; j < student.length; i++){
-                            //if studentID match 
-                            if (student[j].getStudentID().equals(selectedStudentID))
-                                studentList.insert(student[j]);//insert the student into student ArrayList
-                        }*/
-                        //using method to search
-                        int studentIndex = tutGrpList.get(i).getStudent().indexOf((Student s) -> s.getStudentID().equals(selectedStudentID));
-                        studentList.insert(tutGrpList.get(i).getStudent().get(studentIndex));
-                    }
-                break;
-            //search using studentName
-            case 1:
-                String selectedStudentName = display.findStudentName();
-                    for (int i = 0; i < tutGrpList.getNumberOfEntries(); i++){
-                        ArrayList<Student> temp = tutGrpList.get(i).getStudent();
-                        studentList.insert(temp.get(temp.indexOf((Student item) -> item.getStudentName().equals(selectedStudentName))));
-                        /*for (int i = 0; i < student.length; i++){
-                            //if studentName match 
-                            if (student[i].getStudentName().equals(selectedStudentName))
-                                studentList.insert(student[i]);//insert the student into student ArrayList
-                        }*/
-                    }
-            default:
-                break;
+        final String filterWith = tempFilterWith;
+        ArrayList<Student> studentList = new ArrayList<>();
+        for (int i = 0; i < tutGrpList.getNumberOfEntries(); i++) {
+            int index = tutGrpList.get(i).getStudent().indexOf((t) -> {
+                if (choice == 0) {
+                    return t.getStudentID().equals(filterWith);
+                }else{
+                    return t.getStudentName().equals(filterWith);
+                }
+            });
+            if (index >= 0) {
+                studentList.insert(tutGrpList.get(i).getStudent().get(index));
+                break; // alrd found the student, pointless looping over other tutGrps
+            }
         }
+
+        if (studentList.isEmpty()) {
+
+        } else {
+
+        }
+
+        // switch (choice){
+        //     //search using studentID
+        //     case 0:
+        //         String selectedStudentID = display.findStudentID();
+        //             for (int i = 0; i < tutGrpList.getNumberOfEntries(); i++){
+        //                 //loop through the whole student array to find the student that match the condition
+        //                 /*for (int j = 0; j < student.length; i++){
+        //                     //if studentID match 
+        //                     if (student[j].getStudentID().equals(selectedStudentID))
+        //                         studentList.insert(student[j]);//insert the student into student ArrayList
+        //                 }*/
+        //                 //using method to search
+        //                 int studentIndex = tutGrpList.get(i).getStudent().indexOf((Student s) -> s.getStudentID().equals(selectedStudentID));
+        //                 studentList.insert(tutGrpList.get(i).getStudent().get(studentIndex));
+        //             }
+        //         break;
+        //     //search using studentName
+        //     case 1:
+        //         String selectedStudentName = display.findStudentName();
+        //             for (int i = 0; i < tutGrpList.getNumberOfEntries(); i++){
+        //                 ArrayList<Student> temp = tutGrpList.get(i).getStudent();
+        //                 studentList.insert(temp.get(temp.indexOf((Student item) -> item.getStudentName().equals(selectedStudentName))));
+        //                 /*for (int i = 0; i < student.length; i++){
+        //                     //if studentName match 
+        //                     if (student[i].getStudentName().equals(selectedStudentName))
+        //                         studentList.insert(student[i]);//insert the student into student ArrayList
+        //                 }*/
+        //             }
+        //     default:
+        //         break;
+        // }
         //pass the student ArrayList into the method to print out in table form
-        if (studentList.isEmpty())
-            display.studentNotFound();//ERROR occur
-        else
-            display.displayAllSelectedStudent(studentList);
+        // if (studentList.isEmpty())
+        //     display.studentNotFound();//ERROR occur
+        // else
+        //     display.displayAllSelectedStudent(studentList);
     }
     
     public void displayAndEditAllStudent(){

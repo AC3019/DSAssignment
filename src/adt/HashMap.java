@@ -74,9 +74,12 @@ public class HashMap<K extends Comparable<K>, V>
 
     @Override
     public V get(K key) {
+
+        if (!this.containsKey(key))
+            return null;
+
         int position = getHashModulo(key);
 
-        // direct search is faster than searching through the array of keys
         return this.buckets[position].find(new Pair(key, null)).getValue();
     }
 
