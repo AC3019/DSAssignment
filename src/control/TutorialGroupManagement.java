@@ -69,57 +69,120 @@ public class TutorialGroupManagement implements Serializable {
         display.header();
         //add tutGrp in the list
         tutGrpList.insert(display.createTutGrp());
+        display.createTutGrpSuccess();
     }
     
     //function to delete a tutGrp
     public TutorialGroup removeTutGrp(){
         display.header();
-        //if(!tutGrpList.isEmpty()){
+        if(!tutGrpList.isEmpty()){
+            ArrayList<TutorialGroup> passingList = new ArrayList<>();
             //remove tutGrp selected
             TutorialGroup tutGrpRemoved = tutGrpList.remove(display.deleteTutGrp(tutGrpList));
+            display.deleteTutGrpSuccess();
+            //ask want to move the group removed into passing list
+            char decision;
+            do{//valiadation check to get only Y/N
+                decision = display.moveToPassList().toUpperCase().charAt(0);
+                display.cleanBuffer();
+            }while(decision != 'Y' && decision != 'N');
+            if (decision == 'Y'){
+                passingList.insert(tutGrpRemoved);
+                display.moveToPassingListSuccess();
+                //display.printAllSelectedTutGrp(passingList);//display the result
+                char failedStudent; 
+                do{
+                    failedStudent = display.failStudent().toUpperCase().charAt(0);
+                }while(failedStudent != 'Y' && failedStudent != 'N');
+                if (failedStudent == 'Y'){
+                    //to remove the student that below the passing mark
+                    //display current passing list
+                    display.displayAllSelectedStudent(passingList.get(passingList.getNumberOfEntries()-1).getStudent());
+                    //passingList.get(passingList.getNumberOfEntries()-1).getStudent().remove();//to remove students below passing mark
+                }
+                //display final version of passing list
+                display.passingList(passingList.get(passingList.getNumberOfEntries()-1));
+                display.displayAllSelectedStudent(passingList.get(passingList.getNumberOfEntries()-1).getStudent());
+                //ask for report needed?
+                char reportChoice;
+                do{
+                    reportChoice = display.reportChoice().toUpperCase().charAt(0);
+                }while(reportChoice != 'Y' && reportChoice != 'N');
+                if (reportChoice == 'Y'){
+                    display.printReportTitle(display.reportTitle());
+                    display.displayAllSelectedStudent(passingList.get(passingList.getNumberOfEntries()-1).getStudent());
+                }
+            }
             return tutGrpRemoved;
-        //}else
-            //display.noTutGrp();
+        }else
+            display.noTutGrp();
+        return null;
     }
     
     public void sortTutGrpList(){
         display.header();
         //display all tutGrp first
         display.printAllSelectedTutGrp(tutGrpList);
-        //ask whether want to sort
-        char decision = display.sortChoice().toUpperCase().charAt(0);
-        if (decision == 'Y'){
-            //ask for sort type
-            int choice = display.sortChoiceType();
-            if(choice == 0){//sort by ProgrammeCode
-                tutGrpList.sort((TutorialGroup t1, TutorialGroup t2) -> t1.getProgrammeCode().compareTo(t2.getProgrammeCode()));
-                    if(!tutGrpList.isEmpty()){
-                        for (TutorialGroup t : tutGrpList){
+        if(!tutGrpList.isEmpty()){
+            //ask whether want to sort
+            char decision; 
+            do{
+                decision = display.sortChoice().toUpperCase().charAt(0);
+            }while(decision != 'Y' && decision != 'N');
+            if (decision == 'Y'){
+                //ask for sort type
+                int choice = display.sortChoiceType();
+                if(choice == 0){//sort by ProgrammeCode
+                    tutGrpList.sort((TutorialGroup t1, TutorialGroup t2) -> t1.getProgrammeCode().compareTo(t2.getProgrammeCode()));
+                        if(!tutGrpList.isEmpty()){
                             //print in table form
-                            System.out.println(t);
+                            display.afterSort();
+                            display.printAllSelectedTutGrp(tutGrpList);
+                            display.cleanBuffer();
+                        }else{
+                            display.noTutGrp();
                         }
-                    }else{
-                        display.noTutGrp();
-                    }
-            }else if (choice == 1){//sort by numOfStudents
-                
-            }else{
-                display.errorChoice();
+                }else if (choice == 1){//sort by numOfStudents
+                    //tutGrpList.sort((TutorialGroup t1, TutorialGroup t2) -> t1.getStudent().getNumberOfEntries().compareTo(t2.getStudent().getNumberOfEntries()));
+                        if(!tutGrpList.isEmpty()){
+                            //print in table form
+                            display.afterSort();
+                            display.printAllSelectedTutGrp(tutGrpList);
+                        }else{
+                            display.noTutGrp();
+                        }
+                }else{
+                    display.errorChoice();
+                }
+            }
+            char report;
+            do{
+                report = display.reportChoice().toUpperCase().charAt(0);
+            }while(report != 'Y' && report != 'N');
+            if (report == 'Y'){
+                display.printReportTitle(display.reportTitle());
+                display.printAllSelectedTutGrp(tutGrpList);
             }
         }else{
-            display.continueEnter();//if dw sort direct ask for input to continue
-            //ERROR occur
+            display.noTutGrp();
         }
-
+        display.continueEnter();//if dw sort direct ask for input to continue
     }
     
     //function to add student in a tutGrp
     public void addStudent(){
         display.header();
-        //display output and get input required
         Student student = display.addStudent();//stall the student obj created
+        display.addStudentSuccess();
         //display where to stall the student 
         int choice = display.choiceOfTutGrp();
+        if(choice == 0){//to check whether there has a tutGrp
+            if(tutGrpList.isEmpty()){//if no tutGrp
+                display.noTutGrp();
+                display.creatingNewTutGrp();
+                choice = 1;//change to create new tutGrp
+            }
+        }
         int tutGrp = 999;//declare variable to stall tutGrp
         switch (choice) {
             //insert in exist tutGrp
@@ -128,7 +191,7 @@ public class TutorialGroupManagement implements Serializable {
                 break;
             //insert in new tutGrp
             case 1: 
-                Input.cleanBuffer();
+                display.cleanBuffer();
                 createTutGrp();//create a new tutGrp
                 //since new tutGrp will be added at last so just get numOfEntries
                 tutGrp = tutGrpList.getNumberOfEntries() - 1;//stall the tutGrp
@@ -139,6 +202,7 @@ public class TutorialGroupManagement implements Serializable {
         TutorialGroup selectedTutGrp = tutGrpList.get(tutGrp);
         //add student to tutGrp obj selected
         selectedTutGrp.getStudent().insert(student);
+        display.addStudentIntoListSuccess();
     }
     
     //function to remove a student in a tutGrp
@@ -151,11 +215,11 @@ public class TutorialGroupManagement implements Serializable {
         if(student.length > 0){
             //display all the students and remove the student based on selected in the tutGrp selected
             tutGrp.getStudent().remove(display.displayAllStudentForRemove(student));
+            display.removeStudentSuccess();
         }else{
             display.noStudent();
         }
     }
-    
     
     //function to change a tutGrp for a student
     public void changeTutGrp(){
@@ -169,12 +233,12 @@ public class TutorialGroupManagement implements Serializable {
             Student selectedStudent = tutGrp.getStudent().remove(display.displayAllStudent(student));
             tutGrp = tutGrpList.get(display.insertStudentInTutGrp(tutGrpList));
             tutGrp.getStudent().insert(selectedStudent);
+            display.changeTutGrpSuccess();
         }else{
             display.noStudent();
         }
     }
     
-    //try change logic to search through all tutGrp shud be btr
     public void findStudent(){
         display.header();
         int choice = display.choiceOfSearchingStudent();
@@ -209,9 +273,10 @@ public class TutorialGroupManagement implements Serializable {
         }
 
         if (studentList.isEmpty()) {
-
+            display.studentNotFound();
         } else {
-
+            display.displayAllSelectedStudent(studentList);
+            display.continueEnter();
         }
 
         // switch (choice){
@@ -254,19 +319,70 @@ public class TutorialGroupManagement implements Serializable {
     
     public void displayAndEditAllStudent(){
         display.header();
+        //create a new arrayList to stall the filter result
+        ArrayList<Student> selectedStudentList = new ArrayList<>();
         if(tutGrpList.getNumberOfEntries() > 0){
             int choice = display.choiceOfTutGrp(tutGrpList);
             TutorialGroup tutGrp = tutGrpList.get(choice);
             display.displayAllSelectedStudent(tutGrp.getStudent());
             //if number of student > 0
             if(tutGrp.getStudent().getNumberOfEntries() > 0){
-                char decision = display.edit().toUpperCase().charAt(0);
+                //edit mark function
+                char editMark;
+                do{
+                    editMark = display.editMark().toUpperCase().charAt(0);
+                    do{
+                    //ask for index of student to edit
+                    int indexStudent = display.editStudent(tutGrp.getStudent());
+                    tutGrp.getStudent().get(indexStudent).setMark(display.getStudentMark());
+                    display.studentEditSuccess();
+                    editMark = display.editMark().toUpperCase().charAt(0);
+                }while (editMark == 'Y');
+                }while(editMark != 'Y' && editMark != 'N');
+                //edit function
+                char decision;
+                do{
+                    decision = display.edit().toUpperCase().charAt(0);
+                }while(decision != 'Y' && decision != 'N');
                 if(decision == 'Y'){
                     //ask for index of student to edit
                     int indexStudent = display.editStudent(tutGrp.getStudent());
                     tutGrp.getStudent().get(indexStudent).setStudentName(display.findStudentName());
                     tutGrp.getStudent().get(indexStudent).setAge(display.findStudentAge());
+                    display.studentEditSuccess();
                 }
+                //filter function
+                char filterDecision;
+                do{
+                    filterDecision = display.filterStudent().toUpperCase().charAt(0);
+                }while(filterDecision != 'Y' && filterDecision != 'N');
+                if(filterDecision == 'Y'){
+                    int genderChoice;
+                    String gender;
+                    genderChoice = Input.getChoice("Please select the gender of the student: ", new String[] {
+                                                        "Male",
+                                                        "Female"
+                                                    }, (item) -> item);
+                    if(genderChoice == 0){
+                        gender = "Male";
+                    }else{
+                        gender = "Female";
+                    }
+                    selectedStudentList = tutGrp.getStudent().filter((Student item) -> item.getStudentGender().equals(gender));
+                    display.afterFilter();
+                    display.displayAllSelectedStudent(selectedStudentList);                  
+                }
+                //print report function
+                char reportChoice;
+                do{
+                    reportChoice = display.reportChoice().toUpperCase().charAt(0);
+                }while(reportChoice != 'Y' && reportChoice != 'N');
+                if (reportChoice == 'Y'){
+                    display.printReportTitle(display.reportTitle());
+                    display.displayAllSelectedStudent(selectedStudentList);
+                }
+            }else{
+                display.noStudent();
             }
         }else{
             display.noTutGrp();
@@ -286,6 +402,7 @@ public class TutorialGroupManagement implements Serializable {
                 selectedTutGrpList = tutGrpList.filter((TutorialGroup item) -> item.getProgrammeCode().equals(progCode));
                 break;
             case 1://filter by tutGrpCode
+                display.cleanBuffer();
                 String tutGrpCode = display.getTutGrpCode();
                 selectedTutGrpList = tutGrpList.filter((TutorialGroup item) -> item.getTutGrpCode().equals(tutGrpCode));
                 break;
@@ -298,7 +415,9 @@ public class TutorialGroupManagement implements Serializable {
             default:
         }
         //ask whether want to contiue filter
-        decision = display.continueFilter().toUpperCase().charAt(0);
+        do{
+            decision = display.continueFilter().toUpperCase().charAt(0);
+        }while(decision != 'Y' && decision != 'N');
         //if yes 
         while (decision == 'Y'){
             choice = display.reChoiceOfFilterTutGrp();
@@ -308,17 +427,31 @@ public class TutorialGroupManagement implements Serializable {
                     selectedTutGrpList = selectedTutGrpList.filter((TutorialGroup item) -> item.getProgrammeCode().equals(progCode));
                     break;
                 case 1:
+                    display.cleanBuffer();
                     String tutGrpCode = display.getTutGrpCode();
                     selectedTutGrpList = selectedTutGrpList.filter((TutorialGroup item) -> item.getTutGrpCode().equals(tutGrpCode));
                     break;
                 default:
             }
             //ask whether want to continue filter
-            decision = display.continueFilter().toUpperCase().charAt(0);
+            do{
+                decision = display.continueFilter().toUpperCase().charAt(0);
+            }while(decision != 'Y' && decision != 'N');
         }
         //display the filter result
-        System.out.println("Hello");
-        display.printAllSelectedTutGrp(selectedTutGrpList);
+        if (!selectedTutGrpList.isEmpty()){
+            display.printAllSelectedTutGrp(selectedTutGrpList);//display the result
+            //ask for report needed?
+            char reportChoice;
+            do{
+                reportChoice = display.reportChoice().toUpperCase().charAt(0);
+            }while(reportChoice != 'Y' && reportChoice != 'N');
+            if (reportChoice == 'Y'){
+                display.printReportTitle(display.reportTitle());
+                display.printAllSelectedTutGrp(selectedTutGrpList);
+            }
+        }else
+            display.noTutGrpFound();
     }
         
     //main method
