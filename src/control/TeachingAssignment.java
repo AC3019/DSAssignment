@@ -1,10 +1,7 @@
 package control;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.regex.Pattern;
 
 import adt.ArrayList;
 import adt.HashMap;
@@ -12,7 +9,6 @@ import boundary.TeachingAssignmentUI;
 import entity.Course;
 import entity.Tutor;
 import entity.TutorialGroup;
-import utility.Input;
 
 /**
  * @author hanyue1014
@@ -29,16 +25,98 @@ public class TeachingAssignment implements Serializable {
         this.tutorTutorialGroupMap = new HashMap<>();
     }
 
+    // since wildcard only me do, this not suitable to put in utils as diff ppl may have diff wildcards
+    private Pattern convertWildCardToPattern(String s) {
+        return Pattern.compile(
+            s
+                .replace("%", ".")
+                .replace("+", "[^\s]+")
+                .replace("*", ".+")
+        );
+    }
+
+    // shud probably be done by TutorManagement module, but I had more complex logics to implement, they don't allow working with custom list of tutors
+    // can filter with three criteria, 0 -> ID, 1 -> IC or 2 -> name or 3 -> show all (just return the ori arraylist)
+    /** can include wildcards, except for id 
+     * % for single character, 
+     * + for one or more characters excluding space 
+     * * for one or more characters including space 
+     * (I will use regex to make them valid)
+     */
+    private ArrayList<Tutor> filterTutors(ArrayList<Tutor> tutors) {
+        int discoverTutorChoice = ui.getTutorFindFilter();
+
+        switch (discoverTutorChoice) {
+            case 0:
+                int id = ui.getIDForTutorFilter();
+                return tutors.filter((Tutor t) -> t.getId() == id);
+            case 1:
+                String ic = ui.getIcNoForTutorFilter();
+                return tutors.filter(
+                    (Tutor t) -> this.convertWildCardToPattern(ic).matcher(t.getIcNO()).matches()
+                );
+            
+            case 2:
+                String name = ui.getNameForTutorFilter();
+                return tutors.filter(
+                    (Tutor t) -> this.convertWildCardToPattern(name).matcher(t.getName()).matches()
+                );
+            
+            default:
+                return tutors;
+        }
+    }
+
+    // same logic as filterTutors
+    /**
+     * allow filter for
+     * 0 -> id (allow wildcard)
+     * 1 -> name (allow wildcard)
+     * 2 -> department (let them choose from list)
+     * 3 -> return all
+     */
+    private ArrayList<Course> filterCourses(ArrayList<Course> courses) {
+       int discoverTutorChoice = ui.getTutorFindFilter();
+
+        switch (discoverTutorChoice) {
+            case 0:
+                String id = ui.getIdForCourseFilter();
+                return courses.filter(
+                    (Course c) -> this.convertWildCardToPattern(id).matcher(c.getId()).matches()
+                );
+            case 1:
+                String name = ui.getNameForCourseFilter();
+                return courses.filter(
+                    (Course c) -> this.convertWildCardToPattern(name).matcher(c.getName()).matches()
+                );
+            
+            case 2:
+                String department = ui.getDepartmentForCourseFilter();
+                return courses.filter(
+                    (Course c) -> c.getDepartment().equals(department)
+                );
+            
+            default:
+                return courses;
+        } 
+    }
+
     // prompts courses available to user and ask them to select one
     private Course selectCourse(ArrayList<Course> courses) {
-        int selection = ui.getCourseChoice(courses.toArray(Course.class));
+        int selection = ui.getCourseChoice(
+            courses.toArray(Course.class), 
+            "There are no courses in the system that matches the filter yet, please add one first"
+        );
+
+        if (selection < 0)
+            return null;
 
         return courses.get(selection);
     }
 
     private ArrayList<Tutor> filterTutorSuitableForCourse(Course c, ArrayList<Tutor> tutors) {
         // filter out the tutors that has already been assigned to the course
-        return tutors.filter(
+        ArrayList<Tutor> filtered = tutors.filter(
             (Tutor t) -> {
                 ArrayList<Tutor> cts = this.courseTutorMap.get(c);
                 if (cts == null)
@@ -46,6 +124,9 @@ public class TeachingAssignment implements Serializable {
                 return !cts.contains(t) && t.getDepartment().equals(c.getDepartment());
             }
         );
+        if (filtered.getNumberOfEntries() <= 0)
+            return null;
+        return this.filterTutors(filtered);
     }
 
     private Tutor selectTutorForCourse(Course c, ArrayList<Tutor> tutors) {
@@ -54,8 +135,16 @@ public class TeachingAssignment implements Serializable {
                 // TODO: this requires tweaking Tutor class's `.equals()` method
                 (Tutor t) -> !this.courseTutorMap.get(c).contains(t)
             ).toArray(Tutor.class),
-            "Which tutor to assign for this course[" + c.getId() + " " + c.getName() + "]: "
+            "Tutors (Department: " + c.getDepartment() + ")",
+            "Which tutor to assign for this course[" 
+                + c.getId() + " " 
+                + c.getName() +  " " 
+                + c.getDepartment() + "]: ",
+            "There are no tutors in the system that matches the filters yet, please add one first"
         );
+
+        if (selection < 0)
+            return null;
 
         return tutors.get(selection);
     }
@@ -80,15 +169,23 @@ public class TeachingAssignment implements Serializable {
      * those three are subbed to another two methods above
      */
     public void assignTutorsToCourse(CourseManagement cm, TutorManagement tm) {
-        Course selectedCourse = this.selectCourse(cm.getCourses());
+        ArrayList<Course> filteredCourses = this.filterCourses(cm.getCourses());
+        Course selectedCourse = this.selectCourse(filteredCourses);
+        if (selectedCourse == null) {
+            return;
+        }
         while (true) {
             ArrayList<Tutor> filteredTutors = this.filterTutorSuitableForCourse(
                 selectedCourse, 
                 new ArrayList<Tutor>(tm.getTutors())
             );
-            Tutor selectedTutor = this.selectTutorForCourse(selectedCourse, filteredTutors);
+            if (filteredTutors == null) {
 
-            this.assignTutorToCourse(selectedCourse, selectedTutor);
+            }
+
+            Tutor selectedTutor = this.selectTutorForCourse(selectedCourse, filteredTutors);
+            if (selectedTutor != null)
+                this.assignTutorToCourse(selectedCourse, selectedTutor);
             
             if (!ui.wantAssignMore("TUTOR"))
                 break;
@@ -96,7 +193,11 @@ public class TeachingAssignment implements Serializable {
     }
 
     public Tutor selectTutor(ArrayList<Tutor> ts) {
-        int selection = ui.getTutorChoice(ts.toArray(Tutor.class), "Which tutor to assign tutorial groups to: ");
+        int selection = ui.getTutorChoice(
+            ts.toArray(Tutor.class), 
+            "Which tutor to assign tutorial groups to: ", 
+            "There is currently no any tutors in the system, please add one first"
+        );
         return ts.get(selection);
     }
 
@@ -142,10 +243,50 @@ public class TeachingAssignment implements Serializable {
         }
     }
 
-    public Course[] searchCoursesUnderTutor() {
+    public Course[] searchCoursesUnderTutor(Tutor t) {
         ArrayList<Course> coursesOfTutor = new ArrayList<>();
 
+        this.courseTutorMap
+            .filter((Course _c, ArrayList<Tutor> ts) -> ts.contains(t))
+            .forEach((HashMap<Course, ArrayList<Tutor>>.Pair p) -> {
+                coursesOfTutor.insert(p.getKey());
+            });
+
         return coursesOfTutor.toArray(Course.class);
+    }
+
+    /**
+     * Ask if user want see whole list of tutor to pick from or alrd has someone in mind
+     * Only allow user to select from the tutors that are already assigned to a course, so need populate the list first (to remove duplicates, this is a good use case for a set, but not good enough to be able to justify creating a set adt since i only need it to store and loop through it, and it is only used for very specific reasons like this)
+     * @param tm
+     */
+    public void listCoursesUnderTutor() {
+        // get all tutors assigned to a course and populate them
+        ArrayList<Tutor> tutorsAssignedToAnyCourse = new ArrayList<>();
+
+        for (HashMap<Course, ArrayList<Tutor>>.Pair p : this.courseTutorMap) {
+            for (Tutor t : p.getValue()) {
+                if (!tutorsAssignedToAnyCourse.contains(t))
+                    tutorsAssignedToAnyCourse.insert(t);
+            }
+        }
+
+        // ask if user want to select from the list or if they alrd had something in mind
+        ArrayList<Tutor> filteredTutors = filterTutors(tutorsAssignedToAnyCourse);
+
+        int tutorChoice = ui.getTutorChoice(filteredTutors.toArray(Tutor.class), "Which tutor to select: ", "");
+        Tutor t = filteredTutors.get(tutorChoice);
+
+        HashMap<Course, ArrayList<Tutor>> newCourseHashMap = 
+            this.courseTutorMap.filter((Course c, ArrayList<Tutor> ts) -> ts.contains(t));
+        
+        Course[] allCourseUnderTutor = newCourseHashMap.getKeys(Course.class);
+    }
+
+    public Tutor[] searchTutorsUnderCourse() {
+        ArrayList<Tutor> tutorsUnderCourse = new ArrayList<>();
+
+        return tutorsUnderCourse.toArray(Tutor.class);
     }
 
     // due to java's referencing properties, we need to clean up data when tutor is removed by the tutor management submodule

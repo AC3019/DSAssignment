@@ -44,7 +44,7 @@ public class TableBuilder {
         return this;
     }
 
-    public void printTable(boolean showNumber) {
+    public void printTable(boolean showNumber, String tableHeading) {
 
         int numberColumnSize = 0;
         
@@ -88,6 +88,13 @@ public class TableBuilder {
         for (int i: spaceForColumn) {
             rowLen += i + 3; // + 1 for the dividers among the columns, + 2 for the padding of the columns
         }
+
+        // table heading
+        if (!tableHeading.isBlank())
+            System.out.println(
+                tableHeading.length() >= numberColumnSize 
+                    ? tableHeading : Formatter.centerString(tableHeading, rowLen + 1) // rowLen + 1 for the space in front
+            );
 
         // top row
         System.out.println(" " + StringUtil.fillString("-", rowLen));
@@ -187,6 +194,10 @@ public class TableBuilder {
         // }
         // System.out.println("\u2500\u2518"); // close the last column
 
+    }
+
+    public void printTable(boolean showNumber) {
+        this.printTable(showNumber, "");
     }
 
 }

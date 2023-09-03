@@ -134,6 +134,23 @@ public class Input {
      * @return the choice of the user, in integer (starting from 1)
      */
     public static <T> int getChoice(String prompt, T[] choices, Choicer<T> c) {
+        return getChoice("", prompt, choices, c);
+    }
+
+    /**
+     * Displays a table the choices available to the user, by transforming the obj through Choicer c
+     * @param <T> type of the objs
+     * @param tableHeading what to show above the table of choices
+     * @param choices
+     * @param c the function how the obj should be transformed to get a choice
+     * @return the choice of the user, in integer (starting from 1)
+     */
+    public static <T> int getChoice(
+        String tableHeading, 
+        String prompt, 
+        T[] choices, 
+        Choicer<T> c
+    ) {
         while (true) {
             try {
                 String[] newArr = new String[choices.length];
@@ -145,7 +162,7 @@ public class Input {
                     new String[][] { newArr }
                 );
 
-                tb.printTable(true);
+                tb.printTable(true, tableHeading);
 
                 // handles valid integer validation alrd
                 int choice = Input.getInt(prompt);
