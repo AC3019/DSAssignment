@@ -44,6 +44,11 @@ public class TableBuilder {
         return this;
     }
 
+    // whether the column already exists in the table
+    public boolean hasColumn(String colName) {
+        return this.table.containsKey(colName);
+    }
+
     public void printTable(boolean showNumber, String tableHeading) {
 
         int numberColumnSize = 0;

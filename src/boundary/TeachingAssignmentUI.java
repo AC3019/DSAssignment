@@ -201,6 +201,10 @@ public class TeachingAssignmentUI implements Serializable {
         return Input.getString("What is the Tutorial Group Code for the tutorial group (can use wildcards for a wider search): ", false);
     }
 
+    public int tableDisplayConfig(String tableHeading, String[] configs) {
+        return Input.getChoice(tableHeading, "How would you like to configure the table: ", configs, (s) -> s);
+    }
+
     /**
      * prompts user assignment successful
      * @param type "TUTOR" or "TUTORIALGROUP"

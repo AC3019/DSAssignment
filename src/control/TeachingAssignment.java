@@ -9,6 +9,7 @@ import boundary.TeachingAssignmentUI;
 import entity.Course;
 import entity.Tutor;
 import entity.TutorialGroup;
+import utility.TableBuilder;
 
 /**
  * @author hanyue1014
@@ -236,7 +237,7 @@ public class TeachingAssignment implements Serializable {
         }
     }
 
-    public Tutor selectTutor(ArrayList<Tutor> ts) {
+    public Tutor selectTutorForTutorialGroup(ArrayList<Tutor> ts) {
         int selection = ui.getTutorChoice(
             ts.toArray(Tutor.class), 
             "Which tutor to assign tutorial groups to: ", 
@@ -300,7 +301,7 @@ public class TeachingAssignment implements Serializable {
         Tutor selectedTutor;
         while (true) {
             ArrayList<Tutor> filteredTutors = filterTutors(tutorsAssignedToCourse);
-            selectedTutor = this.selectTutor(filteredTutors);
+            selectedTutor = this.selectTutorForTutorialGroup(filteredTutors);
 
             if (selectedTutor == null) {
                 if (ui.restartFilter())
@@ -328,6 +329,8 @@ public class TeachingAssignment implements Serializable {
         }
     }
 
+    // how is this any different from list courses under a tutor if they both involve filtering wtf
+    // the best I can think of is this will become the supporting method of listAllCoursesUnderTutor
     public Course[] searchCoursesUnderTutor(Tutor t) {
         ArrayList<Course> coursesOfTutor = new ArrayList<>();
 
@@ -336,6 +339,8 @@ public class TeachingAssignment implements Serializable {
             .forEach((HashMap<Course, ArrayList<Tutor>>.Pair p) -> {
                 coursesOfTutor.insert(p.getKey());
             });
+        
+        // implement search/filter logic here??????
 
         return coursesOfTutor.toArray(Course.class);
     }
@@ -347,6 +352,85 @@ public class TeachingAssignment implements Serializable {
      */
     public void listCoursesUnderTutor() {
         // get all tutors assigned to a course and populate them
+        ArrayList<Tutor> tutorsAssignedToAnyCourse = getTutorsAssignedToAnyCourse();
+
+        Tutor selectedTutor;
+        while (true) {
+            // ask if user want to select from the list or if they alrd had something in mind
+            ArrayList<Tutor> filteredTutors = filterTutors(tutorsAssignedToAnyCourse);
+    
+            int tutorChoice = ui.getTutorChoice(
+                filteredTutors.toArray(Tutor.class), 
+                "Which tutor to select: ", 
+                "There is no tutors assigned to any course that matches the filter yet, please add/assign one"
+            );
+            if (tutorChoice < 0) {
+                if (ui.restartFilter())
+                    continue;
+                return;
+            }
+            selectedTutor = filteredTutors.get(tutorChoice);
+            break;
+        }
+        Course[] coursesAfterFilter = searchCoursesUnderTutor(selectedTutor);
+        ArrayList<Course> coursesArrayList = new ArrayList<>(coursesAfterFilter); // convert to arraylist to use ma sweeeeet sweeeeet methods
+        TableBuilder tb = new TableBuilder();
+        boolean showNumber = false;
+        while (true) {
+            int choice = ui.tableDisplayConfig(
+                "Table configuration to display courses under a tutor",
+                new String[] {
+                    tb.hasColumn("Course ID") ? "Remove column 'Course ID'" : "Add column 'Course ID",
+                    tb.hasColumn("Course Name") ? "Remove column 'Course Name'" : "Add column 'Course Name",
+                    tb.hasColumn("Department") ? "Remove column 'Department'" : "Add column 'Department",
+                    tb.hasColumn("Credit Hour") ? "Remove column 'Credit Hour'" : "Add column 'Credit Hour'",
+                    showNumber ? "Disable data number" : "Show data number",
+                    "Done configuration"
+                }
+            );
+            switch (choice) {
+                case 0:
+                    if (tb.hasColumn("Course ID"))
+                        tb.removeColumn("Course ID");
+                    else
+                        tb.addColumn("Course ID", coursesArrayList.map((Course c) -> c.getId()).toArray(String.class));
+                    break;
+
+                case 1:
+                    if (tb.hasColumn("Course Name"))
+                        tb.removeColumn("Course Name");
+                    else
+                        tb.addColumn("Course Name", coursesArrayList.map((Course c) -> c.getName()).toArray(String.class));
+                    break;
+                
+                case 2:
+                    if (tb.hasColumn("Department"))
+                        tb.removeColumn("Department");
+                    else
+                        tb.addColumn("Department", coursesArrayList.map((Course c) -> c.getDepartment()).toArray(String.class));
+                    break;
+
+                case 3:
+                    if (tb.hasColumn("Credit Hour"))
+                        tb.removeColumn("Credit Hour");
+                    else
+                        tb.addColumn("Credit Hour", coursesArrayList.map((Course c) -> c.getDepartment()).toArray(String.class));
+                    break;
+                case 4:
+                    showNumber = !showNumber;
+                    break;
+            
+                default:
+                    break;
+            }
+            if (choice == 5) {
+                break; // while
+            }
+        }
+        tb.printTable(showNumber);
+    }
+
+    private ArrayList<Tutor> getTutorsAssignedToAnyCourse() {
         ArrayList<Tutor> tutorsAssignedToAnyCourse = new ArrayList<>();
 
         for (HashMap<Course, ArrayList<Tutor>>.Pair p : this.courseTutorMap) {
@@ -355,17 +439,7 @@ public class TeachingAssignment implements Serializable {
                     tutorsAssignedToAnyCourse.insert(t);
             }
         }
-
-        // ask if user want to select from the list or if they alrd had something in mind
-        ArrayList<Tutor> filteredTutors = filterTutors(tutorsAssignedToAnyCourse);
-
-        int tutorChoice = ui.getTutorChoice(filteredTutors.toArray(Tutor.class), "Which tutor to select: ", "");
-        Tutor t = filteredTutors.get(tutorChoice);
-
-        HashMap<Course, ArrayList<Tutor>> newCourseHashMap = 
-            this.courseTutorMap.filter((Course c, ArrayList<Tutor> ts) -> ts.contains(t));
-        
-        Course[] allCourseUnderTutor = newCourseHashMap.getKeys(Course.class);
+        return tutorsAssignedToAnyCourse;
     }
 
     public Tutor[] searchTutorsUnderCourse() {
@@ -388,6 +462,16 @@ public class TeachingAssignment implements Serializable {
     // main function to this module, handles everything
     // need to take in controls of other 2 subsystem as need to integrate with them
     public void main(TutorManagement tm, TutorialGroupManagement tgm, CourseManagement cm) {
+        /*
+         * "Assign tutor to a course",
+            "Assign tutorial groups to tutor",
+            "Remove tutor from a course",
+            "Remove tutorial group from a tutor",
+            "List all tutors under a course",
+            "List all courses under a tutor",
+            "Generate report",
+            "Exit teaching assignment"
+         */
         int option = ui.getMenuChoice();
         switch (option) {
             case 0:
@@ -405,6 +489,8 @@ public class TeachingAssignment implements Serializable {
             case 4:
                 break;
             case 5:
+                break;
+            case 6:
                 break;
 
             // won't reach
