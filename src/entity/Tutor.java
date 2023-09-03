@@ -46,10 +46,11 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     }
     
 
-    public Tutor (int id,String name, String department){
+    public Tutor (int id,String name, String department,String phoneNum){
         this.id=id;
         this.name=name;
         this.department=department;
+        this.phoneNum=phoneNum;
     }
     public String getName() {
         return name;

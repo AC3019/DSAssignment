@@ -105,13 +105,17 @@ public class TutorManagement implements Serializable {
               System.out.println("This tutor already exists in the list.");
             } else {
                 tutors.put(tutorObj.getId(), tutorObj);
+                System.out.println("Tutor added successfully");
            }
          }else {
             // Will only come here for first tutor addition
            tutors.put(tutorObj.getId(),tutorObj);
+           System.out.println("Tutor added successfully ");
            // id++;
        }
     }
+    //add remove by ic
+    //add chk ic and id
     public void removeTutor(){
         //int id=tmu.removeTutorData();
        if(tutors.size()>0){
@@ -128,6 +132,9 @@ public class TutorManagement implements Serializable {
 
     }
     //got prob
+    //add search by ic
+    //add loop search few
+    
     public void searchTutor(){
         //int id=tmu.searchTutorId();
         if(tutors.size()<=0){
@@ -144,13 +151,30 @@ public class TutorManagement implements Serializable {
     }
     
     public void amendTutorDetails(){
+        int choice=tmu.amendTutorMenu();
         Tutor t=tmu.amendTutorDetailsData();
        
         Tutor tutor = tutors.get(t.getId());
         if (tutor != null) {
-            tutor.setName(t.getName());
-            tutor.setDepartment(t.getDepartment());
-            System.out.println("Tutor details amended successfully.");
+            
+            switch(choice){
+                case 0:
+                tutor.setName(t.getName());
+                System.out.println("Tutor name amended successfully.");
+                break;
+
+                case 1:
+                tutor.setDepartment(t.getDepartment());
+                System.out.println("Tutor department amended successfully.");
+                break;
+                case 2:
+                tutor.setPhoneNumber(t.getPhoneNum());
+                System.out.println("Tutor's phone number amended successfully. ");
+                break;
+                default:
+                    System.out.println("Invalid choice.. Pls select again");
+            }
+            
         } else {
             System.out.println("Tutor not found.");
         }
@@ -166,6 +190,7 @@ public class TutorManagement implements Serializable {
              System.out.println("no tutor inside the system");
          }
     }
+     //add loop
      public  void filterTutor() {
          if(tutors.size()>0){
      
