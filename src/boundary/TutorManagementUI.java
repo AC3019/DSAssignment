@@ -115,11 +115,27 @@ public class TutorManagementUI implements Serializable {
                 Tutor tutorObj = new Tutor(name, department, gender, age, phoneNum,icNo);
                 return tutorObj;
     }
+    public int removeTutorMenu(){
+         return Input.getChoice(
+            "Select an option: ",
+            new String[] {
+                "remove by id",
+                "Remove by ic",
+                            },
+            (item) -> item
+        );
+         
+
+    }
     public int removeTutorData(){
          //Scanner scan = new Scanner(System.in);
         // System.out.println("Enter a id u wan to remove: ");
             int id = Input.getInt("Enter an id you want to remove: ");
             return id;
+    }
+    public String removeTutorByIc(){
+        String ic=Input.getString("enter tutor ic that you want to remove: ",false);
+                return ic;
     }
     public int searchTutorId(){
         //Scanner scan = new Scanner(System.in);
