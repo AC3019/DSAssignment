@@ -20,6 +20,7 @@ import utility.Input;
 public class TutorManagementUI implements Serializable {
     Scanner scan=new Scanner(System.in);
    // TutorManagementUI tmu=new TutorManagementUI();
+//    TutorManagement tm=new TutorManagement();
     Tutor t=new Tutor();
     public int printMenu() {
         // System.out.println("1. Add a new tutor");
@@ -130,6 +131,10 @@ public class TutorManagementUI implements Serializable {
         
         return id;
     }
+    public String searchTutorIc(){
+        String ic=Input.getString("Enter tutor's ic that you want to find: ",false);
+        return ic;
+    }
     public int amendTutorMenu(){
         int choice= Input.getChoice(
             "Select an option: ",
@@ -141,60 +146,26 @@ public class TutorManagementUI implements Serializable {
             },
             (item) -> item
         );
-        /*
-         int id = Input.getInt("Tutor ID: ");
-                 
-        switch(choice){
-            case 0:
-                String newName=Input.getString("New name: ",false);
-                  break;
-            case 1:
-                String newDepartment = Input.getString("New Department: ",false);
-                break;
-            case 2:
-                String newPhoneNum=Input.getString("New phone:", false);
-                break;
-        }
-        */
-        return choice;
+        
+               return choice;
 
     }
-    //extra buffer error
-    public Tutor amendTutorDetailsData(){
-        //Scanner scan = new Scanner(System.in);
-        //System.out.print("Tutor ID: ");
-        /*
-        int id = Input.getInt("Tutor ID: ");
-        scan.nextLine();
-       int choice= amendTutorMenu();
-        System.out.print("New name: ");
-        String newName = scan.nextLine();
-       // System.out.print("New department: ");
+       public String getNewName(){
+           
+            String newName=Input.getString("New name: ",false);
+            //scan.nextLine();
+            return newName;
+
+    }
+    public String getNewDepartment(){
         String newDepartment = Input.getString("New Department: ",false);
-*/
-        String newName=t.getName();
-        String newDepartment=t.getDepartment();
-        String newPhoneNum=t.getPhoneNum();
-         int choice=amendTutorMenu();
-         int id = Input.getInt("Tutor ID: ");
-         char continueInput=Input.getChar("Do you want to continue amend other field: ");
-         do{
-        switch(choice){
-            case 0:
-                 newName=Input.getString("New name: ",false);
-                  break;
-            case 1:
-                newDepartment = Input.getString("New Department: ",false);
-                break;
-            case 2:
-                newPhoneNum=Input.getString("New phone:", false);
-                break;
-        }
-         }while(continueInput=='Y');
-
-        Tutor tu=new Tutor(id,newName,newDepartment,newPhoneNum);
-        return tu ;
+        return newDepartment;
     }
+    public String getNewPhoneNum(){
+        String newPhoneNum=Input.getString("New phone:", false);
+        return newPhoneNum;
+    }
+
     public int filterTutorData(){
       //Scanner scan = new Scanner(System.in);
         int choice;

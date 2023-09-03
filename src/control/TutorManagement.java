@@ -137,47 +137,92 @@ public class TutorManagement implements Serializable {
     
     public void searchTutor(){
         //int id=tmu.searchTutorId();
+        //Tutor t=new Tutor();
         if(tutors.size()<=0){
          //return tutors.get(id);  
             System.out.println("Pls add tutor first");
             
         }else{
-                int id=tmu.searchTutorId();
+              int choice= Input.getChoice(
+            "Select an option: ",
+                 new String[] {
+                "Search by id:",
+                "Search by ic no:",                
+            },
+            (item) -> item
+        );
+              switch(choice){
+                  case 0:
+                     int id=tmu.searchTutorId();
 
-                 System.out.println(tutors.get(id));
+                      System.out.println(tutors.get(id));
                  //got prob
-                 scan.nextLine();
+                     scan.nextLine();
+                     break;
+                 /*
+                  case 2:
+                      String ic=tmu.searchTutorIc();
+                      Integer key = tutors.keyOf((Integer I, Tutor t) -> t.getIcNo().equals(ic));
+                      System.out.println(tutors.get(ic));
+                  */ 
+              }
+                     
+                     
         }
     }
-    
-    public void amendTutorDetails(){
-        int choice=tmu.amendTutorMenu();
-        Tutor t=tmu.amendTutorDetailsData();
-       
-        Tutor tutor = tutors.get(t.getId());
-        if (tutor != null) {
-            
+    //let user choose amend by ic or id
+    //validate id
+    public void  amendTutorDetails(){
+        //int choice=tmu.amendTutorMenu();
+         int id=0;
+         String newName="";
+         String newDepartment=" ";
+         String newPhoneNum=" ";
+         
+        // id=Input.getInt("Enter the id you want to find: ");
+         Input.cleanBuffer();
+     // Tutor t=new Tutor(id,newName,newDepartment,newPhoneNum);
+             
+       char continueInput='Y';
+       // Tutor tutor = tutors.get(t.getId());
+        if (tutors.size()!=0) {
+             id=Input.getInt("Enter the id you want to ammend: ");
+                   Tutor t=new Tutor(id,newName,newDepartment,newPhoneNum);
+                           Tutor tutor = tutors.get(t.getId());
+
+            do{
+                int choice=tmu.amendTutorMenu();
             switch(choice){
                 case 0:
-                tutor.setName(t.getName());
+                //newName=Input.getString("New name: ",false);
+                    newName=tmu.getNewName();
+                tutor.setName(newName);
                 System.out.println("Tutor name amended successfully.");
                 break;
 
                 case 1:
-                tutor.setDepartment(t.getDepartment());
+                //tutor.setDepartment(t.getDepartment());
+                      newDepartment=tmu.getNewDepartment();
+                tutor.setDepartment(newDepartment);
                 System.out.println("Tutor department amended successfully.");
                 break;
                 case 2:
-                tutor.setPhoneNumber(t.getPhoneNum());
+                  newPhoneNum=tmu.getNewPhoneNum();
+
+                tutor.setPhoneNumber(newPhoneNum);
+
                 System.out.println("Tutor's phone number amended successfully. ");
                 break;
                 default:
                     System.out.println("Invalid choice.. Pls select again");
             }
-            
+                    continueInput=Input.toUpperCase().getChar("Do u wan to amend other fields : ");
+
+            }while(continueInput=='Y');
         } else {
             System.out.println("Tutor not found.");
         }
+ 
     }
      public  void listAllTutor() {
         adt.ArrayList<Tutor> arl = new adt.ArrayList<>(this.tutors.getValues(Tutor.class));
