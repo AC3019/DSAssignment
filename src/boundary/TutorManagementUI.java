@@ -54,7 +54,7 @@ public class TutorManagementUI implements Serializable {
     public String getDepartment() {
         return DepartmentManagement.departments[
                 Input.getChoice(
-                    "Enter department", 
+                    "Enter department: ", 
                     DepartmentManagement.departments, 
                     (s) -> s
                 )
@@ -76,7 +76,7 @@ public class TutorManagementUI implements Serializable {
 
                 do{
                     invalidInput = false;
-                    name=Input.getString("Name:",false);
+                    name=Input.getString("Name:",false).toUpperCase();
                     department = getDepartment();
                     //name.toUpperCase();
                     Input.cleanBuffer();
@@ -115,35 +115,19 @@ public class TutorManagementUI implements Serializable {
                 Tutor tutorObj = new Tutor(name, department, gender, age, phoneNum,icNo);
                 return tutorObj;
     }
-    public int removeTutorMenu(){
-         return Input.getChoice(
-            "Select an option: ",
-            new String[] {
-                "remove by id",
-                "Remove by ic",
-                            },
-            (item) -> item
-        );
-         
-
-    }
-    public int removeTutorData(){
+       public int removeTutorData(){
          //Scanner scan = new Scanner(System.in);
         // System.out.println("Enter a id u wan to remove: ");
             int id = Input.getInt("Enter an id you want to remove: ");
             return id;
     }
-    public String removeTutorByIc(){
-        String ic=Input.getString("enter tutor ic that you want to remove: ",false);
-                return ic;
-    }
-    public int searchTutorId(){
+       public int searchTutorId(){
         //Scanner scan = new Scanner(System.in);
        // System.out.println("Enter id u wan to find: ");
         int id = Input.getInt("Enter tutor's id that you want to find : ");
         
         
-       // scan.nextLine();
+       
         
         return id;
     }
@@ -162,7 +146,7 @@ public class TutorManagementUI implements Serializable {
             },
             (item) -> item
         );
-        
+        Input.cleanBuffer();
                return choice;
 
     }

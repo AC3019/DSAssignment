@@ -119,27 +119,17 @@ public class TutorManagement implements Serializable {
     public void removeTutor(){
         //int id=tmu.removeTutorData();
        if(tutors.size()>0){
-           int choice=tmu.removeTutorMenu();
-           switch(choice){
-               case 0:
-                    int id=tmu.removeTutorData();
+                      int id=tmu.removeTutorData();
                      if (tutors.containsKey(id)) {
                          tutors.remove(id);
+                         System.out.println("Tutor removed successfully ");
+
                      }else {
                          System.out.println("Id invalid");
                       }
 
-                     System.out.println("Tutor removed successfully ");
-                     break;
-                     /*
-                case 1:
-                     String ic=tmu.removeTutorByIc();
-                     if(tutors.getValues().getIcNO().equals(ic)){
-                            tutors.remove(tutors.getKey());
-                     }
-                     */
-           }
-         
+                    
+                             
         }        
     else{
            System.out.println("pls add tutor only can removed");
@@ -153,10 +143,11 @@ public class TutorManagement implements Serializable {
     public void searchTutor(){
         //int id=tmu.searchTutorId();
         //Tutor t=new Tutor();
+        char continueInput='Y';
+        do{
         if(tutors.size()<=0){
          //return tutors.get(id);  
             System.out.println("Pls add tutor first");
-            
         }else{
               int choice= Input.getChoice(
             "Select an option: ",
@@ -166,28 +157,33 @@ public class TutorManagement implements Serializable {
             },
             (item) -> item
         );
+              Input.cleanBuffer();
               switch(choice){
                   case 0:
+                          
                      int id=tmu.searchTutorId();
-
+                     if(tutors.containsKey(id)){
                       System.out.println(tutors.get(id));
-                 //got prob
-                     scan.nextLine();
-                     break;
-                 
+                     }else{
+                         System.out.println("Invalid tutor's id");
+                     }
+                 //got prob                   
+                     break;     
+                     //clear buffer error
                   case 1:
                       String ic=tmu.searchTutorIc();
                       Integer key = tutors.keyOf((Integer I, Tutor t) -> t.getIcNO().equals(ic));
                       System.out.println(tutors.get(key));
                       break;
                   default:
-                      System.out.println("Invalid option ");
-                      
-                  
+                      System.out.println("Invalid option ");                     
               }
-                     
-                     
-        }
+        }       
+        Input.cleanBuffer();
+            continueInput=Character.toUpperCase(Input.getChar("Do you want to continue to search for other tutor: "));
+            //Input.cleanBuffer();
+               }while(continueInput=='Y');
+     
     }
     //let user choose amend by ic or id
     //validate id
@@ -199,13 +195,14 @@ public class TutorManagement implements Serializable {
          String newPhoneNum=" ";
          
         // id=Input.getInt("Enter the id you want to find: ");
-         Input.cleanBuffer();
+         //Input.cleanBuffer();
      // Tutor t=new Tutor(id,newName,newDepartment,newPhoneNum);
              
        char continueInput='Y';
        // Tutor tutor = tutors.get(t.getId());
         if (tutors.size()!=0) {
              id=Input.getInt("Enter the id you want to ammend: ");
+             if(tutors.containsKey(id)){
                    Tutor t=new Tutor(id,newName,newDepartment,newPhoneNum);
                            Tutor tutor = tutors.get(t.getId());
 
@@ -235,29 +232,35 @@ public class TutorManagement implements Serializable {
                 default:
                     System.out.println("Invalid choice.. Pls select again");
             }
-                    continueInput=Input.getChar("Do u wan to amend other fields : ");
+                    continueInput=Character.toUpperCase(Input.getChar("Do u wan to amend other fields : "));
 
             }while(continueInput=='Y');
+        }else{
+                 System.out.println("Tutor's id invalid ");
+             }
         } else {
             System.out.println("Tutor not found.");
         }
  
     }
      public  void listAllTutor() {
+         if(tutors.size()>0){
         adt.ArrayList<Tutor> arl = new adt.ArrayList<>(this.tutors.getValues(Tutor.class));
         arl.sort((Tutor t1, Tutor t2) -> t1.getName().compareTo(t2.getName()));
-         if(tutors.size()>0){
              for (Tutor t : arl) {
                  System.out.println(t);
              }
          }else{
              System.out.println("no tutor inside the system");
          }
+         
     }
      //add loop
      public  void filterTutor() {
+         char continueInput='Y';
+         do{
          if(tutors.size()>0){
-     
+       
         int choice=tmu.filterTutorData();
         switch (choice) {
             case 1:
@@ -275,7 +278,10 @@ public class TutorManagement implements Serializable {
          }else{
              System.out.println("Pls add tutor first");
          }
-
+         Input.cleanBuffer();
+         continueInput=Character.toUpperCase(Input.getChar("Do you want to continue filter? "));
+         
+         }while(continueInput=='Y');
     }
      private  void findByGender() {
         Scanner scan = new Scanner(System.in);
@@ -294,6 +300,7 @@ public class TutorManagement implements Serializable {
         Tutor [] matchedTutors=tutors.filter(
                 (Integer k,Tutor v)-> v.getGender()==(genderToFilter)
         ).getValues(Tutor.class);
+       // System.out.println("Do you want to ");
         for(int i=0;i<matchedTutors.length;i++){
             System.out.println(matchedTutors[i]);
         }
@@ -318,7 +325,7 @@ public class TutorManagement implements Serializable {
      }
      private void findByName(){
          //System.out.print("name to filter: ");
-         String nameToFilter=Input.getString("Name to filter: ", false);
+         String nameToFilter=Input.getString("Name to filter: ", false).toUpperCase();
          Tutor[] matchedTutors=tutors.filter(
                  (Integer k,Tutor v)-> v.getName().contains(nameToFilter)
          ).getValues(Tutor.class);
