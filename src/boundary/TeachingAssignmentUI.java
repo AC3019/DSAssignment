@@ -66,7 +66,11 @@ public class TeachingAssignmentUI implements Serializable {
         );
     }
 
-    public int getTutorialGroupChoice(TutorialGroup[] tgs, String prompt) {
+    public int getTutorialGroupChoice(TutorialGroup[] tgs, String prompt, String ifEmptyArr) {
+        if (tgs.length <= 0) {
+            System.out.println(ifEmptyArr);
+            return -1;
+        }
         return Input.getChoice(
             prompt,
             tgs,
@@ -113,8 +117,10 @@ public class TeachingAssignmentUI implements Serializable {
     }
 
     // a print anything function for anything that don't rlly need to have their own function
+    // warns the user then wait for their action to let the system proceed
     public void warn(String s) {
         System.out.println(s);
+        Input.pause();
     }
 
     // allows wildcards
@@ -167,6 +173,39 @@ public class TeachingAssignmentUI implements Serializable {
         ];
     }
 
+    public int getTutorialGroupFindFilter() {
+        return Input.getChoice(
+            "How do you want to decide which tutorial group to select: ",
+            new String[] {
+                "I already know the programme code, let me find by programme code",
+                "I already know the programme name, let me find by programme name",
+                "I already know the tutorial group code, let me find by tutorial group code",
+                "Show me all of them, let me pick"
+            },
+            (s) -> s
+        );
+    }
+
+    public String getProgCodeForTutGrpFilter() {
+        printWildCardList();
+        return Input.getString("What is the Programme Code for the tutorial group (can use wildcards for a wider search): ", false);
+    }
+
+    public String getProgNameForTutGrpFilter() {
+        printWildCardList();
+        return Input.getString("What is the Programme Name for the tutorial group (can use wildcards for a wider search): ", false);
+    }
+
+    public String getTutGrpCodeForTutGrpFilter() {
+        printWildCardList();
+        return Input.getString("What is the Tutorial Group Code for the tutorial group (can use wildcards for a wider search): ", false);
+    }
+
+    /**
+     * prompts user assignment successful
+     * @param type "TUTOR" or "TUTORIALGROUP"
+     * @return
+     */
     public void assignSuccessful(String type) {
         if (type.equals("TUTOR"))
             System.out.println("Successfully assigned tutor to the course");
@@ -175,7 +214,7 @@ public class TeachingAssignmentUI implements Serializable {
     }
 
     /**
-     * asks user whether they wanna insert more tutor
+     * asks user whether they wanna insert more
      * @param type "TUTOR" or "TUTORIALGROUP"
      * @return
      */
@@ -184,6 +223,10 @@ public class TeachingAssignmentUI implements Serializable {
             return Input.confirm("Do you want to assign more tutor to the course?");
         else 
             return Input.confirm("Do you want to assign more tutorial groups to the tutor?");
+    }
+
+    public boolean restartFilter() {
+        return Input.confirm("Do you want to restart the filter?");
     }
 
 }

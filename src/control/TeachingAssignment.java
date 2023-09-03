@@ -76,7 +76,7 @@ public class TeachingAssignment implements Serializable {
      * 3 -> return all
      */
     private ArrayList<Course> filterCourses(ArrayList<Course> courses) {
-       int discoverTutorChoice = ui.getTutorFindFilter();
+       int discoverTutorChoice = ui.getCourseFindFilter();
 
         switch (discoverTutorChoice) {
             case 0:
@@ -98,6 +98,40 @@ public class TeachingAssignment implements Serializable {
             
             default:
                 return courses;
+        } 
+    }
+
+    // same logic as filterTutors
+    /**
+     * allow filter for
+     * 0 -> programme code (allow wildcard)
+     * 1 -> programme name (allow wildcard)
+     * 2 -> tutorial group code (allow wildcard)
+     * 3 -> return all
+     */
+    private ArrayList<TutorialGroup> filterTutorialGroups(ArrayList<TutorialGroup> tutGrps) {
+        int discoverTutorChoice = ui.getTutorialGroupFindFilter();
+
+        switch (discoverTutorChoice) {
+            case 0:
+                String progCode = ui.getProgCodeForTutGrpFilter();
+                return tutGrps.filter(
+                    (TutorialGroup t) -> this.convertWildCardToPattern(progCode).matcher(t.getProgrammeCode()).matches()
+                );
+            case 1:
+                String progName = ui.getNameForCourseFilter();
+                return tutGrps.filter(
+                    (TutorialGroup t) -> this.convertWildCardToPattern(progName).matcher(t.getProgrammeName()).matches()
+                );
+            
+            case 2:
+                String tutGrpCode = ui.getTutGrpCodeForTutGrpFilter();
+                return tutGrps.filter(
+                    (TutorialGroup t) -> this.convertWildCardToPattern(tutGrpCode).matcher(t.getTutGrpCode()).matches()
+                );
+            
+            default:
+                return tutGrps;
         } 
     }
 
@@ -124,8 +158,6 @@ public class TeachingAssignment implements Serializable {
                 return !cts.contains(t) && t.getDepartment().equals(c.getDepartment());
             }
         );
-        if (filtered.getNumberOfEntries() <= 0)
-            return null;
         return this.filterTutors(filtered);
     }
 
@@ -169,23 +201,35 @@ public class TeachingAssignment implements Serializable {
      * those three are subbed to another two methods above
      */
     public void assignTutorsToCourse(CourseManagement cm, TutorManagement tm) {
-        ArrayList<Course> filteredCourses = this.filterCourses(cm.getCourses());
-        Course selectedCourse = this.selectCourse(filteredCourses);
-        if (selectedCourse == null) {
+        // in reality this won't happen since course management is just a stub
+        if (cm.getCourses().isEmpty()) {
+            ui.warn("Courses is empty, please add some course first");
             return;
+        }
+        Course selectedCourse;
+        while (true) {
+            ArrayList<Course> filteredCourses = this.filterCourses(cm.getCourses());
+            selectedCourse = this.selectCourse(filteredCourses);
+            if (selectedCourse == null) {
+                if (ui.restartFilter())
+                    continue;
+                return;
+            }
+            break;
         }
         while (true) {
             ArrayList<Tutor> filteredTutors = this.filterTutorSuitableForCourse(
                 selectedCourse, 
                 new ArrayList<Tutor>(tm.getTutors())
             );
-            if (filteredTutors == null) {
-
-            }
 
             Tutor selectedTutor = this.selectTutorForCourse(selectedCourse, filteredTutors);
-            if (selectedTutor != null)
-                this.assignTutorToCourse(selectedCourse, selectedTutor);
+            if (selectedTutor == null) {
+                if (ui.restartFilter())
+                    continue;
+            }
+            
+            this.assignTutorToCourse(selectedCourse, selectedTutor);
             
             if (!ui.wantAssignMore("TUTOR"))
                 break;
@@ -196,21 +240,29 @@ public class TeachingAssignment implements Serializable {
         int selection = ui.getTutorChoice(
             ts.toArray(Tutor.class), 
             "Which tutor to assign tutorial groups to: ", 
-            "There is currently no any tutors in the system, please add one first"
+            "There is currently no any tutors in the system that matches the filter, please add one first"
         );
+
+        if (selection < 0)
+            return null;
         return ts.get(selection);
     }
 
     public TutorialGroup selectTutorialGroupForTutor(Tutor t, ArrayList<TutorialGroup> tgs) {
         int selection = ui.getTutorialGroupChoice(
+            // filter out tutorial groups that are already assigned to this tutor
             tgs.filter((TutorialGroup tg) -> {
                 ArrayList<TutorialGroup> hmTg = this.tutorTutorialGroupMap.get(t);
                 if (hmTg == null) 
                     return false;
-                return hmTg.contains(tg);
+                return !hmTg.contains(tg);
             }).toArray(TutorialGroup.class),
-            "Which tutorial group to assign to this tutor[" + t.getId() + " " + t.getName() + "]: "
+            "Which tutorial group to assign to this tutor[" + t.getId() + " " + t.getName() + "]: ",
+            "There is no tutorial groups in the system that matches the filter yet, please add one first"
         );
+
+        if (selection < 0) 
+            return null;
 
         return tgs.get(selection);
     }
@@ -231,10 +283,43 @@ public class TeachingAssignment implements Serializable {
      * those three are subbed to another two methods above
      */
     public void assignTutorialGroupsToTutor(TutorManagement tm, TutorialGroupManagement tgm) {
-        Tutor selectedTutor = this.selectTutor(new ArrayList<Tutor>(tm.getTutors()));
+        // only can assign to the tutors who has already assigned to a course
+        // get all tutors that are assigned to a course
+        ArrayList<Tutor> tutorsAssignedToCourse = new ArrayList<>() {{
+            for (HashMap<Course, ArrayList<Tutor>>.Pair p : courseTutorMap) {
+                for (Tutor t : p.getValue())
+                    insert(t);
+            }
+        }};
+
+        if (tutorsAssignedToCourse.isEmpty()) {
+            ui.warn("There are no tutors assigned to any course yet, please assign one first");
+            return;
+        }
+
+        Tutor selectedTutor;
+        while (true) {
+            ArrayList<Tutor> filteredTutors = filterTutors(tutorsAssignedToCourse);
+            selectedTutor = this.selectTutor(filteredTutors);
+
+            if (selectedTutor == null) {
+                if (ui.restartFilter())
+                    continue;
+                return;
+            }
+
+            break;
+        }
 
         while (true) {
-            TutorialGroup tg = this.selectTutorialGroupForTutor(selectedTutor, tgm.getTutorialGroups());
+            ArrayList<TutorialGroup> filteredTutorialGroups = this.filterTutorialGroups(tgm.getTutorialGroups());
+            TutorialGroup tg = this.selectTutorialGroupForTutor(selectedTutor, filteredTutorialGroups);
+
+            if (tg == null) {
+                if (ui.restartFilter())
+                    continue;
+                return;
+            }
 
             this.assignTutorialGroupToTutor(selectedTutor, tg);
 
