@@ -80,7 +80,7 @@ public class TutorialGroupManagementUI implements Serializable {
     }
     
     public String moveToPassList(){
-        Input.cleanBuffer();
+        //Input.cleanBuffer();
         String choice = Input.getString("Did you want to stall the tutorial group removed into passing list(Y/N): ", false);
         return choice;
     }
@@ -135,12 +135,21 @@ public class TutorialGroupManagementUI implements Serializable {
     }
     
     public String filterStudent(){
+        //Input.cleanBuffer();
         String decision = Input.getString("Did you want to filter the student by gender(Y/N): ", false);
         return decision;
     }
     
     public void afterFilter(){
         System.out.println("Results after filter: ");
+    }
+    
+    public int getGender(){
+        int choice = Input.getChoice("Please select the gender of the student: ", new String[] {
+                                    "Male",
+                                    "Female"
+                                    }, (item) -> item);
+        return choice;
     }
     
     //ask user which way the user want to add the user
@@ -254,8 +263,8 @@ public class TutorialGroupManagementUI implements Serializable {
     }
     
     public String editMark(){
-        Input.cleanBuffer();
-        String decision = Input.getString("Did you want to edit the students mark(Y/N): ", false);
+        //Input.cleanBuffer();
+        String decision = Input.getString("Did you want to edit the student's demerit mark(Y/N): ", false);
         return decision;
     }
     
@@ -284,13 +293,13 @@ public class TutorialGroupManagementUI implements Serializable {
     
     public int getStudentMark(){
         //Input.cleanBuffer();
-        int mark = Input.getInt("Please enter the mark of the student: ", 0, 100);
+        int mark = Input.getInt("Please enter the demerit mark of the student: ", 0, 100);
         return mark;
     }
     
 //information message
     public void createTutGrpSuccess(){
-        System.out.println("Tutorial group has been created successfully");
+        System.out.println("Tutorial group has been created successfully.");
     }
     
     public void addStudentSuccess(){
@@ -314,7 +323,7 @@ public class TutorialGroupManagementUI implements Serializable {
     }
     
     public void studentEditMarkSuccess(){
-        System.out.println("The student's mark has updated successfully.");
+        System.out.println("The student's demerit mark has updated successfully.");
     }
     
     public void deleteTutGrpSuccess(){
@@ -338,7 +347,7 @@ public class TutorialGroupManagementUI implements Serializable {
     }
     
     public void studentNotFound(){
-        System.out.println("There is no match record found in the selected tutorial group.");
+        System.out.println("There is no match record found in the all tutorial group.");
     }
     
     public void afterSort(){
@@ -374,8 +383,8 @@ public class TutorialGroupManagementUI implements Serializable {
         tb.addColumn("Student Age", ages);
         String[] genders = stud.map((Student s) -> s.getStudentGender()).toArray(String.class);
         tb.addColumn("Student Gender", genders);
-        Integer[] marks = stud.map((Student s) -> s.getStudentMark()).toArray(Integer.class);
-        tb.addColumn("Student Mark", marks);
+        Integer[] marks = stud.map((Student s) -> s.getStudentDemeritMark()).toArray(Integer.class);
+        tb.addColumn("Student Demerit Mark", marks);
         tb.printTable(true);
     }
 
@@ -391,6 +400,10 @@ public class TutorialGroupManagementUI implements Serializable {
 //error message
     public void errorChoice(){
         System.out.println("The choice enter is not available.");
+    }
+    
+    public void errorInput(){
+        System.out.println("Only 'Y' or 'N' will be accepted. Please try again.");
     }
 
 }

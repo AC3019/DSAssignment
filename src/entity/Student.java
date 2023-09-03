@@ -27,7 +27,7 @@ public class Student implements Serializable{
         this.studentName = studentName;
         this.age = age;
         this.gender = gender;
-        this.mark = 0;
+        this.mark = 100;
         numberOfStudents++;
     }
     
@@ -63,7 +63,7 @@ public class Student implements Serializable{
         return gender;
     }
     
-    public int getStudentMark(){
+    public int getStudentDemeritMark(){
         return mark;
     }
 }

@@ -8,7 +8,6 @@ import boundary.TutorialGroupManagementUI;
 import entity.Student;
 import entity.TutorialGroup;
 import java.io.Serializable;
-import utility.Input;
 /**
  *
  * @author Neoh Soon Chee
@@ -18,7 +17,6 @@ public class TutorialGroupManagement implements Serializable {
     //variables
     private ArrayList<TutorialGroup> tutGrpList = new ArrayList<>();
     private static TutorialGroupManagementUI display = new TutorialGroupManagementUI();
-
     public ArrayList<TutorialGroup> getTutorialGroups() {
         return this.tutGrpList;
     }
@@ -77,36 +75,51 @@ public class TutorialGroupManagement implements Serializable {
         display.header();
         if(!tutGrpList.isEmpty()){
             ArrayList<TutorialGroup> passingList = new ArrayList<>();
+            ArrayList<Student> studentList = new ArrayList<>();
             //remove tutGrp selected
             TutorialGroup tutGrpRemoved = tutGrpList.remove(display.deleteTutGrp(tutGrpList));
             display.deleteTutGrpSuccess();
             //ask want to move the group removed into passing list
             char decision;
             do{//valiadation check to get only Y/N
-                decision = display.moveToPassList().toUpperCase().charAt(0);
                 display.cleanBuffer();
+                decision = display.moveToPassList().toUpperCase().charAt(0);
+                while (decision != 'Y' && decision != 'N'){
+                    display.errorInput();
+                    decision = display.moveToPassList().toUpperCase().charAt(0);
+                }
             }while(decision != 'Y' && decision != 'N');
             if (decision == 'Y'){
+                //display.cleanBuffer();
+                //tutGrpRemoved.getStudent().getStudentDemeritMark();
+                //tutGrpList.filter((TutorialGroup t) -> t.getStudent().);
                 passingList.insert(tutGrpRemoved);
+                studentList = tutGrpRemoved.getStudent();
+                studentList = studentList.filter((Student s) -> s.getStudentDemeritMark() >= 50);
+                //passingList = passingList.filter((TutorialGroup t) -> t.getStudent().get(0).getStudentDemeritMark() > 50);
                 display.moveToPassingListSuccess();
                 //display.printAllSelectedTutGrp(passingList);//display the result
-                char failedStudent; 
-                do{
-                    failedStudent = display.failStudent().toUpperCase().charAt(0);
-                }while(failedStudent != 'Y' && failedStudent != 'N');
-                if (failedStudent == 'Y'){
+                //char failedStudent; 
+                //do{
+                    //failedStudent = display.failStudent().toUpperCase().charAt(0);
+                //}while(failedStudent != 'Y' && failedStudent != 'N');
+                //if (failedStudent == 'Y'){
                     //to remove the student that below the passing mark
                     //display current passing list
-                    display.displayAllSelectedStudent(passingList.get(passingList.getNumberOfEntries()-1).getStudent());
+                    //display.displayAllSelectedStudent(passingList.get(passingList.getNumberOfEntries()-1).getStudent());
                     //passingList.get(passingList.getNumberOfEntries()-1).getStudent().remove();//to remove students below passing mark
-                }
+                //}
                 //display final version of passing list
                 display.passingList(passingList.get(passingList.getNumberOfEntries()-1));
-                display.displayAllSelectedStudent(passingList.get(passingList.getNumberOfEntries()-1).getStudent());
+                display.displayAllSelectedStudent(studentList);
                 //ask for report needed?
                 char reportChoice;
                 do{
                     reportChoice = display.reportChoice().toUpperCase().charAt(0);
+                    while(reportChoice != 'Y' && reportChoice != 'N'){
+                        display.errorInput();
+                        reportChoice = display.reportChoice().toUpperCase().charAt(0);
+                    }     
                 }while(reportChoice != 'Y' && reportChoice != 'N');
                 if (reportChoice == 'Y'){
                     display.printReportTitle(display.reportTitle());
@@ -128,6 +141,10 @@ public class TutorialGroupManagement implements Serializable {
             char decision; 
             do{
                 decision = display.sortChoice().toUpperCase().charAt(0);
+                while(decision != 'Y' && decision != 'N') {
+                    display.errorInput();
+                    decision = display.sortChoice().toUpperCase().charAt(0);
+                }
             }while(decision != 'Y' && decision != 'N');
             if (decision == 'Y'){
                 //ask for sort type
@@ -143,7 +160,8 @@ public class TutorialGroupManagement implements Serializable {
                             display.noTutGrp();
                         }
                 }else if (choice == 1){//sort by numOfStudents
-                    //tutGrpList.sort((TutorialGroup t1, TutorialGroup t2) -> t1.getStudent().getNumberOfEntries().compareTo(t2.getStudent().getNumberOfEntries()));
+                    display.cleanBuffer();
+                    tutGrpList.sort((TutorialGroup t1, TutorialGroup t2) -> t2.getStudent().getNumberOfEntries() - t1.getStudent().getNumberOfEntries());
                         if(!tutGrpList.isEmpty()){
                             //print in table form
                             display.afterSort();
@@ -158,6 +176,10 @@ public class TutorialGroupManagement implements Serializable {
             char report;
             do{
                 report = display.reportChoice().toUpperCase().charAt(0);
+                while(report != 'Y' && report != 'N'){
+                    display.errorInput();
+                    report = display.reportChoice().toUpperCase().charAt(0);
+                }
             }while(report != 'Y' && report != 'N');
             if (report == 'Y'){
                 display.printReportTitle(display.reportTitle());
@@ -236,6 +258,7 @@ public class TutorialGroupManagement implements Serializable {
             display.changeTutGrpSuccess();
         }else{
             display.noStudent();
+            changeTutGrp();
         }
     }
     
@@ -327,22 +350,33 @@ public class TutorialGroupManagement implements Serializable {
             display.displayAllSelectedStudent(tutGrp.getStudent());
             //if number of student > 0
             if(tutGrp.getStudent().getNumberOfEntries() > 0){
-                //edit mark function
+                //edit demerit mark function
                 char editMark;
                 do{
+                    display.cleanBuffer();
                     editMark = display.editMark().toUpperCase().charAt(0);
-                    do{
-                    //ask for index of student to edit
-                    int indexStudent = display.editStudent(tutGrp.getStudent());
-                    tutGrp.getStudent().get(indexStudent).setMark(display.getStudentMark());
-                    display.studentEditSuccess();
-                    editMark = display.editMark().toUpperCase().charAt(0);
-                }while (editMark == 'Y');
+                    while(editMark != 'Y' && editMark != 'N'){
+                        display.errorInput();
+                        editMark = display.editMark().toUpperCase().charAt(0);
+                    }
+                    if (editMark == 'Y'){ 
+                        //ask for index of student to edit
+                        int indexStudent = display.editStudent(tutGrp.getStudent());
+                        tutGrp.getStudent().get(indexStudent).setMark(display.getStudentMark());
+                        display.studentEditMarkSuccess();
+                        //editMark = display.editMark().toUpperCase().charAt(0);
+                    }
                 }while(editMark != 'Y' && editMark != 'N');
-                //edit function
+                //edit student detail function
                 char decision;
                 do{
+                    if (editMark == 'Y')
+                        display.cleanBuffer();
                     decision = display.edit().toUpperCase().charAt(0);
+                    while(decision != 'Y' && decision != 'N'){
+                         display.errorInput();
+                         decision = display.edit().toUpperCase().charAt(0);
+                    }
                 }while(decision != 'Y' && decision != 'N');
                 if(decision == 'Y'){
                     //ask for index of student to edit
@@ -354,15 +388,18 @@ public class TutorialGroupManagement implements Serializable {
                 //filter function
                 char filterDecision;
                 do{
+                    if(decision == 'Y')
+                        display.cleanBuffer();
                     filterDecision = display.filterStudent().toUpperCase().charAt(0);
+                    while(filterDecision != 'Y' && filterDecision != 'N'){
+                        display.errorInput();
+                        filterDecision = display.filterStudent().toUpperCase().charAt(0);
+                    }
                 }while(filterDecision != 'Y' && filterDecision != 'N');
                 if(filterDecision == 'Y'){
                     int genderChoice;
                     String gender;
-                    genderChoice = Input.getChoice("Please select the gender of the student: ", new String[] {
-                                                        "Male",
-                                                        "Female"
-                                                    }, (item) -> item);
+                    genderChoice = display.getGender();
                     if(genderChoice == 0){
                         gender = "Male";
                     }else{
@@ -371,11 +408,18 @@ public class TutorialGroupManagement implements Serializable {
                     selectedStudentList = tutGrp.getStudent().filter((Student item) -> item.getStudentGender().equals(gender));
                     display.afterFilter();
                     display.displayAllSelectedStudent(selectedStudentList);                  
-                }
+                }else
+                    selectedStudentList = tutGrp.getStudent();
                 //print report function
                 char reportChoice;
                 do{
+                    if(filterDecision == 'Y')
+                        display.cleanBuffer();
                     reportChoice = display.reportChoice().toUpperCase().charAt(0);
+                    while(reportChoice != 'Y' && reportChoice != 'N'){
+                        display.errorInput();
+                        reportChoice = display.reportChoice().toUpperCase().charAt(0);
+                    }
                 }while(reportChoice != 'Y' && reportChoice != 'N');
                 if (reportChoice == 'Y'){
                     display.printReportTitle(display.reportTitle());
@@ -393,12 +437,14 @@ public class TutorialGroupManagement implements Serializable {
         display.header();
         //create a new arrayList to stall filter result
         ArrayList<TutorialGroup> selectedTutGrpList = new ArrayList<>();
+        //clean buffer
+        selectedTutGrpList.clear();
         char decision = 'Y';
         int choice = display.choiceOfFilterTutGrp();
         //filter first time
         switch (choice){
             case 0://filter by progCode
-                String progCode = display.getProgCode();
+                String progCode = display.getProgCode().toUpperCase();
                 selectedTutGrpList = tutGrpList.filter((TutorialGroup item) -> item.getProgrammeCode().equals(progCode));
                 break;
             case 1://filter by tutGrpCode
@@ -407,7 +453,7 @@ public class TutorialGroupManagement implements Serializable {
                 selectedTutGrpList = tutGrpList.filter((TutorialGroup item) -> item.getTutGrpCode().equals(tutGrpCode));
                 break;
             case 2://filter by all criteria above
-                String reProgCode = display.getProgCode();
+                String reProgCode = display.getProgCode().toUpperCase();
                 String reTutGrpCode = display.getTutGrpCode();
                 selectedTutGrpList = tutGrpList.filter((TutorialGroup item) -> item.getProgrammeCode().equals(reProgCode));
                 selectedTutGrpList = selectedTutGrpList.filter((TutorialGroup item) -> item.getTutGrpCode().equals(reTutGrpCode));
