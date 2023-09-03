@@ -118,6 +118,7 @@ public class Tutor implements Comparable<Tutor>, Serializable{
         final int prime = 31;
         int result = 1;
         result = prime * result + id;
+        result = prime * result + ((icNo == null) ? 0 : icNo.hashCode());
         return result;
     }
 
@@ -127,10 +128,15 @@ public class Tutor implements Comparable<Tutor>, Serializable{
             return true;
         if (obj == null)
             return false;
-        if (!(obj instanceof Tutor))
+        if (getClass() != obj.getClass())
             return false;
         Tutor other = (Tutor) obj;
         if (id != other.id)
+            return false;
+        if (icNo == null) {
+            if (other.icNo != null)
+                return false;
+        } else if (!icNo.equals(other.icNo))
             return false;
         return true;
     }
