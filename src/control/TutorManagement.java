@@ -23,6 +23,10 @@ import java.util.Scanner;
 public class TutorManagement implements Serializable {
     HashMap<Integer, Tutor> tutors=new HashMap<>();
     TutorManagementUI tmu = new TutorManagementUI();
+    private boolean dataChanged = false;
+    
+    public boolean isDataChanged() { return this.dataChanged; }
+    public void setDataChanged(boolean dataChanged) { this.dataChanged = dataChanged; }
     //TutorManagement tm=new TutorManagement();
     Scanner scan=new Scanner(System.in);
     /*
@@ -132,7 +136,7 @@ public class TutorManagement implements Serializable {
                              System.out.println(p);
                          }
                          System.out.println("Tutor removed successfully ");
-
+                         this.dataChanged = true;
                      }else {
                          System.out.println("Id invalid");
                       }
@@ -219,9 +223,15 @@ public class TutorManagement implements Serializable {
             switch(choice){
                 case 0:
                 //newName=Input.getString("New name: ",false);
+                    System.out.println("Your current name is "+ tutor.getName());
                     newName=tmu.getNewName();
-                tutor.setName(newName);
-                System.out.println("Tutor name amended successfully.");
+                    if(tutor.getName().equals(newName)){
+                        System.out.println("Please enter a new name... amend fail");
+                    }else{
+                    tutor.setName(newName);
+                    System.out.println("Tutor name amended successfully.");
+
+                    }
                 break;
 
                 case 1:

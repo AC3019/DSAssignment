@@ -152,7 +152,7 @@ public class TutorManagementUI implements Serializable {
     }
        public String getNewName(){
            
-            String newName=Input.getString("New name: ",false);
+            String newName=Input.getString("New name: ",false).toUpperCase();
             //scan.nextLine();
             return newName;
 
