@@ -168,15 +168,32 @@ public class TutorManagementUI implements Serializable {
 
     public int filterTutorData(){
       //Scanner scan = new Scanner(System.in);
-        int choice;
-         
-        System.out.println("1. Filter by gender");
-        System.out.println("2. Filter by department");
-        System.out.println("3. Filter by name ");
-        //System.out.print("Select an option: ");
+        int choice=Input.getChoice(
+                "Select an option: ",
+                new String[]{
+                    "Filter by gender: ",
+                    "Filter by department: ",
+                    "Filter by name: ",
+                        
+                },
+                (item)-> item
+        );
+                Input.cleanBuffer();
 
-        choice = Input.getInt("Enter your choice: ");
-        Input.cleanBuffer();
-               return choice;
+        return choice;
+         
+        
+    }
+    public int listAllTutorMenu(){
+         int choice= Input.getChoice(
+            "Select an option: ",
+            new String[] {
+                "Sort by name in alphabetical order:",
+                "Sort by tutor's id in ascending order:",
+                
+            },
+            (item) -> item
+        );
+         return choice;
     }
 }

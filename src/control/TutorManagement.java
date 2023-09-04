@@ -243,18 +243,41 @@ public class TutorManagement implements Serializable {
         }
  
     }
-     public  void listAllTutor() {
+
+     public void listAllTutor() {
+         char continueInput='Y';
+        do{
          if(tutors.size()>0){
-        adt.ArrayList<Tutor> arl = new adt.ArrayList<>(this.tutors.getValues(Tutor.class));
-        arl.sort((Tutor t1, Tutor t2) -> t1.getName().compareTo(t2.getName()));
-             for (Tutor t : arl) {
-                 System.out.println(t);
-             }
-         }else{
+                int choice=tmu.listAllTutorMenu();
+         
+         switch(choice){
+          case 0:
+                //if(tutors.size()>0){
+               adt.ArrayList<Tutor> arl = new adt.ArrayList<>(this.tutors.getValues(Tutor.class));
+               arl.sort((Tutor t1, Tutor t2) -> t1.getName().compareTo(t2.getName()));
+                    for (Tutor t : arl) {
+                        System.out.println(t);
+                 }
+             break;
+          case 1:
+              for(HashMap<Integer,Tutor>.Pair p:this.tutors){
+                  Tutor t=p.getValue();
+                  System.out.println(t);
+                  }
+              break;
+          default:
+              System.out.println("Invalid choice");
+         }  
+                  }        
+        
+         else{
              System.out.println("no tutor inside the system");
          }
-         
-    }
+         Input.cleanBuffer();
+        continueInput=Character.toUpperCase(Input.getChar("Do you want to continue? ", false));
+         }while(continueInput=='Y');
+        }
+
      //add loop
      public  void filterTutor() {
          char continueInput='Y';
