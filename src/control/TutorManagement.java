@@ -118,6 +118,9 @@ public class TutorManagement implements Serializable {
     //add chk ic and id
     public void removeTutor(){
         //int id=tmu.removeTutorData();
+        Integer []t=this.tutors.getKeys(Integer.class);
+                System.out.println("Available tutor's id inside the map are"+t);
+
        if(tutors.size()>0){
                       int id=tmu.removeTutorData();
                      if (tutors.containsKey(id)) {
@@ -203,8 +206,7 @@ public class TutorManagement implements Serializable {
         if (tutors.size()!=0) {
              id=Input.getInt("Enter the id you want to ammend: ");
              if(tutors.containsKey(id)){
-                   Tutor t=new Tutor(id,newName,newDepartment,newPhoneNum);
-                           Tutor tutor = tutors.get(t.getId());
+                           Tutor tutor = tutors.get(id);
 
             do{
                 int choice=tmu.amendTutorMenu();
@@ -281,23 +283,27 @@ public class TutorManagement implements Serializable {
      //add loop
      public  void filterTutor() {
          char continueInput='Y';
+         HashMap<Integer, Tutor> ts = this.tutors;
          do{
          if(tutors.size()>0){
        
         int choice=tmu.filterTutorData();
         switch (choice) {
             case 1:
-                findByGender();
+                ts = findByGender(ts);
                 break;
             case 2:
-                findByDepartment();
+                ts=findByDepartment(ts);
                 break;
             case 3:
                 findByName();
                 break;
+            case 4: // show all tutors
+                break;
             default:
                 System.out.println("Invalid choice. Please select again.");
         }
+        
          }else{
              System.out.println("Pls add tutor first");
          }
@@ -305,8 +311,9 @@ public class TutorManagement implements Serializable {
          continueInput=Character.toUpperCase(Input.getChar("Do you want to continue filter? "));
          
          }while(continueInput=='Y');
+         Tutor[] filteredTutors = ts.getValues(Tutor.class);
     }
-     private  void findByGender() {
+     private HashMap<Integer, Tutor> findByGender(HashMap<Integer, Tutor> tutors) {
         Scanner scan = new Scanner(System.in);
         System.out.print("Gender to filter: ");
         char genderToFilter = scan.next().toUpperCase().charAt(0);
@@ -320,15 +327,14 @@ public class TutorManagement implements Serializable {
             }
         }
 */
-        Tutor [] matchedTutors=tutors.filter(
+        HashMap<Integer, Tutor> matchedTutors=tutors.filter(
                 (Integer k,Tutor v)-> v.getGender()==(genderToFilter)
-        ).getValues(Tutor.class);
+        );
        // System.out.println("Do you want to ");
-        for(int i=0;i<matchedTutors.length;i++){
-            System.out.println(matchedTutors[i]);
-        }
-        System.out.println("The total number of tutors in this gender are "+matchedTutors.length);
-    }
+        
+        System.out.println("The total number of tutors in this gender are "+matchedTutors.size());
+        return matchedTutors;
+     }
      private void findByDepartment(){
         //Scanner scan=new Scanner(System.in);
         //System.out.print("Department to filter: ");
