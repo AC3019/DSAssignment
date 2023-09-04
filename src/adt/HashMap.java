@@ -101,6 +101,8 @@ public class HashMap<K extends Comparable<K>, V>
             return null;
         
         int position = this.getHashModulo(key);
+        // remove from the key list
+        this.keys.remove(this.keys.indexOf(key));
         return this.buckets[position].delete(new Pair(key, null)).getValue();
     }
 
