@@ -455,11 +455,12 @@ public class TutorManagement implements Serializable {
          ArrayList<Tutor> ts = new ArrayList(tutors.getValues(Tutor.class));
          TableBuilder tb = new TableBuilder();
          LocalDateTime obj=LocalDateTime.now();
-         String title=tmu.getReportTitle();
-         System.out.println(obj);
+         //String title=tmu.getReportTitle();
+        // System.out.println(obj);
          if(tutors.size()>0){
-             tmu.printPrompt(title);
-             
+             tmu.getReportTitle();
+             //tmu.printPrompt(title);
+             tmu.printDateTime(obj);
          tb.addColumn("Tutor ID", ts.map((t) -> String.valueOf(t.getId())).toArray(String.class));
          tb.addColumn("Tutor Name", ts.map((t) -> t.getName()).toArray(String.class));
          tb.addColumn("Tutor Department", ts.map((t) -> t.getDepartment()).toArray(String.class));
