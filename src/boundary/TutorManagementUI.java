@@ -30,17 +30,23 @@ public class TutorManagementUI implements Serializable {
         // System.out.println("5. List all tutors");
         // System.out.println("6. Exit");
         // System.out.print("Select an option: ");
-        return Input.getChoice(
+        int choice= Input.getChoice(
             "Select an option: ",
             new String[] {
                 "Add a new tutor",
                 "Remove a tutor",
                 "Find tutor",
-                "Amend tutor details"
+                "Amend tutor details",
+                "List all tutors",
+                "Filter tutors",
+                "Get total Number of Tutors",
+                "Exit"
+               
             },
             (item) -> item
         );
-         
+        Input.cleanBuffer();
+         return choice;
     }
     public int funcInput(){
        // Scanner scan = new Scanner(System.in);
@@ -142,7 +148,7 @@ public class TutorManagementUI implements Serializable {
                 "Amend Names:",
                 "Amend Department:",
                 "Amend Phone Number: ",
-                
+                "Exit: "
             },
             (item) -> item
         );
@@ -195,5 +201,17 @@ public class TutorManagementUI implements Serializable {
             (item) -> item
         );
          return choice;
+    }
+    public void invalidSwitchChoice(){
+        System.out.println("Ïnvalid choice. Please select again....");
+    }
+    public char wantToContinue() {
+        return Character.toUpperCase(Input.getChar("Do you want to continue (Y/N)?"));
+    }
+    public void continueMsgError(){
+        System.out.println ("Invalid choice.. Please enter only 'Y' or 'N'");
+    }
+    public String continueMsg(){
+        return ("Do you want to continue(y/n)");
     }
 }

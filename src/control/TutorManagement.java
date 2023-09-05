@@ -28,7 +28,7 @@ public class TutorManagement implements Serializable {
     public boolean isDataChanged() { return this.dataChanged; }
     public void setDataChanged(boolean dataChanged) { this.dataChanged = dataChanged; }
     //TutorManagement tm=new TutorManagement();
-    Scanner scan=new Scanner(System.in);
+    //Scanner scan=new Scanner(System.in);
     /*
     public TutorManagement() {
         tutors = new HashMap<>();
@@ -50,6 +50,8 @@ public class TutorManagement implements Serializable {
         boolean running = true;
 
         while (running) {  
+          int choice=  tmu.printMenu();
+          /*
         System.out.println("1. Add a new tutor");
         System.out.println("2. Remove a tutor");
         System.out.println("3. Find tutor");
@@ -61,36 +63,36 @@ public class TutorManagement implements Serializable {
 
         System.out.print("Select an option: ");
         int choice=tmu.funcInput();
-
+*/
             switch (choice) {
-                case 1:
+                case 0:
                     addNewTutor();
                     break;
-                case 2:
+                case 1:
                     removeTutor();
                     break;
-                case 3:
+                case 2:
                     searchTutor();
                     break;
-                case 4:
+                case 3:
                     amendTutorDetails();
                     break;
                 
-                case 5:
+                case 4:
                     listAllTutor();
                     break;
                 
-                case 6:
+                case 5:
                     filterTutor();
                     break;
-                case 7:
+                case 6:
                     getTotalNumOfTutor();
                     break;
-                case 8:
+                case 7:
                     running = false;
                     break;
                 default:
-                    System.out.println("Invalid choice. Please select again.");
+                    tmu.invalidSwitchChoice();
             }
         
        }
@@ -123,9 +125,14 @@ public class TutorManagement implements Serializable {
     public void removeTutor(){
         //int id=tmu.removeTutorData();
         Integer []t=this.tutors.getKeys(Integer.class);
+        Tutor []tn=this.tutors.getValues(Tutor.class);
+        String[] tutorNames = new String[tn.length];
+        for (int i=0; i<tn.length;i++){
+            tutorNames[i]=tn[i].getName();
+        }
         System.out.print("Available tutor's id inside the map are ");
         for(int i=0;i<t.length;i++){
-                System.out.print(t[i] + " ");
+                System.out.print(t[i] + " "+ tutorNames[i]);
         }
         System.out.println();
        if(tutors.size()>0){
@@ -185,8 +192,14 @@ public class TutorManagement implements Serializable {
                      //clear buffer error
                   case 1:
                       String ic=tmu.searchTutorIc();
+                      
                       Integer key = tutors.keyOf((Integer I, Tutor t) -> t.getIcNO().equals(ic));
+                      
+                      if (key == null) {
+                          System.out.println("Invalid ic");
+                      }else{
                       System.out.println(tutors.get(key));
+                      }
                       break;
                   default:
                       System.out.println("Invalid option ");                     
@@ -214,6 +227,17 @@ public class TutorManagement implements Serializable {
        char continueInput='Y';
        // Tutor tutor = tutors.get(t.getId());
         if (tutors.size()!=0) {
+            Integer []t=this.tutors.getKeys(Integer.class);
+        Tutor []tn=this.tutors.getValues(Tutor.class);
+        String[] tutorNames = new String[tn.length];
+        for (int i=0; i<tn.length;i++){
+            tutorNames[i]=tn[i].getName();
+        }
+        System.out.print("Available tutor's id inside the map are ");
+        for(int i=0;i<t.length;i++){
+                System.out.print(t[i] + " "+ tutorNames[i]);
+        }
+        System.out.println();
              id=Input.getInt("Enter the id you want to ammend: ");
              if(tutors.containsKey(id)){
                            Tutor tutor = tutors.get(id);
@@ -228,30 +252,53 @@ public class TutorManagement implements Serializable {
                     if(tutor.getName().equals(newName)){
                         System.out.println("Please enter a new name... amend fail");
                     }else{
-                    tutor.setName(newName);
-                    System.out.println("Tutor name amended successfully.");
+                         tutor.setName(newName);
+                          System.out.println("Tutor name amended successfully.");
 
                     }
                 break;
 
                 case 1:
                 //tutor.setDepartment(t.getDepartment());
+                    System.out.println("Your current department is "+ tutor.getDepartment());
                       newDepartment=tmu.getDepartment();
-                tutor.setDepartment(newDepartment);
-                System.out.println("Tutor department amended successfully.");
+                      if(tutor.getDepartment().equals(newDepartment)){
+                          System.out.println("Pls enter a new department... amend fail");
+                      }else{
+                          tutor.setDepartment(newDepartment);
+                            System.out.println("Tutor department amended successfully.");
+                      }
+               
                 break;
                 case 2:
+                 System.out.println("Your current department is "+ tutor.getPhoneNum());
+
                   newPhoneNum=tmu.getNewPhoneNum();
+                  if(tutor.getPhoneNum().equals(newPhoneNum)){
+                      System.out.println("pls enter a new phone num");
+                  }else{
+                      tutor.setPhoneNumber(newPhoneNum);
 
-                tutor.setPhoneNumber(newPhoneNum);
+                    System.out.println("Tutor's phone number amended successfully. ");
+                  }
 
-                System.out.println("Tutor's phone number amended successfully. ");
                 break;
+                case 3:
+                    System.out.println("Exit");
+                    break;
                 default:
-                    System.out.println("Invalid choice.. Pls select again");
+                    tmu.invalidSwitchChoice();
             }
-                    continueInput=Character.toUpperCase(Input.getChar("Do u wan to amend other fields : "));
-
+            if (choice == 3) {
+                    
+                break;
+            }
+                    continueInput=tmu.wantToContinue();
+                    while(continueInput !='Y'&&continueInput!='N'){
+                        tmu.continueMsgError();
+                    //Input.cleanBuffer();
+                    continueInput=tmu.wantToContinue();
+                    }
             }while(continueInput=='Y');
         }else{
                  System.out.println("Tutor's id invalid ");
@@ -284,7 +331,7 @@ public class TutorManagement implements Serializable {
                   }
               break;
           default:
-              System.out.println("Invalid choice");
+              tmu.invalidSwitchChoice();
          }  
                   }        
         
