@@ -37,7 +37,8 @@ public class TutorManagement implements Serializable {
     
     public static void main(String[] args) {
         TutorManagement tm = new TutorManagement();
-        tm.displayMenu();
+        TeachingAssignment ta = new TeachingAssignment();
+        tm.displayMenu(ta);
 
     }
 
@@ -46,7 +47,7 @@ public class TutorManagement implements Serializable {
         return this.tutors.getValues(Tutor.class);
     }
     
-    public void displayMenu() {
+    public void displayMenu(TeachingAssignment ta) {
         boolean running = true;
 
         while (running) {  
@@ -69,7 +70,7 @@ public class TutorManagement implements Serializable {
                     addNewTutor();
                     break;
                 case 1:
-                    removeTutor();
+                    removeTutor(ta);
                     break;
                 case 2:
                     searchTutor();
@@ -122,7 +123,7 @@ public class TutorManagement implements Serializable {
     }
     //add remove by ic
     //add chk ic and id
-    public void removeTutor(){
+    public void removeTutor(TeachingAssignment ta){
         //int id=tmu.removeTutorData();
         Integer []t=this.tutors.getKeys(Integer.class);
         Tutor []tn=this.tutors.getValues(Tutor.class);
@@ -138,12 +139,12 @@ public class TutorManagement implements Serializable {
        if(tutors.size()>0){
                       int id=tmu.removeTutorData();
                      if (tutors.containsKey(id)) {
-                         tutors.remove(id);
+                         Tutor removed = tutors.remove(id);
                          for (HashMap<Integer, Tutor>.Pair p: tutors) {
                              System.out.println(p);
                          }
                          System.out.println("Tutor removed successfully ");
-                         this.dataChanged = true;
+                         ta.cleanUp(removed);
                      }else {
                          System.out.println("Id invalid");
                       }
