@@ -233,4 +233,18 @@ public class TeachingAssignmentUI implements Serializable {
         return Input.confirm("Do you want to restart the filter?");
     }
 
+    public void displayNumberOfElementsInList(String what, int number) {
+        System.out.println("There are currently [" + number + "] " + what + " in the list");
+    }
+
+    public boolean continueFilter() {
+        return Input.confirm("Do you want to continue filter?");
+    }
+
+    // Used only by me, I guarantee sortByChoices will NEVER be empty
+    public int getSortBy(String[] sortByChoices) {
+        System.out.println("NOTE: Sorted by column will always displayed as the first one and can never be removed");
+        return Input.getChoice("Which column do you want to sort by: ", sortByChoices, (s) -> s);
+    }
+
 }

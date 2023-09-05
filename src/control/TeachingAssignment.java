@@ -77,9 +77,9 @@ public class TeachingAssignment implements Serializable {
      * 3 -> return all
      */
     private ArrayList<Course> filterCourses(ArrayList<Course> courses) {
-       int discoverTutorChoice = ui.getCourseFindFilter();
+       int discoverCourseChoice = ui.getCourseFindFilter();
 
-        switch (discoverTutorChoice) {
+        switch (discoverCourseChoice) {
             case 0:
                 String id = ui.getIdForCourseFilter();
                 return courses.filter(
@@ -111,9 +111,9 @@ public class TeachingAssignment implements Serializable {
      * 3 -> return all
      */
     private ArrayList<TutorialGroup> filterTutorialGroups(ArrayList<TutorialGroup> tutGrps) {
-        int discoverTutorChoice = ui.getTutorialGroupFindFilter();
+        int discoverTutorialGroupChoice = ui.getTutorialGroupFindFilter();
 
-        switch (discoverTutorChoice) {
+        switch (discoverTutorialGroupChoice) {
             case 0:
                 String progCode = ui.getProgCodeForTutGrpFilter();
                 return tutGrps.filter(
@@ -334,13 +334,23 @@ public class TeachingAssignment implements Serializable {
     public Course[] searchCoursesUnderTutor(Tutor t) {
         ArrayList<Course> coursesOfTutor = new ArrayList<>();
 
-        this.courseTutorMap
-            .filter((Course _c, ArrayList<Tutor> ts) -> ts.contains(t))
-            .forEach((HashMap<Course, ArrayList<Tutor>>.Pair p) -> {
-                coursesOfTutor.insert(p.getKey());
-            });
+        for (
+            HashMap<Course, ArrayList<Tutor>>.Pair p : 
+                this.courseTutorMap
+                    .filter((Course _c, ArrayList<Tutor> ts) -> ts.contains(t))
+        ) {
+            coursesOfTutor.insert(p.getKey());
+        }
         
-        // implement search/filter logic here??????
+        // allow for repeated filter
+        while (true) {
+            coursesOfTutor = this.filterCourses(coursesOfTutor);
+            ui.displayNumberOfElementsInList("courses", coursesOfTutor.getNumberOfEntries());
+            if (coursesOfTutor.getNumberOfEntries() < 1 && ui.restartFilter())
+                continue;
+            if (!ui.continueFilter())
+                break;
+        }
 
         return coursesOfTutor.toArray(Course.class);
     }
@@ -373,7 +383,49 @@ public class TeachingAssignment implements Serializable {
             break;
         }
         Course[] coursesAfterFilter = searchCoursesUnderTutor(selectedTutor);
+        while (coursesAfterFilter.length < 1) {
+            ui.warn("There are no courses that match the filter");
+            if (ui.restartFilter())
+                coursesAfterFilter = searchCoursesUnderTutor(selectedTutor);
+            return; // if user dw restart filter, ntg we can do, alrd no courses to display d, so just exit lo
+        }
         ArrayList<Course> coursesArrayList = new ArrayList<>(coursesAfterFilter); // convert to arraylist to use ma sweeeeet sweeeeet methods
+
+        // allow to sort by smtg, as long as it implements comparable, sort by's column will be always displayed first 
+        int sortByChoice = ui.getSortBy(new String[] {
+            "Course ID (ASC)",
+            "Course ID (DESC)",
+            "Course Name (ASC)",
+            "Course Name (DESC)",
+            "Department (ASC)",
+            "Department (DESC)",
+            "Credit Hour (ASC)",
+            "Credit Hour (DESC)",
+            "Don't sort by anything"
+        });
+
+        coursesArrayList.sort((Course c1, Course c2) -> {
+            switch (sortByChoice) {
+                case 0:
+                    return c2.getId().compareTo(c1.getId());
+                case 1:
+                    return c1.getId().compareTo(c2.getId());
+                case 2:
+                    return c2.getName().compareTo(c1.getName());
+                case 3:
+                    return c1.getName().compareTo(c2.getName());
+                case 4:
+                    return c2.getDepartment().compareTo(c1.getDepartment());
+                case 5:
+                    return c1.getDepartment().compareTo(c2.getDepartment());
+                case 6:
+                    return c2.getCreditHour() - c1.getCreditHour();
+                case 7:
+                    return c1.getCreditHour() - c2.getCreditHour();
+            }
+            return 1; // always return positive to keep same position
+        });
+
         TableBuilder tb = new TableBuilder();
         boolean showNumber = false;
         while (true) {
@@ -385,46 +437,35 @@ public class TeachingAssignment implements Serializable {
                     tb.hasColumn("Department") ? "Remove column 'Department'" : "Add column 'Department",
                     tb.hasColumn("Credit Hour") ? "Remove column 'Credit Hour'" : "Add column 'Credit Hour'",
                     showNumber ? "Disable data number" : "Show data number",
+                    "Show all column",
                     "Done configuration"
                 }
             );
-            switch (choice) {
-                case 0:
-                    if (tb.hasColumn("Course ID"))
+            if (choice == 0 || choice == 5) {
+                if (tb.hasColumn("Course ID"))
                         tb.removeColumn("Course ID");
-                    else
-                        tb.addColumn("Course ID", coursesArrayList.map((Course c) -> c.getId()).toArray(String.class));
-                    break;
-
-                case 1:
-                    if (tb.hasColumn("Course Name"))
-                        tb.removeColumn("Course Name");
-                    else
-                        tb.addColumn("Course Name", coursesArrayList.map((Course c) -> c.getName()).toArray(String.class));
-                    break;
-                
-                case 2:
-                    if (tb.hasColumn("Department"))
-                        tb.removeColumn("Department");
-                    else
-                        tb.addColumn("Department", coursesArrayList.map((Course c) -> c.getDepartment()).toArray(String.class));
-                    break;
-
-                case 3:
-                    if (tb.hasColumn("Credit Hour"))
-                        tb.removeColumn("Credit Hour");
-                    else
-                        tb.addColumn("Credit Hour", coursesArrayList.map((Course c) -> c.getDepartment()).toArray(String.class));
-                    break;
-                case 4:
-                    showNumber = !showNumber;
-                    break;
-            
-                default:
-                    break;
-            }
-            if (choice == 5) {
-                break; // while
+                else
+                    tb.addColumn("Course ID", coursesArrayList.map((Course c) -> c.getId()).toArray(String.class));
+            } else if (choice == 1 || choice == 5) {
+                if (tb.hasColumn("Course Name"))
+                    tb.removeColumn("Course Name");
+                else
+                    tb.addColumn("Course Name", coursesArrayList.map((Course c) -> c.getName()).toArray(String.class));
+            } else if (choice == 2 || choice == 5) {
+                if (tb.hasColumn("Department"))
+                    tb.removeColumn("Department");
+                else
+                    tb.addColumn("Department", coursesArrayList.map((Course c) -> c.getDepartment()).toArray(String.class));
+            } else if (choice == 3 || choice == 5) {
+                if (tb.hasColumn("Credit Hour"))
+                    tb.removeColumn("Credit Hour");
+                else
+                    tb.addColumn("Credit Hour", coursesArrayList.map((Course c) -> c.getDepartment()).toArray(String.class));
+            } else if (choice == 4 || choice == 5) {
+                showNumber = !showNumber;
+            } else if (choice == 6) {
+                // finished config, exit loop
+                break;
             }
         }
         tb.printTable(showNumber);
@@ -442,8 +483,8 @@ public class TeachingAssignment implements Serializable {
         return tutorsAssignedToAnyCourse;
     }
 
-    public Tutor[] searchTutorsUnderCourse() {
-        ArrayList<Tutor> tutorsUnderCourse = new ArrayList<>();
+    public Tutor[] searchTutorsUnderCourse(Course c) {
+        ArrayList<Tutor> tutorsUnderCourse = this.courseTutorMap.get(c);
 
         return tutorsUnderCourse.toArray(Tutor.class);
     }
