@@ -214,4 +214,13 @@ public class TutorManagementUI implements Serializable {
     public String continueMsg(){
         return ("Do you want to continue(y/n)");
     }
+    public void exitSysMsg(){
+        System.out.println("Exiting tutor management system ");
+    }
+    public void duplicateMsg(){
+        System.out.println("This tutor already exist in the list");
+    }
+    public void emptyListMsg(){
+        System.out.println("Please add tutor first..");
+    }
 }

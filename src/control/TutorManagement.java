@@ -19,6 +19,7 @@ import java.io.Serializable;
 //import java.util.ArrayList;
 import boundary.TutorManagementUI;
 import java.util.Scanner;
+import utility.TableBuilder;
 //import java.util.Map;
 public class TutorManagement implements Serializable {
     HashMap<Integer, Tutor> tutors=new HashMap<>();
@@ -98,8 +99,7 @@ public class TutorManagement implements Serializable {
        }
 
         
-
-        System.out.println("Exiting Tutor Management System.");
+        tmu.exitSysMsg();
     }
     
     public  void addNewTutor(){
@@ -108,7 +108,7 @@ public class TutorManagement implements Serializable {
            boolean containsDuplicate = tutors.containsValue((Integer k, Tutor t) -> t.getIcNO().equals(tutorObj.getIcNO()));
 
            if (containsDuplicate) {
-              System.out.println("This tutor already exists in the list.");
+               tmu.duplicateMsg();
             } else {
                 tutors.put(tutorObj.getId(), tutorObj);
                 System.out.println("Tutor added successfully");
@@ -145,7 +145,7 @@ public class TutorManagement implements Serializable {
                          System.out.println("Tutor removed successfully ");
                          ta.cleanUp(removed);
                      }else {
-                         System.out.println("Id invalid");
+                         tmu.emptyListMsg();
                       }
 
                     
@@ -206,8 +206,12 @@ public class TutorManagement implements Serializable {
               }
         }       
         Input.cleanBuffer();
-            continueInput=Character.toUpperCase(Input.getChar("Do you want to continue to search for other tutor: "));
-            //Input.cleanBuffer();
+                     continueInput=tmu.wantToContinue();
+                    while(continueInput !='Y'&&continueInput!='N'){
+                        tmu.continueMsgError();
+                    //Input.cleanBuffer();
+                    continueInput=tmu.wantToContinue();
+                    }
                }while(continueInput=='Y');
      
     }
@@ -304,7 +308,7 @@ public class TutorManagement implements Serializable {
                  System.out.println("Tutor's id invalid ");
              }
         } else {
-            System.out.println("Tutor not found.");
+            tmu.emptyListMsg();
         }
  
     }
@@ -364,14 +368,21 @@ public class TutorManagement implements Serializable {
             case 3: // show all tutors
                 break;
             default:
-                System.out.println("Invalid choice. Please select again.");
+                tmu.invalidSwitchChoice();
         }
-        
+        if(choice==3){
+            break;
+        }
          }else{
              System.out.println("Pls add tutor first");
          }
          Input.cleanBuffer();
-         continueInput=Character.toUpperCase(Input.getChar("Do you want to continue filter? "));
+                    continueInput=tmu.wantToContinue();
+                    while(continueInput !='Y'&&continueInput!='N'){
+                        tmu.continueMsgError();
+                    //Input.cleanBuffer();
+                    continueInput=tmu.wantToContinue();
+                    }
          
          }while(continueInput=='Y');
          Tutor[] filteredTutors = ts.getValues(Tutor.class);
@@ -435,6 +446,15 @@ public class TutorManagement implements Serializable {
      }
      public void getTotalNumOfTutor(){
          System.out.println("The total number of tutors are"+tutors.size());
+     }
+     public void generateReport(){
+         ArrayList<Tutor> ts = new ArrayList(tutors.getValues(Tutor.class));
+         TableBuilder tb = new TableBuilder();
+         tb.addColumn("Tutor ID", ts.map((t) -> String.valueOf(t.getId())).toArray(String.class));
+         tb.addColumn("Tutor Name", ts.map((t) -> t.getName()).toArray(String.class));
+         tb.addColumn("Tutor Department", ts.map((t) -> t.getDepartment()).toArray(String.class));
+
+         tb.printTable(true);
      }
     
 }
