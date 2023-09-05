@@ -32,7 +32,8 @@ public class TeachingAssignment implements Serializable {
             s
                 .replace("%", ".")
                 .replace("+", "[^\s]+")
-                .replace("*", ".+")
+                .replace("*", ".+"),
+            Pattern.CASE_INSENSITIVE
         );
     }
 
@@ -538,6 +539,7 @@ public class TeachingAssignment implements Serializable {
             default:
                 break;
         }
+
     }
 
     public static void main(String[] args) {

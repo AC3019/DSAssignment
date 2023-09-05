@@ -112,8 +112,7 @@ public class TeachingAssignmentUI implements Serializable {
                 }
             }
         );
-        System.out.println("List of wildcards that can be used");
-        tb.printTable(false);
+        tb.printTable(false, "List of wildcards that can be used");
     }
 
     // a print anything function for anything that don't rlly need to have their own function
@@ -127,7 +126,7 @@ public class TeachingAssignmentUI implements Serializable {
     public String getNameForTutorFilter() {
         printWildCardList();
         return Input.getString(
-            "What is the tutor's name (can use wildcards for a wider search, case sensitive): ", 
+            "What is the tutor's name (can use wildcards for a wider search, case insensitive): ", 
             false
         );
     }
@@ -155,12 +154,12 @@ public class TeachingAssignmentUI implements Serializable {
 
     public String getIdForCourseFilter() {
         printWildCardList();
-        return Input.getString("What is the ID for the course (can use wildcards for a wider search): ", false);
+        return Input.getString("What is the ID for the course (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public String getNameForCourseFilter() {
         printWildCardList();
-        return Input.getString("What is the name for the course (can use wildcards for a wider search): ", false);
+        return Input.getString("What is the name for the course (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public String getDepartmentForCourseFilter() {
@@ -188,17 +187,17 @@ public class TeachingAssignmentUI implements Serializable {
 
     public String getProgCodeForTutGrpFilter() {
         printWildCardList();
-        return Input.getString("What is the Programme Code for the tutorial group (can use wildcards for a wider search): ", false);
+        return Input.getString("What is the Programme Code for the tutorial group (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public String getProgNameForTutGrpFilter() {
         printWildCardList();
-        return Input.getString("What is the Programme Name for the tutorial group (can use wildcards for a wider search): ", false);
+        return Input.getString("What is the Programme Name for the tutorial group (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public String getTutGrpCodeForTutGrpFilter() {
         printWildCardList();
-        return Input.getString("What is the Tutorial Group Code for the tutorial group (can use wildcards for a wider search): ", false);
+        return Input.getString("What is the Tutorial Group Code for the tutorial group (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public int tableDisplayConfig(String tableHeading, String[] configs) {
