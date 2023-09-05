@@ -20,6 +20,7 @@ import java.io.Serializable;
 import boundary.TutorManagementUI;
 import java.util.Scanner;
 import utility.TableBuilder;
+import java.time.LocalDateTime;
 //import java.util.Map;
 public class TutorManagement implements Serializable {
     HashMap<Integer, Tutor> tutors=new HashMap<>();
@@ -90,6 +91,9 @@ public class TutorManagement implements Serializable {
                     getTotalNumOfTutor();
                     break;
                 case 7:
+                    generateReport();
+                    break;
+                case 8:
                     running = false;
                     break;
                 default:
@@ -111,12 +115,12 @@ public class TutorManagement implements Serializable {
                tmu.duplicateMsg();
             } else {
                 tutors.put(tutorObj.getId(), tutorObj);
-                System.out.println("Tutor added successfully");
+                tmu.printPrompt("Tutor added successfully");
            }
          }else {
             // Will only come here for first tutor addition
            tutors.put(tutorObj.getId(),tutorObj);
-           System.out.println("Tutor added successfully ");
+           tmu.printPrompt("Tutor added successfully ");
            // id++;
        }
     }
@@ -305,7 +309,7 @@ public class TutorManagement implements Serializable {
                     }
             }while(continueInput=='Y');
         }else{
-                 System.out.println("Tutor's id invalid ");
+                 tmu.printPrompt("Tutor's id invalid ");
              }
         } else {
             tmu.emptyListMsg();
@@ -392,7 +396,7 @@ public class TutorManagement implements Serializable {
     }
      private HashMap<Integer, Tutor> findByGender(HashMap<Integer, Tutor> tutors) {
         Scanner scan = new Scanner(System.in);
-        System.out.print("Gender to filter: ");
+        System.out.print("Gender to filter (M/F): ");
         char genderToFilter = scan.next().toUpperCase().charAt(0);
         scan.nextLine();
         //Character.toUpperCase(genderToFilter);
@@ -450,10 +454,21 @@ public class TutorManagement implements Serializable {
      public void generateReport(){
          ArrayList<Tutor> ts = new ArrayList(tutors.getValues(Tutor.class));
          TableBuilder tb = new TableBuilder();
+         LocalDateTime obj=LocalDateTime.now();
+         String title=tmu.getReportTitle();
+         System.out.println(obj);
+         if(tutors.size()>0){
+             tmu.printPrompt(title);
+             
          tb.addColumn("Tutor ID", ts.map((t) -> String.valueOf(t.getId())).toArray(String.class));
          tb.addColumn("Tutor Name", ts.map((t) -> t.getName()).toArray(String.class));
          tb.addColumn("Tutor Department", ts.map((t) -> t.getDepartment()).toArray(String.class));
-
+         tb.addColumn("Tutor Contact Number", ts.map((t) -> t.getPhoneNum()).toArray(String.class));
+         tb.addColumn("Tutor Gender", ts.map((t) -> t.getGender()).toArray(Character.class));
+         tb.addColumn("Tutor Age", ts.map((t) -> t.getAge()).toArray(Integer.class));
+         }else{
+             tmu.printPrompt("No tutor inside the list");
+         }
          tb.printTable(true);
      }
     

@@ -13,6 +13,8 @@ import control.DepartmentManagement;
 import utility.Input;
 import entity.Tutor;
 import java.util.regex.*;
+import java.time.LocalDateTime;
+        
 
 import java.io.Serializable;
 import java.util.Scanner;
@@ -40,6 +42,7 @@ public class TutorManagementUI implements Serializable {
                 "List all tutors",
                 "Filter tutors",
                 "Get total Number of Tutors",
+                "Generate Report",
                 "Exit"
                
             },
@@ -222,5 +225,20 @@ public class TutorManagementUI implements Serializable {
     }
     public void emptyListMsg(){
         System.out.println("Please add tutor first..");
+    }
+    public void printPrompt(String e){
+        System.out.println(e);
+    }
+    /*
+    public void numOfTutor(){
+        System.out.println();
+    }
+    */
+    public String getReportTitle(){
+        String title=Input.getString("What report title do you want to set: ", false);
+        return title;
+    }
+    public void printDateTime(){
+        System.out.println()
     }
 }
