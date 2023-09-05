@@ -42,7 +42,6 @@ public class TutorManagement implements Serializable {
 
     }
 
-    // TODO: gud job why use java default collection, sila convert to ours
     public Tutor[] getTutors() {
         return this.tutors.getValues(Tutor.class);
     }
