@@ -393,6 +393,14 @@ public class TeachingAssignment implements Serializable {
         ArrayList<Course> coursesArrayList = new ArrayList<>(coursesAfterFilter); // convert to arraylist to use ma sweeeeet sweeeeet methods
 
         // allow to sort by smtg, as long as it implements comparable, sort by's column will be always displayed first 
+        this.sortCourses(coursesArrayList);
+
+        ui.buildAndPrintCourseTable(coursesArrayList);
+    }
+
+
+    // will manipulate the arraylist passed in
+    private void sortCourses(ArrayList<Course> coursesArrayList) {
         int sortByChoice = ui.getSortBy(new String[] {
             "Course ID (ASC)",
             "Course ID (DESC)",
@@ -426,50 +434,6 @@ public class TeachingAssignment implements Serializable {
             }
             return 1; // always return positive to keep same position
         });
-
-        TableBuilder tb = new TableBuilder();
-        boolean showNumber = false;
-        while (true) {
-            int choice = ui.tableDisplayConfig(
-                "Table configuration to display courses under a tutor",
-                new String[] {
-                    tb.hasColumn("Course ID") ? "Remove column 'Course ID'" : "Add column 'Course ID",
-                    tb.hasColumn("Course Name") ? "Remove column 'Course Name'" : "Add column 'Course Name",
-                    tb.hasColumn("Department") ? "Remove column 'Department'" : "Add column 'Department",
-                    tb.hasColumn("Credit Hour") ? "Remove column 'Credit Hour'" : "Add column 'Credit Hour'",
-                    showNumber ? "Disable data number" : "Show data number",
-                    "Show all column",
-                    "Done configuration"
-                }
-            );
-            if (choice == 0 || choice == 5) {
-                if (tb.hasColumn("Course ID"))
-                        tb.removeColumn("Course ID");
-                else
-                    tb.addColumn("Course ID", coursesArrayList.map((Course c) -> c.getId()).toArray(String.class));
-            } else if (choice == 1 || choice == 5) {
-                if (tb.hasColumn("Course Name"))
-                    tb.removeColumn("Course Name");
-                else
-                    tb.addColumn("Course Name", coursesArrayList.map((Course c) -> c.getName()).toArray(String.class));
-            } else if (choice == 2 || choice == 5) {
-                if (tb.hasColumn("Department"))
-                    tb.removeColumn("Department");
-                else
-                    tb.addColumn("Department", coursesArrayList.map((Course c) -> c.getDepartment()).toArray(String.class));
-            } else if (choice == 3 || choice == 5) {
-                if (tb.hasColumn("Credit Hour"))
-                    tb.removeColumn("Credit Hour");
-                else
-                    tb.addColumn("Credit Hour", coursesArrayList.map((Course c) -> c.getDepartment()).toArray(String.class));
-            } else if (choice == 4 || choice == 5) {
-                showNumber = !showNumber;
-            } else if (choice == 6) {
-                // finished config, exit loop
-                break;
-            }
-        }
-        tb.printTable(showNumber);
     }
 
     private ArrayList<Tutor> getTutorsAssignedToAnyCourse() {
