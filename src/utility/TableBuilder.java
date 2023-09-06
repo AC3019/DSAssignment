@@ -1,5 +1,7 @@
 package utility;
 
+import java.util.function.Consumer;
+
 import adt.HashMap;
 
 /**
@@ -8,7 +10,7 @@ import adt.HashMap;
  * @ref Box drawing utf-8 chars: https://en.wikipedia.org/wiki/Box-drawing_character
  * However, normal fonts don't support those as seen in ***NETBEANS TERMINAL***
  * @ref **should be font safe** box drawing chars: https://gist.github.com/dsample/79a97f38bf956f37a0f99ace9df367b9
- * Sadly both also unsupported
+ * Sadly both also unsupported ***BY NETBEANS TERMINAL***
  * 
  * @author xuanbin
  */
@@ -21,13 +23,12 @@ public class TableBuilder {
         this.table = new HashMap<>();
     }
 
+    // colsDatas should have same length as colsName
     public TableBuilder(String[] colsName, Object[][] colsDatas) {
         this.table = new HashMap<>();
         
-        for (String s: colsName) {
-            for (Object[] ss: colsDatas) {
-                this.table.put(s, ss);
-            }
+        for (int i = 0; i < colsName.length; i++) {
+            this.table.put(colsName[i], colsDatas[i]);
         }
     }
 
@@ -49,7 +50,13 @@ public class TableBuilder {
         return this.table.containsKey(colName);
     }
 
-    public void printTable(boolean showNumber, String tableHeading) {
+    public String generateTableString(boolean showNumber, String tableHeading) {
+        StringBuilder sb = new StringBuilder();
+
+        // custom function, lazy write \n every time ;))
+        Consumer<String> appendWithNewLine = (String s) -> {
+            sb.append(s + "\n");
+        };
 
         int numberColumnSize = 0;
         
@@ -58,7 +65,7 @@ public class TableBuilder {
 
         // dou ntg to print tf
         if (keys.length <= 0)
-            return;
+            return "";
 
         // get how long should a row be
         /**
@@ -96,13 +103,13 @@ public class TableBuilder {
 
         // table heading
         if (!tableHeading.isBlank())
-            System.out.println(
+            appendWithNewLine.accept(
                 tableHeading.length() >= numberColumnSize 
                     ? tableHeading : Formatter.centerString(tableHeading, rowLen + 1) // rowLen + 1 for the space in front
             );
 
         // top row
-        System.out.println(" " + StringUtil.fillString("-", rowLen));
+        appendWithNewLine.accept(" " + StringUtil.fillString("-", rowLen));
         // System.out.print("\u250C\u2500"); // utf-8 encoding
         // if (showNumber)
         //     System.out.print(
@@ -118,30 +125,33 @@ public class TableBuilder {
 
         // print table heading
         // System.out.print("\u2502 ");
-        System.out.print("| ");
+        sb.append("| ");
         if (showNumber)
-            System.out.print(Formatter.padLeft("#", numberColumnSize) + " | ");
-        System.out.print(Formatter.padRight(keys[0], spaceForColumn[0]));
+            sb.append(Formatter.padLeft("#", numberColumnSize) + " | ");
+
+        sb.append(Formatter.padRight(keys[0], spaceForColumn[0]));
         for (int i = 1; i < keys.length; i++) {
-            System.out.print(" | " + Formatter.padRight(keys[i], spaceForColumn[i]));
+            sb.append(" | " + Formatter.padRight(keys[i], spaceForColumn[i]));
         }
-        System.out.print(" |\n"); // close the last column
+        sb.append(" |\n"); // close the last column
 
         // divider between header row and data rows
-        System.out.print("|-");
+        sb.append("|-");
         if (showNumber)
-            System.out.print(
+            sb.append(
                 // (
                 //     Formatter.padLeft("-", numberColumnSize) + "\u2500\u253C\u2500"
                 // ).replace(" ", "-")
                 StringUtil.fillString("-", numberColumnSize) + "-|-"
             );
-        System.out.print(
+        
+        sb.append(
             // Formatter.padRight(" ", spaceForColumn[0]).replace(" ", "\u2500")
             StringUtil.fillString("-", spaceForColumn[0])
         );
+
         for (int i = 1; i < keys.length; i++) {
-            System.out.print(
+            sb.append(
                 // (
                 //     "\u2500\u253C\u2500" + Formatter.padRight(" ", spaceForColumn[i])
                 // ).replace(" ", "\u2500")
@@ -149,19 +159,19 @@ public class TableBuilder {
             );
         }
         // System.out.print("\u2500\u2524\n");
-        System.out.print("-|\n");
+        sb.append("-|\n");
 
         // finally, print the rows
         for (int i = 0; i < totalRows; i++) {
             // System.out.print("\u2502 ");
-            System.out.print("| ");
+            sb.append("| ");
             if (showNumber) {
                 // System.out.print(Formatter.padLeft(String.valueOf(i), numberColumnSize) + " \u2502 ");
-                System.out.print(Formatter.padLeft(String.valueOf(i), numberColumnSize) + " | ");
+                sb.append(Formatter.padLeft(String.valueOf(i), numberColumnSize) + " | ");
             }
 
             // first column without show number cannot print ` | `, so make it solo
-            System.out.print(
+            sb.append(
                 Formatter.padRight(
                     this.table.get(keys[0])[i] == null ? "" : this.table.get(keys[0])[i].toString()
                     , spaceForColumn[0]
@@ -170,7 +180,7 @@ public class TableBuilder {
 
             // the other columns
             for (int j = 1; j < keys.length; j++) {
-                System.out.print(
+                sb.append(
                     // " \u2502 " +
                     " | " +
                     Formatter.padRight(
@@ -181,11 +191,11 @@ public class TableBuilder {
             }
             // close the row
             // System.out.println(" \u2502");
-            System.out.println(" |");
+            appendWithNewLine.accept(" |");
         }
 
         // bottom row
-        System.out.println(" " + StringUtil.fillString("-", rowLen));
+        appendWithNewLine.accept(" " + StringUtil.fillString("-", rowLen));
         // System.out.print("\u2514\u2500");
         // if (showNumber)
         //     System.out.print(
@@ -199,6 +209,49 @@ public class TableBuilder {
         // }
         // System.out.println("\u2500\u2518"); // close the last column
 
+        return sb.toString();
+    }
+
+    public String generateCSVString(boolean includeNumber, boolean includeHeading) {
+        StringBuilder sb = new StringBuilder();
+        String[] keys = this.table.getKeys(String.class);
+        if (keys.length <= 0)
+            return ""; // gud job ntg agn
+        
+        // class design: assume all data has the same length
+        int dataLength = this.table.get(keys[0]).length;
+
+        if (includeHeading) {
+            if (includeNumber)
+                sb.append("#,");
+            for (int i = 0; i < keys.length - 1; i++) // don't want include last one
+                sb.append(keys[i] + ",");
+            sb.append(keys[keys.length - 1]); // append the last one without the last comma
+        }
+
+        for (int i = 0; i < dataLength; i++) { // don't want include last one
+            for (int j = 0; j < keys.length - 1; j++) { // don't want include last one
+                Object tempObj = this.table.get(keys[j])[i];
+                String temp = tempObj == null ? "" : tempObj.toString();
+                // for simple CSV, if content has ",", need wrap content with ""
+                if (temp.contains(","))
+                    temp = "\"" + temp + "\"";
+                sb.append(temp + ",");
+            }
+            
+            // same handling for the last column of data, just without comma
+            Object tempObj = this.table.get(keys[keys.length - 1])[i];
+            String temp = tempObj == null ? "" : tempObj.toString();
+            if (temp.contains(","))
+                temp = "\"" + temp + "\"";
+            sb.append(temp); // append the last one without the last comma
+        }
+
+        return sb.toString();
+    }
+
+    public void printTable(boolean showNumber, String tableHeading) {
+        System.out.println(this.generateTableString(showNumber, tableHeading));
     }
 
     public void printTable(boolean showNumber) {
