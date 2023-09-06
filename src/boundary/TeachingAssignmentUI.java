@@ -1,8 +1,10 @@
 package boundary;
 
 import java.io.Serializable;
+import java.util.regex.Pattern;
 
 import adt.ArrayList;
+import adt.HashMap;
 import control.DepartmentManagement;
 import entity.Course;
 import entity.Tutor;
@@ -36,6 +38,181 @@ public class TeachingAssignmentUI implements Serializable {
             courses, 
             (Course c) -> c.toString()
         );
+    }
+
+    // prompts courses available to user and ask them to select one
+    public Course selectCourse(ArrayList<Course> courses) {
+        int selection = this.getCourseChoice(
+            courses.toArray(Course.class), 
+            "There are no courses in the system that matches the filter yet, please add one first"
+        );
+
+        if (selection < 0)
+            return null;
+
+        return courses.get(selection);
+    }
+
+        // since wildcard only me do, this not suitable to put in utils as diff ppl may have diff wildcards
+    private Pattern convertWildCardToPattern(String s) {
+        return Pattern.compile(
+            s
+                .replace("%", ".")
+                .replace("+", "[^\s]+")
+                .replace("*", ".+"),
+            Pattern.CASE_INSENSITIVE
+        );
+    }
+
+    // shud probably be done by TutorManagement module, but I had more complex logics to implement, they don't allow working with custom list of tutors
+    // can filter with three criteria, 0 -> ID, 1 -> IC or 2 -> name or 3 -> show all (just return the ori arraylist)
+    /** can include wildcards, except for id 
+     * % for single character, 
+     * + for one or more characters excluding space 
+     * * for one or more characters including space 
+     * (I will use regex to make them valid)
+     */
+    public ArrayList<Tutor> filterTutors(ArrayList<Tutor> tutors) {
+        int discoverTutorChoice = this.getTutorFindFilter();
+
+        switch (discoverTutorChoice) {
+            case 0:
+                int id = this.getIDForTutorFilter();
+                return tutors.filter((Tutor t) -> t.getId() == id);
+            case 1:
+                String ic = this.getIcNoForTutorFilter();
+                return tutors.filter(
+                    (Tutor t) -> this.convertWildCardToPattern(ic).matcher(t.getIcNO()).matches()
+                );
+            
+            case 2:
+                String name = this.getNameForTutorFilter();
+                return tutors.filter(
+                    (Tutor t) -> this.convertWildCardToPattern(name).matcher(t.getName()).matches()
+                );
+            
+            default:
+                return tutors;
+        }
+    }
+
+    // same logic as filterTutors
+    /**
+     * allow filter for
+     * 0 -> id (allow wildcard)
+     * 1 -> name (allow wildcard)
+     * 2 -> department (let them choose from list)
+     * 3 -> return all
+     */
+    public ArrayList<Course> filterCourses(ArrayList<Course> courses) {
+       int discoverCourseChoice = this.getCourseFindFilter();
+
+        switch (discoverCourseChoice) {
+            case 0:
+                String id = this.getIdForCourseFilter();
+                return courses.filter(
+                    (Course c) -> this.convertWildCardToPattern(id).matcher(c.getId()).matches()
+                );
+            case 1:
+                String name = this.getNameForCourseFilter();
+                return courses.filter(
+                    (Course c) -> this.convertWildCardToPattern(name).matcher(c.getName()).matches()
+                );
+            
+            case 2:
+                String department = this.getDepartmentForCourseFilter();
+                return courses.filter(
+                    (Course c) -> c.getDepartment().equals(department)
+                );
+            
+            default:
+                return courses;
+        } 
+    }
+
+    // same logic as filterTutors
+    /**
+     * allow filter for
+     * 0 -> programme code (allow wildcard)
+     * 1 -> programme name (allow wildcard)
+     * 2 -> tutorial group code (allow wildcard)
+     * 3 -> return all
+     */
+    public ArrayList<TutorialGroup> filterTutorialGroups(ArrayList<TutorialGroup> tutGrps) {
+        int discoverTutorialGroupChoice = this.getTutorialGroupFindFilter();
+
+        switch (discoverTutorialGroupChoice) {
+            case 0:
+                String progCode = this.getProgCodeForTutGrpFilter();
+                return tutGrps.filter(
+                    (TutorialGroup t) -> this.convertWildCardToPattern(progCode).matcher(t.getProgrammeCode()).matches()
+                );
+            case 1:
+                String progName = this.getNameForCourseFilter();
+                return tutGrps.filter(
+                    (TutorialGroup t) -> this.convertWildCardToPattern(progName).matcher(t.getProgrammeName()).matches()
+                );
+            
+            case 2:
+                String tutGrpCode = this.getTutGrpCodeForTutGrpFilter();
+                return tutGrps.filter(
+                    (TutorialGroup t) -> this.convertWildCardToPattern(tutGrpCode).matcher(t.getTutGrpCode()).matches()
+                );
+            
+            default:
+                return tutGrps;
+        } 
+    }
+
+    public Tutor selectTutorForCourse(Course c, ArrayList<Tutor> tutors, HashMap<Course, ArrayList<Tutor>> courseTutorMap) {
+        int selection = this.getTutorChoice(
+            tutors.filter(
+                // TODO: this requires tweaking Tutor class's `.equals()` method
+                (Tutor t) -> !courseTutorMap.get(c).contains(t)
+            ).toArray(Tutor.class),
+            "Tutors (Department: " + c.getDepartment() + ")",
+            "Which tutor to assign for this course[" 
+                + c.getId() + " " 
+                + c.getName() +  " " 
+                + c.getDepartment() + "]: ",
+            "There are no tutors in the system that matches the filters yet, please add one first"
+        );
+
+        if (selection < 0)
+            return null;
+
+        return tutors.get(selection);
+    }
+
+    public Tutor selectTutorForTutorialGroup(ArrayList<Tutor> ts) {
+        int selection = this.getTutorChoice(
+            ts.toArray(Tutor.class), 
+            "Which tutor to assign tutorial groups to: ", 
+            "There is currently no any tutors in the system that matches the filter, please add one first"
+        );
+
+        if (selection < 0)
+            return null;
+        return ts.get(selection);
+    }
+
+    public TutorialGroup selectTutorialGroupForTutor(Tutor t, ArrayList<TutorialGroup> tgs, HashMap<Tutor, ArrayList<TutorialGroup>> tutorTutorialGroupMap) {
+        int selection = this.getTutorialGroupChoice(
+            // filter out tutorial groups that are already assigned to this tutor
+            tgs.filter((TutorialGroup tg) -> {
+                ArrayList<TutorialGroup> hmTg = tutorTutorialGroupMap.get(t);
+                if (hmTg == null) 
+                    return false;
+                return !hmTg.contains(tg);
+            }).toArray(TutorialGroup.class),
+            "Which tutorial group to assign to this tutor[" + t.getId() + " " + t.getName() + "]: ",
+            "There is no tutorial groups in the system that matches the filter yet, please add one first"
+        );
+
+        if (selection < 0) 
+            return null;
+
+        return tgs.get(selection);
     }
 
     public int getTutorChoice(Tutor[] tutors, String prompt, String ifEmptyArr) {
