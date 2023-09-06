@@ -303,11 +303,11 @@ public class TutorManagement implements Serializable {
 
                   newPhoneNum=tmu.getNewPhoneNum();
                   if(tutor.getPhoneNum().equals(newPhoneNum)){
-                      System.out.println("pls enter a new phone num");
+                      tmu.printPrompt("pls enter a new phone num");
                   }else{
                       tutor.setPhoneNumber(newPhoneNum);
 
-                    System.out.println("Tutor's phone number amended successfully. ");
+                        tmu.printPrompt("Tutor's phone number amended successfully. ");
                   }
 
                 break;
@@ -362,6 +362,12 @@ public class TutorManagement implements Serializable {
                   }
               break;
           case 2:
+               adt.ArrayList<Tutor> arl2 = new adt.ArrayList<>(this.tutors.getValues(Tutor.class));
+               arl2.sort((Tutor t1, Tutor t2) -> t1.getSalary().compareTo(t2.getSalary()));
+                    for (Tutor t : arl2) {
+                        System.out.println(t);
+                 }
+          case 3:
               break;
           default:
               tmu.invalidSwitchChoice();
@@ -375,18 +381,24 @@ public class TutorManagement implements Serializable {
              tmu.printPrompt("no tutor inside the system");
          }
          Input.cleanBuffer();
-        continueInput=Character.toUpperCase(Input.getChar("Do you want to continue? ", false));
+        continueInput=tmu.wantToContinue();
+         while(continueInput !='Y'&&continueInput!='N'){
+                tmu.continueMsgError();
+                    //Input.cleanBuffer();
+                continueInput=tmu.wantToContinue();
+           }
          }while(continueInput=='Y');
         }
 
      //add loop
      public  void filterTutor() {
          char continueInput='Y';
+         int choice=0;
          HashMap<Integer, Tutor> ts = this.tutors;
          do{
          if(tutors.size()>0){
        
-        int choice=tmu.filterTutorData();
+         choice=tmu.filterTutorData();
         switch (choice) {
             case 0:
                 ts = findByGender(ts);
@@ -408,7 +420,9 @@ public class TutorManagement implements Serializable {
          }else{
              System.out.println("Pls add tutor first");
          }
-         Input.cleanBuffer();
+         if(choice==1){
+            Input.cleanBuffer();
+         }
                     continueInput=tmu.wantToContinue();
                     while(continueInput !='Y'&&continueInput!='N'){
                         tmu.continueMsgError();
@@ -423,10 +437,11 @@ public class TutorManagement implements Serializable {
          }
     }
      private HashMap<Integer, Tutor> findByGender(HashMap<Integer, Tutor> tutors) {
-        Scanner scan = new Scanner(System.in);
-        System.out.print("Gender to filter (M/F): ");
-        char genderToFilter = scan.next().toUpperCase().charAt(0);
-        scan.nextLine();
+        //Scanner scan = new Scanner(System.in);
+        //System.out.print("Gender to filter (M/F): ");
+        char genderToFilter = Character.toUpperCase(Input.getChar("Gender to filter(M/F): "));
+                //scan.next().toUpperCase().charAt(0);
+        //Input.cleanBuffer();
         //Character.toUpperCase(genderToFilter);
         //ArrayList <Tutor> matchedTutors = new ArrayList<>();
         /*
