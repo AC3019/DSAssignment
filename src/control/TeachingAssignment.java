@@ -389,6 +389,7 @@ public class TeachingAssignment implements Serializable {
                 break;
 
             case 4:
+                this.listTutorsUnderCourse();
                 break;
 
             case 5:

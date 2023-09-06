@@ -25,7 +25,6 @@ public class TeachingAssignmentUI implements Serializable {
             "Generate report",
             "Exit teaching assignment"
         }, (s) -> s);
-        Input.cleanBuffer(); 
         return choice;
     }
 
@@ -311,12 +310,14 @@ public class TeachingAssignmentUI implements Serializable {
     // warns the user then wait for their action to let the system proceed
     public void warn(String s) {
         System.out.println(s);
+        Input.cleanBuffer();
         Input.pause();
     }
 
     // allows wildcards
     public String getNameForTutorFilter() {
         printWildCardList();
+        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
         return Input.getString(
             "What is the tutor's name (can use wildcards for a wider search, case insensitive): ", 
             false
@@ -325,6 +326,7 @@ public class TeachingAssignmentUI implements Serializable {
 
     public String getIcNoForTutorFilter() {
         printWildCardList();
+        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
         return Input.getString(
             "What is the tutor's IC (can use wildcards for a wider search): ",
             false
@@ -346,11 +348,13 @@ public class TeachingAssignmentUI implements Serializable {
 
     public String getIdForCourseFilter() {
         printWildCardList();
+        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
         return Input.getString("What is the ID for the course (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public String getNameForCourseFilter() {
         printWildCardList();
+        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
         return Input.getString("What is the name for the course (can use wildcards for a wider search, case insensitive): ", false);
     }
 
@@ -379,16 +383,19 @@ public class TeachingAssignmentUI implements Serializable {
 
     public String getProgCodeForTutGrpFilter() {
         printWildCardList();
+        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
         return Input.getString("What is the Programme Code for the tutorial group (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public String getProgNameForTutGrpFilter() {
         printWildCardList();
+        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
         return Input.getString("What is the Programme Name for the tutorial group (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public String getTutGrpCodeForTutGrpFilter() {
         printWildCardList();
+        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
         return Input.getString("What is the Tutorial Group Code for the tutorial group (can use wildcards for a wider search, case insensitive): ", false);
     }
 
@@ -414,6 +421,7 @@ public class TeachingAssignmentUI implements Serializable {
      * @return
      */
     public boolean wantAssignMore(String type) {
+        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
         if (type.equals("TUTOR"))
             return Input.confirm("Do you want to assign more tutor to the course?");
         else 
@@ -421,6 +429,7 @@ public class TeachingAssignmentUI implements Serializable {
     }
 
     public boolean restartFilter() {
+        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
         return Input.confirm("Do you want to restart the filter?");
     }
 
@@ -429,6 +438,7 @@ public class TeachingAssignmentUI implements Serializable {
     }
 
     public boolean continueFilter() {
+        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
         return Input.confirm("Do you want to continue filter?");
     }
 
