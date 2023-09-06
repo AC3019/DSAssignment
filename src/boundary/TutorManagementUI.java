@@ -24,6 +24,7 @@ public class TutorManagementUI implements Serializable {
    // TutorManagementUI tmu=new TutorManagementUI();
 //    TutorManagement tm=new TutorManagement();
     Tutor t=new Tutor();
+    
     public int printMenu() {
         // System.out.println("1. Add a new tutor");
         // System.out.println("2. Remove a tutor");
@@ -78,6 +79,7 @@ public class TutorManagementUI implements Serializable {
                 int age;
                 String phoneNum="";
                 String icNo;
+                double salary;
                 String regexHp = "^(\\+?6?01)[0-9]{7,9}$";
             Pattern pattern = Pattern.compile(regexHp);
                 Matcher m ;
@@ -105,6 +107,7 @@ public class TutorManagementUI implements Serializable {
                      m = pattern.matcher(phoneNum);
 
                     icNo=Input.getString("Ic No:", false);
+                    salary=Input.getDouble("Enter your salary: ");
                     // validate gender
                     
                     if (Character.valueOf(gender).compareTo("M".charAt(0)) != 0
@@ -121,7 +124,7 @@ public class TutorManagementUI implements Serializable {
                 }while(invalidInput);     
                    
 
-                Tutor tutorObj = new Tutor(name, department, gender, age, phoneNum,icNo);
+                Tutor tutorObj = new Tutor(name, department, gender, age, phoneNum,icNo,salary);
                 return tutorObj;
     }
        public int removeTutorData(){
@@ -183,6 +186,7 @@ public class TutorManagementUI implements Serializable {
                     "Filter by gender: ",
                     "Filter by department: ",
                     "Filter by name: ",
+                    "Exit "
                         
                 },
                 (item)-> item
@@ -199,6 +203,7 @@ public class TutorManagementUI implements Serializable {
             new String[] {
                 "Sort by name in alphabetical order:",
                 "Sort by tutor's id in ascending order:",
+                "Exit "
                 
             },
             (item) -> item
@@ -241,5 +246,14 @@ public class TutorManagementUI implements Serializable {
     }
     public void printDateTime(LocalDateTime e){
         System.out.println("\t\t\t\t"+e);
+    }
+    public void cleanBuffer(){
+        Input.cleanBuffer();
+    }
+    public void printPromptWithoutEmptyLine(String e){
+        System.out.print(e);
+    }
+    public void printEmptyLine(){
+        System.out.println();
     }
 }
