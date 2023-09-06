@@ -1,7 +1,6 @@
 package control;
 
 import java.io.Serializable;
-import java.util.regex.Pattern;
 
 import adt.ArrayList;
 import adt.HashMap;
@@ -126,7 +125,7 @@ public class TeachingAssignment implements Serializable {
         Tutor selectedTutor;
         while (true) {
             ArrayList<Tutor> filteredTutors = ui.filterTutors(tutorsAssignedToCourse);
-            selectedTutor = ui.selectTutorForTutorialGroup(filteredTutors);
+            selectedTutor = ui.selectTutor(filteredTutors);
 
             if (selectedTutor == null) {
                 if (ui.restartFilter())
@@ -168,14 +167,13 @@ public class TeachingAssignment implements Serializable {
         }
         
         // allow for repeated filter
-        while (true) {
+        do {
             coursesOfTutor = ui.filterCourses(coursesOfTutor);
             ui.displayNumberOfElementsInList("courses", coursesOfTutor.getNumberOfEntries());
-            if (coursesOfTutor.getNumberOfEntries() < 1 && ui.restartFilter())
-                continue;
-            if (!ui.continueFilter())
-                break;
-        }
+            // filtered out list no more thing, quit
+            if (coursesOfTutor.getNumberOfEntries() < 1)
+                return new Course[0]; // return empty array
+        } while (ui.continueFilter());
 
         return coursesOfTutor.toArray(Course.class);
     }
@@ -189,24 +187,17 @@ public class TeachingAssignment implements Serializable {
         // get all tutors assigned to a course and populate them
         ArrayList<Tutor> tutorsAssignedToAnyCourse = getTutorsAssignedToAnyCourse();
 
-        Tutor selectedTutor;
-        while (true) {
+        Tutor selectedTutor = null;
+        do {
             // ask if user want to select from the list or if they alrd had something in mind
+            // only let filter once, the loop is just for restart filter in case filter dao empty list
             ArrayList<Tutor> filteredTutors = ui.filterTutors(tutorsAssignedToAnyCourse);
-    
-            int tutorChoice = ui.getTutorChoice(
-                filteredTutors.toArray(Tutor.class), 
-                "Which tutor to select: ", 
-                "There is no tutors assigned to any course that matches the filter yet, please add/assign one"
-            );
-            if (tutorChoice < 0) {
-                if (ui.restartFilter())
-                    continue;
+            selectedTutor = ui.selectTutor(filteredTutors);
+
+            if (selectedTutor == null && !ui.restartFilter())
                 return;
-            }
-            selectedTutor = filteredTutors.get(tutorChoice);
-            break;
-        }
+        } while (selectedTutor == null);
+
         Course[] coursesAfterFilter = searchCoursesUnderTutor(selectedTutor);
         while (coursesAfterFilter.length < 1) {
             ui.warn("There are no courses that match the filter");
@@ -214,50 +205,13 @@ public class TeachingAssignment implements Serializable {
                 coursesAfterFilter = searchCoursesUnderTutor(selectedTutor);
             return; // if user dw restart filter, ntg we can do, alrd no courses to display d, so just exit lo
         }
+
         ArrayList<Course> coursesArrayList = new ArrayList<>(coursesAfterFilter); // convert to arraylist to use ma sweeeeet sweeeeet methods
 
         // allow to sort by smtg, as long as it implements comparable, sort by's column will be always displayed first 
-        this.sortCourses(coursesArrayList);
+        ui.sortCourses(coursesArrayList);
 
-        ui.buildAndPrintCourseTable(coursesArrayList);
-    }
-
-
-    // will manipulate the arraylist passed in
-    private void sortCourses(ArrayList<Course> coursesArrayList) {
-        int sortByChoice = ui.getSortBy(new String[] {
-            "Course ID (ASC)",
-            "Course ID (DESC)",
-            "Course Name (ASC)",
-            "Course Name (DESC)",
-            "Department (ASC)",
-            "Department (DESC)",
-            "Credit Hour (ASC)",
-            "Credit Hour (DESC)",
-            "Don't sort by anything"
-        });
-
-        coursesArrayList.sort((Course c1, Course c2) -> {
-            switch (sortByChoice) {
-                case 0:
-                    return c2.getId().compareTo(c1.getId());
-                case 1:
-                    return c1.getId().compareTo(c2.getId());
-                case 2:
-                    return c2.getName().compareTo(c1.getName());
-                case 3:
-                    return c1.getName().compareTo(c2.getName());
-                case 4:
-                    return c2.getDepartment().compareTo(c1.getDepartment());
-                case 5:
-                    return c1.getDepartment().compareTo(c2.getDepartment());
-                case 6:
-                    return c2.getCreditHour() - c1.getCreditHour();
-                case 7:
-                    return c1.getCreditHour() - c2.getCreditHour();
-            }
-            return 1; // always return positive to keep same position
-        });
+        ui.buildAndPrintCourseTable(coursesArrayList, selectedTutor);
     }
 
     private ArrayList<Tutor> getTutorsAssignedToAnyCourse() {
@@ -272,10 +226,44 @@ public class TeachingAssignment implements Serializable {
         return tutorsAssignedToAnyCourse;
     }
 
+    // handles filtering
     public Tutor[] searchTutorsUnderCourse(Course c) {
         ArrayList<Tutor> tutorsUnderCourse = this.courseTutorMap.get(c);
 
+        do {
+            tutorsUnderCourse = ui.filterTutors(tutorsUnderCourse);
+            if (tutorsUnderCourse.getNumberOfEntries() < 1)
+                return new Tutor[0]; // just return empty array, calling method should handle
+        } while (ui.continueFilter());
+
         return tutorsUnderCourse.toArray(Tutor.class);
+    }
+
+    public void listTutorsUnderCourse() {
+        ArrayList<Course> coursesAssigned = new ArrayList<Course>(this.courseTutorMap.getKeys(Course.class));
+
+        Course selectedCourse = null;
+        do {
+            // only allow filter once, this loop is just to make sure no null course
+            ArrayList<Course> filteredCoursesAssigned = ui.filterCourses(coursesAssigned);
+            selectedCourse = ui.selectCourse(filteredCoursesAssigned);
+            if (selectedCourse == null && !ui.restartFilter())
+                return; // dou no selected course and user dw restart the filter, how ah, return nia lo
+        } while (selectedCourse == null);
+
+        Tutor[] tutorsAssignedToCourse = this.searchTutorsUnderCourse(selectedCourse);
+        while (tutorsAssignedToCourse.length < 1) {
+            ui.warn("There are no tutors that matches the filter assigned to this course");
+            if (ui.restartFilter())
+                tutorsAssignedToCourse = this.searchTutorsUnderCourse(selectedCourse);
+            return; // exit if user refuses to restart the filter
+        }
+
+        ArrayList<Tutor> tutorArrayList = new ArrayList<>(tutorsAssignedToCourse);
+
+        ui.sortTutor(tutorArrayList);
+
+        ui.buildAndPrintTutorTable(tutorArrayList, selectedCourse);
     }
 
     // only handles removing the tutor from the course map
@@ -287,22 +275,81 @@ public class TeachingAssignment implements Serializable {
 
     // the whole process of removing a tutor from a course
     public void removeTutorFromCourseProcess() {
-        // display all the course to pick from
         ArrayList<Course> filteredCourseList = new ArrayList<Course>(this.courseTutorMap.getKeys(Course.class));
-        
-        filteredCourseList = ui.filterCourses(filteredCourseList);
-        Course selectedCourse = ui.selectCourse(filteredCourseList);
 
+        // filter and select course from a list of course that has already been assigned
+        Course selectedCourse = null;
+        do {
+            do {
+                filteredCourseList = ui.filterCourses(filteredCourseList);
+            } while (ui.continueFilter());
+            selectedCourse = ui.selectCourse(filteredCourseList);
+            if (selectedCourse == null && !ui.restartFilter())
+                return; // if alrd null and user refuses to actually select smtg, can directly exit from this function
+        } while (selectedCourse == null);
 
+        // filter and select tutor from the list of tutors assigned to the selected course
+        ArrayList<Tutor> filteredTutorAssignedToCourse = this.courseTutorMap.get(selectedCourse);
+        Tutor selectedTutor = null;
+        do {
+            do {
+                filteredTutorAssignedToCourse = ui.filterTutors(filteredTutorAssignedToCourse);
+            } while (ui.continueFilter());
+            if (selectedTutor == null && !ui.restartFilter())
+                return;
+        } while (selectedTutor == null);
+
+        this.removeTutorFromCourse(selectedCourse, selectedTutor);
+        ui.removeSuccessful("Tutor", "Course");
+    }
+
+    // only handles removing the tutorial group from a tutor from a hashmap
+    private void removeTutorialGroupFromTutor(Tutor t, TutorialGroup tg) {
+        ArrayList<TutorialGroup> tutorialGroupAssignedToTutor = this.tutorTutorialGroupMap.get(t);
+
+        tutorialGroupAssignedToTutor.remove(tutorialGroupAssignedToTutor.indexOf(tg));
+    }
+
+    // the whole process of removing a tutorial group from a tutor
+    public void removeTutorialGroupFromTutorProcess() {
+        ArrayList<Tutor> filteredTutorList = new ArrayList<Tutor>(this.tutorTutorialGroupMap.getKeys(Tutor.class));
+
+        // filter and select tutor from the list of tutors already assigned
+        Tutor selectedTutor = null;
+        do {
+            do {
+                filteredTutorList = ui.filterTutors(filteredTutorList);
+            } while (ui.continueFilter());
+            selectedTutor = ui.selectTutor(filteredTutorList);
+            if (selectedTutor == null && !ui.restartFilter())
+                return;
+        } while (selectedTutor == null);
+
+        // filter and select the tutorial group assigned to the tutor
+        ArrayList<TutorialGroup> filteredTutorialGroupAssignedToTutor = this.tutorTutorialGroupMap.get(selectedTutor);
+
+        TutorialGroup selectedTutorialGroup = null;
+        do {
+            do {
+                filteredTutorialGroupAssignedToTutor = ui.filterTutorialGroups(filteredTutorialGroupAssignedToTutor);
+            } while (ui.continueFilter());
+            selectedTutorialGroup = ui.selectTutorialGroup(filteredTutorialGroupAssignedToTutor);
+            if (selectedTutorialGroup == null && !ui.restartFilter())
+                return;
+        } while (selectedTutorialGroup == null);
+        this.removeTutorialGroupFromTutor(selectedTutor, selectedTutorialGroup);
+        ui.removeSuccessful("Tutorial Group", "Tutor");
     }
 
     // due to java's referencing properties, we need to clean up data when tutor is removed by the tutor management submodule
     // don't need to implement cleanUp for Course for now becuz the course subsystem is just a stub
+    // TODO
     public void cleanUp(Tutor tutor) {
 
     }
 
     // due to java's referencing properties, we need to clean up data when tutorial group is removed
+    // TODO:
     public void cleanUp(TutorialGroup tutGrp) {
 
     }
@@ -317,6 +364,9 @@ public class TeachingAssignment implements Serializable {
             "Remove tutorial group from a tutor",
             "List all tutors under a course",
             "List all courses under a tutor",
+            TODO: Both TODO below is if got time
+            TODO: "List all tutorial group under a tutor",
+            TODO: "List all tutor for a tutorial group",
             "Generate report",
             "Exit teaching assignment"
          */
@@ -331,11 +381,16 @@ public class TeachingAssignment implements Serializable {
                 break;
             
             case 2:
+                this.removeTutorFromCourseProcess();
                 break;
-            case 3: 
+
+            case 3:
+                this.removeTutorialGroupFromTutorProcess(); 
                 break;
+
             case 4:
                 break;
+
             case 5:
                 this.listCoursesUnderTutor();
                 break;

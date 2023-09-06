@@ -13,7 +13,6 @@ public class Input {
      * Reinitialises scanner
      */
     public static void reinit() {
-        s.close();
         s = new Scanner(System.in);
     }
 
@@ -23,7 +22,7 @@ public class Input {
      * @return
      */
     public static void cleanBuffer() {
-        s.nextLine();
+        if (s.hasNextLine()) s.nextLine();
     }
 
     /**

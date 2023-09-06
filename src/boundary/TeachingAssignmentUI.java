@@ -15,7 +15,7 @@ import utility.TableBuilder;
 public class TeachingAssignmentUI implements Serializable {
     
     public int getMenuChoice() {
-        return Input.getChoice("Enter your choice: ", new String[] {
+        int choice = Input.getChoice("Enter your choice: ", new String[] {
             "Assign tutor to a course",
             "Assign tutorial groups to tutor",
             "Remove tutor from a course",
@@ -25,6 +25,8 @@ public class TeachingAssignmentUI implements Serializable {
             "Generate report",
             "Exit teaching assignment"
         }, (s) -> s);
+        Input.cleanBuffer(); 
+        return choice;
     }
 
     public int getCourseChoice(Course[] courses, String ifEmptyArr) {
@@ -34,7 +36,7 @@ public class TeachingAssignmentUI implements Serializable {
             return -1;
         }
         return Input.getChoice(
-            "Which course to assign: ", 
+            "Which course to select: ", 
             courses, 
             (Course c) -> c.toString()
         );
@@ -79,6 +81,7 @@ public class TeachingAssignmentUI implements Serializable {
             case 0:
                 int id = this.getIDForTutorFilter();
                 return tutors.filter((Tutor t) -> t.getId() == id);
+
             case 1:
                 String ic = this.getIcNoForTutorFilter();
                 return tutors.filter(
@@ -167,7 +170,6 @@ public class TeachingAssignmentUI implements Serializable {
     public Tutor selectTutorForCourse(Course c, ArrayList<Tutor> tutors, HashMap<Course, ArrayList<Tutor>> courseTutorMap) {
         int selection = this.getTutorChoice(
             tutors.filter(
-                // TODO: this requires tweaking Tutor class's `.equals()` method
                 (Tutor t) -> !courseTutorMap.get(c).contains(t)
             ).toArray(Tutor.class),
             "Tutors (Department: " + c.getDepartment() + ")",
@@ -184,10 +186,10 @@ public class TeachingAssignmentUI implements Serializable {
         return tutors.get(selection);
     }
 
-    public Tutor selectTutorForTutorialGroup(ArrayList<Tutor> ts) {
+    public Tutor selectTutor(ArrayList<Tutor> ts) {
         int selection = this.getTutorChoice(
             ts.toArray(Tutor.class), 
-            "Which tutor to assign tutorial groups to: ", 
+            "Which tutor to select: ", 
             "There is currently no any tutors in the system that matches the filter, please add one first"
         );
 
@@ -212,6 +214,18 @@ public class TeachingAssignmentUI implements Serializable {
         if (selection < 0) 
             return null;
 
+        return tgs.get(selection);
+    }
+
+    public TutorialGroup selectTutorialGroup(ArrayList<TutorialGroup> tgs) {
+        int selection = this.getTutorialGroupChoice(
+            tgs.toArray(TutorialGroup.class), 
+            "Which tutorial group to select: ", 
+            "There is currently no any tutorial group in the system that matches the filter, please add one first"
+        );
+
+        if (selection < 0)
+            return null;
         return tgs.get(selection);
     }
 
@@ -420,16 +434,95 @@ public class TeachingAssignmentUI implements Serializable {
 
     // Used only by me, I guarantee sortByChoices will NEVER be empty
     public int getSortBy(String[] sortByChoices) {
-        System.out.println("NOTE: Sorted by column will always displayed as the first one and can never be removed");
         return Input.getChoice("Which column do you want to sort by: ", sortByChoices, (s) -> s);
     }
 
-    public void buildAndPrintCourseTable(ArrayList<Course> coursesArrayList) {
+    // will manipulate the arraylist passed in
+    public void sortCourses(ArrayList<Course> coursesArrayList) {
+        int sortByChoice = this.getSortBy(new String[] {
+            "Course ID (ASC)",
+            "Course ID (DESC)",
+            "Course Name (ASC)",
+            "Course Name (DESC)",
+            "Department (ASC)",
+            "Department (DESC)",
+            "Credit Hour (ASC)",
+            "Credit Hour (DESC)",
+            "Don't sort by anything"
+        });
+
+        coursesArrayList.sort((Course c1, Course c2) -> {
+            switch (sortByChoice) {
+                case 0:
+                    return c2.getId().compareTo(c1.getId());
+                case 1:
+                    return c1.getId().compareTo(c2.getId());
+                case 2:
+                    return c2.getName().compareTo(c1.getName());
+                case 3:
+                    return c1.getName().compareTo(c2.getName());
+                case 4:
+                    return c2.getDepartment().compareTo(c1.getDepartment());
+                case 5:
+                    return c1.getDepartment().compareTo(c2.getDepartment());
+                case 6:
+                    return c2.getCreditHour() - c1.getCreditHour();
+                case 7:
+                    return c1.getCreditHour() - c2.getCreditHour();
+            }
+            return 1; // always return positive to keep same position
+        });
+    }
+
+    // manipulates the list passed in
+    public void sortTutor(ArrayList<Tutor> tutors) {
+        int sortByChoice = this.getSortBy(new String[] {
+            "Tutor ID (ASC)",
+            "Tutor ID (DESC)",
+            "Tutor Name (ASC)",
+            "Tutor Name (DESC)",
+            "Department (ASC)",
+            "Department (DESC)",
+            "Don't sort by anything"
+        });
+
+        switch (sortByChoice) {
+            case 0:
+                tutors.sort((Tutor t1, Tutor t2) -> t2.getId() - t1.getId());
+                break;
+            
+            case 1:
+                tutors.sort((Tutor t1, Tutor t2) -> t1.getId() - t2.getId());
+                break;
+            
+            case 2:
+                tutors.sort((Tutor t1, Tutor t2) -> t2.getName().compareTo(t1.getName()));
+                break;
+
+            case 3:
+                tutors.sort((Tutor t1, Tutor t2) -> t1.getName().compareTo(t2.getName()));
+                break;
+            
+            case 4:
+                tutors.sort((Tutor t1, Tutor t2) -> t2.getDepartment().compareTo(t1.getDepartment()));
+                break;
+
+            case 5:
+                tutors.sort((Tutor t1, Tutor t2) -> t1.getDepartment().compareTo(t2.getDepartment()));
+                break;
+        
+            default:
+                break;
+        }
+    }
+
+    // won't use tiok this for tutorial group (only for Tutor cuz Tutor and Course related only)
+    public void buildAndPrintCourseTable(ArrayList<Course> coursesArrayList, Tutor t) {
         TableBuilder tb = new TableBuilder();
         boolean showNumber = false;
         while (true) {
             int choice = this.tableDisplayConfig(
-                "Table configuration to display courses under a tutor",
+                "Table configuration to display courses",
                 new String[] {
                     tb.hasColumn("Course ID") ? "Remove column 'Course ID'" : "Add column 'Course ID",
                     tb.hasColumn("Course Name") ? "Remove column 'Course Name'" : "Add column 'Course Name",
@@ -440,34 +533,149 @@ public class TeachingAssignmentUI implements Serializable {
                     "Done configuration"
                 }
             );
+            
             if (choice == 0 || choice == 5) {
-                if (tb.hasColumn("Course ID"))
+                // choice is 5 means we want show, don't remove
+                if (tb.hasColumn("Course ID") && choice != 5)
                         tb.removeColumn("Course ID");
                 else
                     tb.addColumn("Course ID", coursesArrayList.map((Course c) -> c.getId()).toArray(String.class));
-            } else if (choice == 1 || choice == 5) {
-                if (tb.hasColumn("Course Name"))
+            } 
+            
+            if (choice == 1 || choice == 5) {
+                if (tb.hasColumn("Course Name") && choice != 5)
                     tb.removeColumn("Course Name");
                 else
                     tb.addColumn("Course Name", coursesArrayList.map((Course c) -> c.getName()).toArray(String.class));
-            } else if (choice == 2 || choice == 5) {
-                if (tb.hasColumn("Department"))
+            } 
+            
+            if (choice == 2 || choice == 5) {
+                if (tb.hasColumn("Department") && choice != 5)
                     tb.removeColumn("Department");
                 else
                     tb.addColumn("Department", coursesArrayList.map((Course c) -> c.getDepartment()).toArray(String.class));
-            } else if (choice == 3 || choice == 5) {
-                if (tb.hasColumn("Credit Hour"))
+            } 
+            
+            if (choice == 3 || choice == 5) {
+                if (tb.hasColumn("Credit Hour") && choice != 5)
                     tb.removeColumn("Credit Hour");
                 else
                     tb.addColumn("Credit Hour", coursesArrayList.map((Course c) -> c.getDepartment()).toArray(String.class));
-            } else if (choice == 4 || choice == 5) {
-                showNumber = !showNumber;
-            } else if (choice == 6) {
+            } 
+            
+            if (choice == 4 || choice == 5) {
+                showNumber = !showNumber || choice == 5; // choice == 5 means always show number column
+            } 
+            
+            if (choice == 6) {
                 // finished config, exit loop
                 break;
             }
         }
-        tb.printTable(showNumber);
+        tb.printTable(
+            showNumber, 
+            "Courses Assigned to Tutor [" + 
+                t.getId() + " " + t.getName() + 
+                "(" + t.getDepartment() + ")" + 
+            "]"
+        );
+    }
+
+    /**
+     * Allow user to build and print the tutor table
+     * @param tutorArrayList
+     * @param obj can only be instanceof Course or TutorialGroup, other instances will be ignored
+     */
+    public void buildAndPrintTutorTable(ArrayList<Tutor> tutorArrayList, Object obj) {
+        TableBuilder tb = new TableBuilder();
+        boolean showNumber = false;
+        
+        while (true) {
+            int choice = this.tableDisplayConfig(
+                "Table configuration to display tutors under a course",
+                new String[] {
+                    tb.hasColumn("Tutor ID") ? "Remove column 'Tutor ID'" : "Add column 'Tutor ID",
+                    tb.hasColumn("Tutor Name") ? "Remove column 'Tutor Name'" : "Add column 'Tutor Name",
+                    tb.hasColumn("IC No.") ? "Remove column 'IC. No'" : "Add column 'IC. No'",
+                    tb.hasColumn("Age") ? "Remove column 'Age'" : "Add column 'Age'",
+                    tb.hasColumn("Phone No.") ? "Remove column 'Phone No.'" : "Add column 'Phone No.'",
+                    tb.hasColumn("Department") ? "Remove column 'Department'" : "Add column 'Department",
+                    showNumber ? "Disable data number" : "Show data number",
+                    "Show all column",
+                    "Done configuration"
+                }
+            );
+
+            if (choice == 0 || choice == 7) {
+                // choice is 5 means we want show, don't remove
+                if (tb.hasColumn("Tutor ID") && choice != 7)
+                        tb.removeColumn("Tutor ID");
+                else
+                    tb.addColumn("Tutor ID", tutorArrayList.map((Tutor t) -> t.getId()).toArray(String.class));
+            } 
+            
+            if (choice == 1 || choice == 7) {
+                if (tb.hasColumn("Tutor Name") && choice != 7)
+                    tb.removeColumn("Tutor Name");
+                else
+                    tb.addColumn("Tutor Name", tutorArrayList.map((Tutor t) -> t.getName()).toArray(String.class));
+            } 
+            
+            if (choice == 2 || choice == 7) {
+                if (tb.hasColumn("IC No.") && choice != 7)
+                    tb.removeColumn("IC. No.");
+                else
+                    tb.addColumn("IC No.", tutorArrayList.map((Tutor t) -> t.getIcNO()).toArray(String.class));
+            } 
+            
+            if (choice == 3 || choice == 7) {
+                if (tb.hasColumn("Age") && choice != 7)
+                    tb.removeColumn("Age");
+                else
+                    tb.addColumn("Age", tutorArrayList.map((Tutor t) -> (Integer) t.getAge()).toArray(Integer.class));
+            } 
+
+            if (choice == 4 || choice == 7) {
+                if (tb.hasColumn("Phone No.") && choice != 7)
+                    tb.removeColumn("Phone No.");
+                else
+                    tb.addColumn("Phone No.", tutorArrayList.map((Tutor t) -> t.getPhoneNum()).toArray(String.class));
+            } 
+
+            if (choice == 5 || choice == 7) {
+                if (tb.hasColumn("Department") && choice != 7)
+                    tb.removeColumn("Department");
+                else
+                    tb.addColumn("Department", tutorArrayList.map((Tutor t) -> t.getDepartment()).toArray(String.class));
+            } 
+
+            if (choice == 6 || choice == 7) {
+                showNumber = !showNumber || choice == 7;
+            }
+
+            if (choice == 8)
+                break; // done config
+        }
+        String tableHeading = "";
+        if (obj instanceof Course) {
+            Course c = (Course) obj;
+            tableHeading = "Tutors Assigned to the Course [" + 
+                c.getId() + " " + c.getName() + 
+                "(" + c.getDepartment() +")" + 
+            "]";
+        } else if (obj instanceof TutorialGroup) {
+            TutorialGroup tg = (TutorialGroup) obj;
+            tableHeading = "Tutors Assigned to the Tutorial Group [" +
+                // TODO: confirm with SC see this how
+                tg.getProgrammeCode() + tg.getTutGrpCode() + " " + tg.getProgrammeName() +
+            "]";
+        }
+        tb.printTable(showNumber, tableHeading);
+    }
+
+    public void removeSuccessful(String what, String assignedTo) {
+        System.out.println("Successfully removed [" + what + "] assigned to [" + assignedTo + "]");
+        Input.pause();
     }
 
 }
