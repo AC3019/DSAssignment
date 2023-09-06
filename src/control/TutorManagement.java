@@ -136,9 +136,12 @@ public class TutorManagement implements Serializable {
     //add chk ic and id
     public void removeTutor(TeachingAssignment ta) {
         //int id=tmu.removeTutorData();
-        char continueInput='Y';
+      //  char continueInput = 'Y';
         if (tutors.size() > 0) {
+            /*
             do{
+                if(tutors.size()>=1){
+             */
             Integer[] t = this.tutors.getKeys(Integer.class);
             Tutor[] tn = this.tutors.getValues(Tutor.class);
             String[] tutorNames = new String[tn.length];
@@ -150,7 +153,11 @@ public class TutorManagement implements Serializable {
                 System.out.print(t[i] + " " + tutorNames[i]);
             }
             tmu.printEmptyLine();
-
+            /*
+                }else{
+                    tmu.printPrompt("No tutor inside ");
+                }
+             */
             int id = tmu.removeTutorData();
             if (tutors.containsKey(id)) {
                 Tutor removed = tutors.remove(id);
@@ -160,20 +167,29 @@ public class TutorManagement implements Serializable {
                 tmu.printPrompt("Tutor removed successfully ");
                 ta.cleanUp(removed);
             } else {
-                tmu.emptyListMsg();
+                tmu.printPrompt("Invalid tutor id");
             }
-              tmu.cleanBuffer();
-             continueInput = tmu.wantToContinue();
+            /*
+            tmu.cleanBuffer();
+            continueInput = tmu.wantToContinue();
             while (continueInput != 'Y' && continueInput != 'N') {
                 tmu.continueMsgError();
                 //Input.cleanBuffer();
                 continueInput = tmu.wantToContinue();
-            
+
             }
+            */
+            /*
+        } else {
+            tmu.printPrompt("No tutor inside ");
+        }
+            */
+        /*
         }while(continueInput=='Y');
             
-           
-        }else {
+         */
+        // }
+        } else {
             System.out.println("pls add tutor only can removed");
         }
 
@@ -201,6 +217,7 @@ public class TutorManagement implements Serializable {
                         },
                         (item) -> item
                 );
+
                 Input.cleanBuffer();
                 switch (choice) {
                     case 0:
