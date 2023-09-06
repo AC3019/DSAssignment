@@ -271,12 +271,12 @@ public class TeachingAssignmentUI implements Serializable {
 
     public int getTutorFindFilter() {
         return Input.getChoice(
-            "How do you want to decide which tutor to select: ",
+            "How do you want to decide which tutor to see: ",
             new String[] {
-                "I already know their ID, let me find by ID",
-                "I already know their name, let me find by name",
-                "I already know their IC, let me find by IC",
-                "Show me all of them, let me pick"
+                "Filter by ID",
+                "Filter by name",
+                "Filter by IC",
+                "Show me all of them"
             },
             (s) -> s
         );
@@ -335,12 +335,12 @@ public class TeachingAssignmentUI implements Serializable {
 
     public int getCourseFindFilter() {
         return Input.getChoice(
-            "How do you want to decide which course to select: ",
+            "How do you want to decide which course to see: ",
             new String[] {
-                "I already know the ID, let me find by ID",
-                "I already know the name, let me find by name",
-                "I already know the department, let me choose from them",
-                "Show me all of them, let me pick"
+                "Filter by ID",
+                "Filter by name",
+                "Filter by department",
+                "Show me all of them"
             },
             (s) -> s
         );
@@ -349,13 +349,13 @@ public class TeachingAssignmentUI implements Serializable {
     public String getIdForCourseFilter() {
         printWildCardList();
         Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
-        return Input.getString("What is the ID for the course (can use wildcards for a wider search, case insensitive): ", false);
+        return Input.getString("Enter ID filter (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public String getNameForCourseFilter() {
         printWildCardList();
         Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
-        return Input.getString("What is the name for the course (can use wildcards for a wider search, case insensitive): ", false);
+        return Input.getString("Enter name filter (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public String getDepartmentForCourseFilter() {
@@ -370,12 +370,12 @@ public class TeachingAssignmentUI implements Serializable {
 
     public int getTutorialGroupFindFilter() {
         return Input.getChoice(
-            "How do you want to decide which tutorial group to select: ",
+            "How do you want to decide which tutorial group to see: ",
             new String[] {
-                "I already know the programme code, let me find by programme code",
-                "I already know the programme name, let me find by programme name",
-                "I already know the tutorial group code, let me find by tutorial group code",
-                "Show me all of them, let me pick"
+                "Filter by programme code",
+                "Filter by programme name",
+                "Filter by tutorial group code",
+                "Show me all of them"
             },
             (s) -> s
         );
@@ -384,19 +384,19 @@ public class TeachingAssignmentUI implements Serializable {
     public String getProgCodeForTutGrpFilter() {
         printWildCardList();
         Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
-        return Input.getString("What is the Programme Code for the tutorial group (can use wildcards for a wider search, case insensitive): ", false);
+        return Input.getString("Enter Programme Code filter (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public String getProgNameForTutGrpFilter() {
         printWildCardList();
         Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
-        return Input.getString("What is the Programme Name for the tutorial group (can use wildcards for a wider search, case insensitive): ", false);
+        return Input.getString("Enter Programme Name filter (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public String getTutGrpCodeForTutGrpFilter() {
         printWildCardList();
         Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
-        return Input.getString("What is the Tutorial Group Code for the tutorial group (can use wildcards for a wider search, case insensitive): ", false);
+        return Input.getString("Enter Tutorial Group Code filter (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public int tableDisplayConfig(String tableHeading, String[] configs) {
