@@ -24,7 +24,7 @@ javac -cp ./src/ -d ./build/ **/*.java
 
 java -cp ./build dsassignment.DSAssignment
 ```
-or just use the script `buildRun.sh`
+or just use the script `buildRun.sh` (Only for MAC & Linux & UN*X based OS)
 ```sh
 # usage of buildRun.sh
 # one time only, add executable property to it
