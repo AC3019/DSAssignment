@@ -199,6 +199,7 @@ public class TutorManagementUI implements Serializable {
             new String[] {
                 "Sort by name in alphabetical order:",
                 "Sort by tutor's id in ascending order:",
+                "Exit "
                 
             },
             (item) -> item
@@ -241,5 +242,14 @@ public class TutorManagementUI implements Serializable {
     }
     public void printDateTime(LocalDateTime e){
         System.out.println("\t\t\t\t"+e);
+    }
+    public void cleanBuffer(){
+        Input.cleanBuffer();
+    }
+    public void printPromptWithoutEmptyLine(String e){
+        System.out.print(e);
+    }
+    public void printEmptyLine(){
+        System.out.println();
     }
 }
