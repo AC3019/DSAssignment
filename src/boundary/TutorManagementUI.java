@@ -277,4 +277,13 @@ public class TutorManagementUI implements Serializable {
     public void printEmptyLine() {
         System.out.println();
     }
+    public void printAvailableNameInMap(String s){
+        //for (int i=0;i<t.length;i++){
+        System.out.print(s);
+        //}
+    }
+    public void printKey(Tutor k) {
+        System.out.println(k);
+    }
+  
 }
