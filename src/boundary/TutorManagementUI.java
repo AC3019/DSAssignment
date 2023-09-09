@@ -22,19 +22,11 @@ import utility.Input;
 public class TutorManagementUI implements Serializable {
 
     Scanner scan = new Scanner(System.in);
-    // TutorManagementUI tmu=new TutorManagementUI();
-//    TutorManagement tm=new TutorManagement();
+  
     Tutor t = new Tutor();
 
     public int printMenu() {
-        // System.out.println("1. Add a new tutor");
-        // System.out.println("2. Remove a tutor");
-        // System.out.println("3. Find tutor");
-        // System.out.println("4. Amend tutor details");
-        // System.out.println("5. List all tutors");
-        // System.out.println("6. Exit");
-        // System.out.print("Select an option: ");
-        int choice = Input.getChoice(
+               int choice = Input.getChoice(
                 "Select an option: ",
                 new String[]{
                     "Add a new tutor",
@@ -55,12 +47,10 @@ public class TutorManagementUI implements Serializable {
     }
 
     public int funcInput() {
-        // Scanner scan = new Scanner(System.in);
-        //        System.out.println("Enter the function u want to perform:");
+      
         int choice = scan.nextInt();
         scan.nextLine(); // Consume newline
-        //Input.cleanBuffer();
-        //Input.cleanBuffer();
+        
         return choice;
     }
 
@@ -81,37 +71,30 @@ public class TutorManagementUI implements Serializable {
         int age;
         String phoneNum = "";
         String icNo;
-        //double salary;
         String regexHp = "^(\\+?6?01)[0-9]{7,9}$";
         Pattern pattern = Pattern.compile(regexHp);
         Matcher m;
+        String regexIc="\\d{6}-\\d{2}-\\d{4}";
+        Pattern pattern1=Pattern.compile(regexIc);
         //= pattern.matcher(phoneNum);
-
+        Matcher m1;
         do {
             invalidInput = false;
             name = Input.getString("Name:", false).toUpperCase();
             department = getDepartment();
             //name.toUpperCase();
             Input.cleanBuffer();
-            //subject.toUpperCase();
-            //gender=tmu.getChar("Gender(M/F): ",false);
+           
             gender = Character.toUpperCase(Input.getChar("Gender(M/F): ", false));
-            //Character.toUpperCase(gender);
-            //System.out.print("Age: ");
-            //age = scan.nextInt();
-            //Input.cleanBuffer();
-            age = Input.getInt("Age: ");
-            // scan.nextLine();// clear buffer
+             age = Input.getInt("Age: ");
             Input.cleanBuffer();
-            //System.out.print("Phone: ");
-            //phoneNum = scan.nextLine();
+           
             phoneNum = Input.getString("Phone (0123456789):  ", false);
             m = pattern.matcher(phoneNum);
 
-            icNo = Input.getString("Ic No:", false);
-            // salary=Input.getDouble("Enter your salary: ");
+            icNo = Input.getString("Ic No (xxxxxx-xx-xxxx):", false);
+            m1=pattern1.matcher(icNo);
             // validate gender
-
             if (Character.valueOf(gender).compareTo("M".charAt(0)) != 0
                     && Character.valueOf(gender).compareTo("F".charAt(0)) != 0) {
                 System.out.println("Gender should be either M or F. Please re-enter...");
@@ -121,6 +104,11 @@ public class TutorManagementUI implements Serializable {
             if (!m.matches()) {
                 System.out.println("phone num not matched");
                 invalidInput = true;
+                
+            }
+            if(!m1.matches()){
+                System.out.println("Ic Num not matched");
+                invalidInput=true;
             }
 
         } while (invalidInput);
@@ -130,15 +118,13 @@ public class TutorManagementUI implements Serializable {
     }
 
     public int removeTutorData() {
-        //Scanner scan = new Scanner(System.in);
-        // System.out.println("Enter a id u wan to remove: ");
+       
         int id = Input.getInt("Enter an id you want to remove: ");
         return id;
     }
 
     public int searchTutorId() {
-        //Scanner scan = new Scanner(System.in);
-        // System.out.println("Enter id u wan to find: ");
+       
         int id = Input.getInt("Enter tutor's id that you want to find : ");
 
         return id;
@@ -248,12 +234,7 @@ public class TutorManagementUI implements Serializable {
         System.out.println(e);
     }
 
-    /*
-    public void numOfTutor(){
-        System.out.println();
-    }
-     */
-    public void getReportTitle() {
+       public void getReportTitle() {
         String title = Input.getString("What report title do you want to set: ", false);
         System.out.print(title);
     }
@@ -278,12 +259,26 @@ public class TutorManagementUI implements Serializable {
         System.out.println();
     }
     public void printAvailableNameInMap(String s){
-        //for (int i=0;i<t.length;i++){
         System.out.print(s);
-        //}
+        
     }
     public void printKey(Tutor k) {
         System.out.println(k);
     }
-  
+    public int searchTutorMenu(){
+        int choice = Input.getChoice(
+                        "Select an option: ",
+                        new String[]{
+                            "Search by id:",
+                            "Search by ic no:",
+                            "Exit "
+                        },
+                        (item) -> item
+                );
+                return choice;
+    }
+    public Integer getNewId(){
+           Integer id = Input.getInt("Enter the tutor's id you want to ammend: ");
+           return id;
+    }
 }

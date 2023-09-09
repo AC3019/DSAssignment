@@ -13,16 +13,11 @@ import adt.HashMap;
 import adt.ArrayList;
 import adt.ListInterface;
 import utility.Input;
-//import java.util.List;
-//import java.util.HashMap;
 import java.io.Serializable;
-//import java.util.ArrayList;
 import boundary.TutorManagementUI;
-//import java.util.Scanner;
 import utility.TableBuilder;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
-//import java.util.Map;
 
 public class TutorManagement implements Serializable {
 
@@ -38,14 +33,7 @@ public class TutorManagement implements Serializable {
         this.dataChanged = dataChanged;
     }
 
-    //TutorManagement tm=new TutorManagement();
-    //Scanner scan=new Scanner(System.in);
-    /*
-    public TutorManagement() {
-        tutors = new HashMap<>();
-    }
-     */
-    public static void main(String[] args) {
+        public static void main(String[] args) {
         TutorManagement tm = new TutorManagement();
         TeachingAssignment ta = new TeachingAssignment();
         tm.displayMenu(ta);
@@ -61,20 +49,7 @@ public class TutorManagement implements Serializable {
 
         while (running) {
             int choice = tmu.printMenu();
-            /*
-        System.out.println("1. Add a new tutor");
-        System.out.println("2. Remove a tutor");
-        System.out.println("3. Find tutor");
-        System.out.println("4. Amend tutor details");
-        System.out.println("5. List all tutors");
-        System.out.println("6. Filter Tutor");
-        System.out.println("7. Get total number of tutors");
-        System.out.println("8. Exit");
-
-        System.out.print("Select an option: ");
-        int choice=tmu.funcInput();
-             */
-            switch (choice) {
+                       switch (choice) {
                 case 0:
                     addNewTutor();
                     break;
@@ -128,21 +103,15 @@ public class TutorManagement implements Serializable {
             // Will only come here for first tutor addition
             tutors.put(tutorObj.getId(), tutorObj);
             tmu.printPrompt("Tutor added successfully ");
-            // id++;
         }
     }
 
     //add remove by ic
     //add chk ic and id
     public void removeTutor(TeachingAssignment ta) {
-        //int id=tmu.removeTutorData();
-      //  char continueInput = 'Y';
+       
         if (tutors.size() > 0) {
-            /*
-            do{
-                if(tutors.size()>=1){
-             */
-            Integer[] t = this.tutors.getKeys(Integer.class);
+                        Integer[] t = this.tutors.getKeys(Integer.class);
             Tutor[] tn = this.tutors.getValues(Tutor.class);
             String[] tutorNames = new String[tn.length];
             for (int i = 0; i < tn.length; i++) {
@@ -153,12 +122,7 @@ public class TutorManagement implements Serializable {
                 tmu.printAvailableNameInMap(t[i] + " " + tutorNames[i]+ " ");
             }
             tmu.printEmptyLine();
-            /*
-                }else{
-                    tmu.printPrompt("No tutor inside ");
-                }
-             */
-            int id = tmu.removeTutorData();
+                       int id = tmu.removeTutorData();
             if (tutors.containsKey(id)) {
                 Tutor removed = tutors.remove(id);
                 /*
@@ -171,27 +135,7 @@ public class TutorManagement implements Serializable {
             } else {
                 tmu.printPrompt("Invalid tutor id");
             }
-            /*
-            tmu.cleanBuffer();
-            continueInput = tmu.wantToContinue();
-            while (continueInput != 'Y' && continueInput != 'N') {
-                tmu.continueMsgError();
-                //Input.cleanBuffer();
-                continueInput = tmu.wantToContinue();
-
-            }
-            */
-            /*
-        } else {
-            tmu.printPrompt("No tutor inside ");
-        }
-            */
-        /*
-        }while(continueInput=='Y');
-            
-         */
-        // }
-        } else {
+                   } else {
             tmu.printPrompt("pls add tutor only can removed");
         }
 
@@ -211,17 +155,8 @@ public class TutorManagement implements Serializable {
                 tmu.printPrompt("Pls add tutor first");
             } else {
                 do{
-                choice = Input.getChoice(
-                        "Select an option: ",
-                        new String[]{
-                            "Search by id:",
-                            "Search by ic no:",
-                            "Exit "
-                        },
-                        (item) -> item
-                );
-
-                Input.cleanBuffer();
+                choice=tmu.searchTutorMenu();
+                tmu.cleanBuffer();
                 switch (choice) {
                     case 0:
                         Integer[] t = this.tutors.getKeys(Integer.class);
@@ -232,19 +167,17 @@ public class TutorManagement implements Serializable {
                         }
                         tmu.printPromptWithoutEmptyLine("Available tutor's id inside the map are ");
                         for (int i = 0; i < t.length; i++) {
-                            tmu.printAvailableNameInMap(t[i] + " " + tutorNames[i]);
+                            tmu.printAvailableNameInMap(t[i] + " " + tutorNames[i]+ " ");
                         }
                         tmu.printEmptyLine();
 
                         int id = tmu.searchTutorId();
                         if (tutors.containsKey(id)) {
-                            System.out.println(tutors.get(id));
+                            tmu.printKey(tutors.get(id));
                         } else {
                             tmu.printPrompt("Invalid tutor's id");
                         }
-                        //got prob                   
                         break;
-                    //clear buffer error
                     case 1:
                         String ic = tmu.searchTutorIc();
 
@@ -266,7 +199,7 @@ public class TutorManagement implements Serializable {
                 break;
             }
             if (choice == 0) {
-                Input.cleanBuffer();
+                tmu.cleanBuffer();
             }
             continueInput = tmu.wantToContinue();
             while (continueInput != 'Y' && continueInput != 'N') {
@@ -279,21 +212,14 @@ public class TutorManagement implements Serializable {
         } 
     }
 
-    //let user choose amend by ic or id
     //validate id
     public void amendTutorDetails() {
-        //int choice=tmu.amendTutorMenu();
-        int id = 0;
-        String newName = "";
-        String newDepartment = " ";
-        String newPhoneNum = " ";
-
-        // id=Input.getInt("Enter the id you want to find: ");
-        //Input.cleanBuffer();
-        // Tutor t=new Tutor(id,newName,newDepartment,newPhoneNum);
-        char continueInput = 'Y';
-        char falseContinue = 'Y';
-        // Tutor tutor = tutors.get(t.getId());
+        int id ;
+        String newName ;
+        String newDepartment ;
+        String newPhoneNum ;
+        char continueInput ;
+        char falseContinue ='Y';
         if (tutors.size() != 0) {
             Integer[] t = this.tutors.getKeys(Integer.class);
             Tutor[] tn = this.tutors.getValues(Tutor.class);
@@ -303,10 +229,11 @@ public class TutorManagement implements Serializable {
             }
             tmu.printPromptWithoutEmptyLine("Available tutor's id inside the map are ");
             for (int i = 0; i < t.length; i++) {
-                tmu.printAvailableNameInMap(t[i] + " " + tutorNames[i]);
+                tmu.printAvailableNameInMap(t[i] + " " + tutorNames[i]+ " ");
             }
             tmu.printEmptyLine();
-            id = Input.getInt("Enter the tutor's id you want to ammend: ");
+            //id = Input.getInt("Enter the tutor's id you want to ammend: ");
+            id=tmu.getNewId();
             if (tutors.containsKey(id)) {
                 Tutor tutor = tutors.get(id);
 
@@ -315,7 +242,7 @@ public class TutorManagement implements Serializable {
                     switch (choice) {
                         case 0:
                             //newName=Input.getString("New name: ",false);
-                            System.out.println("Your current name is " + tutor.getName());
+                            tmu.printPrompt("Your current name is " + tutor.getName());
                             newName = tmu.getNewName();
                             if (tutor.getName().equals(newName)) {
                                 tmu.printPrompt("Please enter a new name... amend fail");
@@ -337,11 +264,20 @@ public class TutorManagement implements Serializable {
                             break;
 
                         case 1:
-                            //tutor.setDepartment(t.getDepartment());
                             tmu.printPrompt("Your current department is " + tutor.getDepartment());
                             newDepartment = tmu.getDepartment();
+                            tmu.cleanBuffer();
                             if (tutor.getDepartment().equals(newDepartment)) {
                                 tmu.printPrompt("Pls enter a new department... amend fail");
+                               do {
+                                    falseContinue = Character.toUpperCase(Input.getChar("Do you want to enter a new department(Y/N):"));
+                                    if (falseContinue != 'Y') {
+                                        break;
+                                    } else {
+                                        newDepartment = tmu.getNewDepartment();
+                                    }
+                                } while (tutor.getDepartment().equals(newDepartment));
+                                tutor.setDepartment(newDepartment);
                             } else {
                                 tutor.setDepartment(newDepartment);
                                 tmu.printPrompt("Tutor department amended successfully.");
@@ -372,12 +308,11 @@ public class TutorManagement implements Serializable {
                         break;
                     }
                     if (choice == 1) {
-                        Input.cleanBuffer();
+                        tmu.cleanBuffer();
                     }
                     continueInput = tmu.wantToContinue();
                     while (continueInput != 'Y' && continueInput != 'N') {
                         tmu.continueMsgError();
-                        //Input.cleanBuffer();
                         continueInput = tmu.wantToContinue();
                     }
                 } while (continueInput == 'Y');
@@ -392,8 +327,9 @@ public class TutorManagement implements Serializable {
 
     public void listAllTutor() {
         char continueInput = 'Y';
-        do {
+        
             if (tutors.size() > 0) {
+                do{
                 int choice = tmu.listAllTutorMenu();
 
                 switch (choice) {
@@ -408,19 +344,11 @@ public class TutorManagement implements Serializable {
                     case 1:
                         for (HashMap<Integer, Tutor>.Pair p : this.tutors) {
                             Tutor t = p.getValue();
-                            System.out.println(t);
+                            tmu.printKey(t);
                         }
                         break;
-                    /*
-          case 2:
-               adt.ArrayList<Tutor> arl2 = new adt.ArrayList<>(this.tutors.getValues(Tutor.class));
-               arl2.sort((Tutor t1, Tutor t2) -> t1.getSalary().compareTo(t2.getSalary()));
-                    for (Tutor t : arl2) {
-                        System.out.println(t);
-                 }
-                    break;
-                     */
-                    case 3:
+                    
+                    case 2:
                         break;
                     default:
                         tmu.invalidSwitchChoice();
@@ -428,20 +356,18 @@ public class TutorManagement implements Serializable {
                 if (choice == 2) {
                     break;
                 }
-            } else {
-                tmu.printPrompt("no tutor inside the system");
-            }
-            Input.cleanBuffer();
+                  tmu.cleanBuffer();
             continueInput = tmu.wantToContinue();
             while (continueInput != 'Y' && continueInput != 'N') {
                 tmu.continueMsgError();
-                //Input.cleanBuffer();
                 continueInput = tmu.wantToContinue();
             }
         } while (continueInput == 'Y');
-    }
+            } else {
+                tmu.printPrompt("no tutor inside the system");
+            }
+               }
 
-    //add loop
     public void filterTutor() {
         char continueInput = 'Y';
         int choice = 0;
@@ -454,6 +380,9 @@ public class TutorManagement implements Serializable {
                 switch (choice) {
                     case 0:
                         ts = findByGender(ts);
+                        if(ts.size()==0){
+                            break;
+                        }
                         break;
                     case 1:
                         ts = findByDepartment(ts);
@@ -469,11 +398,13 @@ public class TutorManagement implements Serializable {
                 if (choice == 3) {
                     break;
                 }
+                if(choice==1){
+                    tmu.cleanBuffer();
+                }
              
                 continueInput = tmu.wantToContinue();
             while (continueInput != 'Y' && continueInput != 'N') {
                 tmu.continueMsgError();
-                //Input.cleanBuffer();
                 continueInput = tmu.wantToContinue();
             }
                     } while (continueInput == 'Y');
@@ -481,64 +412,44 @@ public class TutorManagement implements Serializable {
                 tmu.printPrompt("Pls add tutor first");
             }
             if (choice == 1) {
-                Input.cleanBuffer();
+                tmu.cleanBuffer();
             }
-            /*
-            continueInput = tmu.wantToContinue();
-            while (continueInput != 'Y' && continueInput != 'N') {
-                tmu.continueMsgError();
-                //Input.cleanBuffer();
-                continueInput = tmu.wantToContinue();
-            }
-            */
-
-      //  } while (continueInput == 'Y');
+          
         Tutor[] filteredTutors = ts.getValues(Tutor.class);
         for (Tutor t : filteredTutors) {
-            System.out.println(t);
+            tmu.printKey(t);
         }
     }
 
     private HashMap<Integer, Tutor> findByGender(HashMap<Integer, Tutor> tutors) {
-        //Scanner scan = new Scanner(System.in);
-        //System.out.print("Gender to filter (M/F): ");
-        char genderToFilter = Character.toUpperCase(Input.getChar("Gender to filter(M/F): "));
-        //scan.next().toUpperCase().charAt(0);
-        //Input.cleanBuffer();
-        //Character.toUpperCase(genderToFilter);
-        //ArrayList <Tutor> matchedTutors = new ArrayList<>();
-        /*
-        for (Map.Entry<Integer, Tutor> tutor : tutors.entrySet()) {
-            if (Character.valueOf(genderToFilter).compareTo(tutor.getValue().getGender()) == 0) {
-                matchedTutors.add(tutor.getValue());
-            }
-        }
-         */
-        HashMap<Integer, Tutor> matchedTutors = tutors.filter(
-                (Integer k, Tutor v) -> v.getGender() == (genderToFilter)
-        );
-        // System.out.println("Do you want to ");
+        char genderToFilter;
+        boolean continueInput=true;
+        do{
+         genderToFilter = Character.toUpperCase(Input.getChar("Gender to filter(M/F): "));
+        
+               if(genderToFilter !='M'&&genderToFilter !='F'){
+            tmu.printPrompt("Error,gender should be only M or F... Please reenter");
+            genderToFilter = Character.toUpperCase(Input.getChar("Gender to filter(M/F): "));
+                   }
+               }while(genderToFilter !='M'&&genderToFilter!='F');
 
-        System.out.println("The total number of tutors in this gender are " + matchedTutors.size());
+        char finalGender = genderToFilter;
+        HashMap<Integer, Tutor> matchedTutors = tutors.filter(
+                (Integer k, Tutor v) -> v.getGender() == (finalGender)
+        );
+
+        tmu.printPrompt("The total number of tutors in this gender are " + matchedTutors.size());
         return matchedTutors;
     }
 
     private HashMap<Integer, Tutor> findByDepartment(HashMap<Integer, Tutor> tutors) {
-        //Scanner scan=new Scanner(System.in);
-        //System.out.print("Department to filter: ");
+        
         String departmentToFilter = tmu.getDepartment();
-        //subjectToFilter.toUpperCase();
+       tmu.cleanBuffer();
         HashMap<Integer, Tutor> matchedTutors = tutors.filter(
                 (Integer k, Tutor v) -> v.getDepartment().equals(departmentToFilter)
         );
-        //for (Map.Entry<Integer, Tutor> tutor : tutors.entrySet()) {
-
-        //}
-        /*
-        for(int i=0;i<matchedTutors.length;i++){
-            System.out.println(matchedTutors[i]);
-        }*/
-        System.out.println("The total number of tutors in this subject are " + matchedTutors.size());
+               tmu.printPrompt("The total number of tutors in this subject are " + matchedTutors.size());
         return matchedTutors;
     }
 
@@ -547,17 +458,13 @@ public class TutorManagement implements Serializable {
         HashMap<Integer, Tutor> matchedTutors = tutors.filter(
                 (Integer k, Tutor v) -> v.getName().contains(nameToFilter)
         );
-        /*      
-         for(int i=0;i<matchedTutors.length;i++){
-            System.out.println(matchedTutors[i]);
-        }
-         */
-        System.out.println("The total number of tutors with this name are " + matchedTutors.size());
+        
+        tmu.printPrompt("The total number of tutors with this name are " + matchedTutors.size());
         return matchedTutors;
     }
 
     public void getTotalNumOfTutor() {
-        System.out.println("The total number of tutors are" + tutors.size());
+        tmu.printPrompt("The total number of tutors are " + tutors.size());
     }
 
     public void generateReport() {

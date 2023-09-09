@@ -20,7 +20,6 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     private String phoneNum;
     private String icNo;
     private static int currentID = 1;
-   // private double salary;
 
     // default constructor
     public Tutor() {
@@ -36,7 +35,6 @@ public class Tutor implements Comparable<Tutor>, Serializable{
         this.age = age;
         this.phoneNum = phoneNum;
         this.icNo=icNo;
-       // this.salary=salary;
 
     }
     
@@ -52,7 +50,6 @@ public class Tutor implements Comparable<Tutor>, Serializable{
         this.name=name;
         this.department=department;
         this.phoneNum=phoneNum;
-       // this.salary=salary;
     }
     public String getName() {
         return name;
@@ -72,11 +69,8 @@ public class Tutor implements Comparable<Tutor>, Serializable{
         return age;
 
     }
-    /*
-    public double getSalary(){
-        return salary;
-    }
-    */
+    
+        
 
     public String getPhoneNum() {
         return phoneNum;
@@ -91,11 +85,8 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     public void setName(String name) {
         this.name = name;
     }
-    /*
-    public void setSalary(double salary){
-        this.salary=salary;
-    }
-*/
+   
+    
     public void setDepartment(String department) {
         this.department = department;
     }
@@ -120,7 +111,7 @@ public class Tutor implements Comparable<Tutor>, Serializable{
 
     public String toString() {
         return String.format(
-                "Tutor's id: %d\nTutor's name:%s\nTutor's department:%s\nTutor's gender: %s\nTutor's age:%d\nTutor's phone num:%s\n IcNo:%s\n ",
+                "Tutor's id: %d\nTutor's name:%s\nTutor's department:%s\nTutor's gender: %s\nTutor's age:%d\nTutor's phone num:%s\nTutor's IcNo:%s\n ",
                 id, name, department, gender, age, phoneNum, icNo);
     }
 
