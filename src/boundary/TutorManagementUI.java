@@ -281,4 +281,8 @@ public class TutorManagementUI implements Serializable {
            Integer id = Input.getInt("Enter the tutor's id you want to ammend: ");
            return id;
     }
+    public char wantToContinueFilter() {
+        return Character.toUpperCase(Input.getChar("Do you want to continue to filter based on current result (Y/N)?"));
+    }
+
 }

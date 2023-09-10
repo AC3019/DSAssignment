@@ -244,6 +244,7 @@ public class TutorManagement implements Serializable {
                             //newName=Input.getString("New name: ",false);
                             tmu.printPrompt("Your current name is " + tutor.getName());
                             newName = tmu.getNewName();
+                           // tmu.cleanBuffer();
                             if (tutor.getName().equals(newName)) {
                                 tmu.printPrompt("Please enter a new name... amend fail");
                                 do {
@@ -266,14 +267,16 @@ public class TutorManagement implements Serializable {
                         case 1:
                             tmu.printPrompt("Your current department is " + tutor.getDepartment());
                             newDepartment = tmu.getDepartment();
-                            tmu.cleanBuffer();
+                            //tmu.cleanBuffer();
                             if (tutor.getDepartment().equals(newDepartment)) {
                                 tmu.printPrompt("Pls enter a new department... amend fail");
                                do {
+                                   tmu.cleanBuffer();
                                     falseContinue = Character.toUpperCase(Input.getChar("Do you want to enter a new department(Y/N):"));
                                     if (falseContinue != 'Y') {
                                         break;
                                     } else {
+                                        //tmu.cleanBuffer();
                                         newDepartment = tmu.getNewDepartment();
                                     }
                                 } while (tutor.getDepartment().equals(newDepartment));
@@ -380,15 +383,28 @@ public class TutorManagement implements Serializable {
                 switch (choice) {
                     case 0:
                         ts = findByGender(ts);
+                        
                         if(ts.size()==0){
+                            tmu.printPrompt("Invalid criteria... don't have tutor with this criteria");
                             break;
                         }
+
                         break;
                     case 1:
                         ts = findByDepartment(ts);
+                         if(ts.size()==0){
+                            tmu.printPrompt("Invalid criteria... don't have tutor with this criteria");
+                            break;
+                        }
+
                         break;
                     case 2:
                         ts = findByName(ts);
+                         if(ts.size()==0){
+                            tmu.printPrompt("Invalid criteria... don't have tutor with this criteria");
+                            break;
+                        }
+
                         break;
                     case 3: // show all tutors
                         break;
@@ -398,16 +414,19 @@ public class TutorManagement implements Serializable {
                 if (choice == 3) {
                     break;
                 }
+                /*
                 if(choice==1){
                     tmu.cleanBuffer();
                 }
-             
-                continueInput = tmu.wantToContinue();
+*/
+             if(ts.size()>0){
+                continueInput = tmu.wantToContinueFilter();
             while (continueInput != 'Y' && continueInput != 'N') {
                 tmu.continueMsgError();
-                continueInput = tmu.wantToContinue();
+                continueInput = tmu.wantToContinueFilter();
             }
-                    } while (continueInput == 'Y');
+             }
+                    } while (continueInput == 'Y'&&ts.size()!=0);
     } else {
                 tmu.printPrompt("Pls add tutor first");
             }
