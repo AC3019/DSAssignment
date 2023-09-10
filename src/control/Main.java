@@ -16,36 +16,46 @@ import java.io.Serializable;
  */
 public class Main implements Serializable {
 
-    private static TutorManagement tutorManagementControl = new TutorManagement();
-    private static TutorialGroupManagement tutorialaGroupManagementControl = new TutorialGroupManagement();
-    private static CourseManagement courseManagementControl = new CourseManagement();
-    private static TeachingAssignment teachingAssignmentControl = new TeachingAssignment();
+    private TutorManagement tutorManagementControl = new TutorManagement();
+    private TutorialGroupManagement tutorialaGroupManagementControl = new TutorialGroupManagement();
+    private CourseManagement courseManagementControl = new CourseManagement();
+    private TeachingAssignment teachingAssignmentControl = new TeachingAssignment();
 
     public static void main(String[] args) {
+        Main m = new Main(); // to be able to save snapshot
+        m.tutorManagementControl.displayMenu(m.teachingAssignmentControl);
+
+        // STUB, saving system snapshot
+        m.saveSnapshot(m);
+        // STUB, loading system snapshot
+        m = m.loadSnapshot();
         System.out.println("I hate Netbeans, faQ");
     }
     
     // TODO: make save and load snapshot functions
-    public void saveSnapshot() {
+    public void saveSnapshot(Main state) {
         try {
             ObjectOutputStream writer = new ObjectOutputStream(
                 new FileOutputStream("autosave/snapshot.dat")
             );
-            writer.writeObject(this);
+            writer.writeObject(state);
             writer.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void loadSnapshot() {
+    public Main loadSnapshot() {
         try {
             ObjectInputStream reader = new ObjectInputStream(
                 new FileInputStream("autosave/snapshot.dat")
             );
+            Main loaded = (Main) reader.readObject();
             reader.close();
+            return loaded;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
 
