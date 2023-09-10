@@ -819,10 +819,22 @@ public class TeachingAssignmentUI implements Serializable {
 
         String dataToWrite = choice == 0 ? tb.generateCSVString(showNumber, true) : tb.generateTableString(showNumber, possibleReportTitle);
 
+        boolean success = false;
         if (choice == 0) {
-            FileStringWriter.writeToCSV(fileName, dataToWrite);
+            success = FileStringWriter.writeToCSV(fileName, dataToWrite);
         } else {
-            FileStringWriter.writeReportToTxt(fileName, dataToWrite);
+            success = FileStringWriter.writeReportToTxt(fileName, dataToWrite);
+        }
+
+        if (success) {
+            System.out.println(
+                "Successfully written to file, the file is located at " + 
+                (choice == 0 ? "export/" : "generated_reports/") + 
+                fileName + (choice == 0 ? ".csv" : ".txt")
+            );
+            Input.pause();
+        } else {
+            this.warn("Failed to write to file, please try again later");
         }
     }
 
