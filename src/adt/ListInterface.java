@@ -65,7 +65,7 @@ public interface ListInterface<T> {
     public abstract void clear();
 
     /**
-     * Converts the list back to a java array
+     * Converts the list back to a java array with only the elements in the list, does not include anything that is not a part of the list (like nulls)
      * Thank you java for your unintuitive type erasure to make me make sure the user always tells u what type of item the arraylist is storing :)))
      * @param Class<U> the class to cast to
      * @return U[] the array containing every item in the list, except null (with the class)

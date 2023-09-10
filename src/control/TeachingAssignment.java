@@ -69,6 +69,7 @@ public class TeachingAssignment implements Serializable {
             if (selectedCourse == null) {
                 if (ui.restartFilter())
                     continue;
+                ui.warn("No course selected, exiting...");
                 return;
             }
             break;
@@ -83,6 +84,8 @@ public class TeachingAssignment implements Serializable {
             if (selectedTutor == null) {
                 if (ui.restartFilter())
                     continue;
+                ui.warn("No tutor selected, exiting...");
+                return;
             }
             
             this.assignTutorToCourse(selectedCourse, selectedTutor);
@@ -130,6 +133,7 @@ public class TeachingAssignment implements Serializable {
             if (selectedTutor == null) {
                 if (ui.restartFilter())
                     continue;
+                ui.warn("No tutor selected, exiting...");
                 return;
             }
 
@@ -143,6 +147,7 @@ public class TeachingAssignment implements Serializable {
             if (tg == null) {
                 if (ui.restartFilter())
                     continue;
+                ui.warn("No tutorial group selected, exiting...");
                 return;
             }
 
@@ -194,16 +199,21 @@ public class TeachingAssignment implements Serializable {
             ArrayList<Tutor> filteredTutors = ui.filterTutors(tutorsAssignedToAnyCourse);
             selectedTutor = ui.selectTutor(filteredTutors);
 
-            if (selectedTutor == null && !ui.restartFilter())
+            if (selectedTutor == null && !ui.restartFilter()) {
+                ui.warn("No tutor selected, exiting...");
                 return;
+            }
         } while (selectedTutor == null);
 
         Course[] coursesAfterFilter = searchCoursesUnderTutor(selectedTutor);
         while (coursesAfterFilter.length < 1) {
-            ui.warn("There are no courses that match the filter");
+            ui.warn("There are no courses assigned to this tutor that match the filter");
             if (ui.restartFilter())
                 coursesAfterFilter = searchCoursesUnderTutor(selectedTutor);
-            return; // if user dw restart filter, ntg we can do, alrd no courses to display d, so just exit lo
+            else {
+                ui.warn("No courses found, exiting...");
+                return; // if user dw restart filter, ntg we can do, alrd no courses to display d, so just exit lo
+            }
         }
 
         ArrayList<Course> coursesArrayList = new ArrayList<>(coursesAfterFilter); // convert to arraylist to use ma sweeeeet sweeeeet methods
@@ -247,16 +257,21 @@ public class TeachingAssignment implements Serializable {
             // only allow filter once, this loop is just to make sure no null course
             ArrayList<Course> filteredCoursesAssigned = ui.filterCourses(coursesAssigned);
             selectedCourse = ui.selectCourse(filteredCoursesAssigned);
-            if (selectedCourse == null && !ui.restartFilter())
+            if (selectedCourse == null && !ui.restartFilter()){
+                ui.warn("No course selected, exiting...");   
                 return; // dou no selected course and user dw restart the filter, how ah, return nia lo
+            }
         } while (selectedCourse == null);
 
         Tutor[] tutorsAssignedToCourse = this.searchTutorsUnderCourse(selectedCourse);
         while (tutorsAssignedToCourse.length < 1) {
-            ui.warn("There are no tutors that matches the filter assigned to this course");
+            ui.warn("There are no tutors assigned to this course that matches the filter");
             if (ui.restartFilter())
                 tutorsAssignedToCourse = this.searchTutorsUnderCourse(selectedCourse);
-            return; // exit if user refuses to restart the filter
+            else {
+                ui.warn("No tutors found, exiting...");
+                return; // exit if user refuses to restart the filter
+            }
         }
 
         ArrayList<Tutor> tutorArrayList = new ArrayList<>(tutorsAssignedToCourse);
@@ -264,6 +279,100 @@ public class TeachingAssignment implements Serializable {
         ui.sortTutor(tutorArrayList);
 
         ui.buildAndPrintTutorTable(tutorArrayList, selectedCourse);
+    }
+
+    // handles filtering
+    public TutorialGroup[] searchTutorialGroupsUnderTutor(Tutor t) {
+        ArrayList<TutorialGroup> tutorialGroupUnderTutor = this.tutorTutorialGroupMap.get(t);
+
+        do {
+            tutorialGroupUnderTutor = ui.filterTutorialGroups(tutorialGroupUnderTutor);
+            if (tutorialGroupUnderTutor.getNumberOfEntries() < 1)
+                return new TutorialGroup[0]; // calling method should handle this
+        } while(ui.continueFilter());
+
+        return tutorialGroupUnderTutor.toArray(TutorialGroup.class);
+    }
+
+    public void listTutorialGroupUnderTutor() {
+        ArrayList<Tutor> tutorsAssigned = new ArrayList<>(this.tutorTutorialGroupMap.getKeys(Tutor.class));
+
+        Tutor selectedTutor = null;
+        do {
+            // only allow filter once, this is to make sure the user cannot select null tutor
+            ArrayList<Tutor> filteredTutors = ui.filterTutors(tutorsAssigned);
+            selectedTutor = ui.selectTutor(filteredTutors);
+            if (selectedTutor == null && !ui.restartFilter()) {
+                ui.warn("No tutor selected, exiting...");
+                return;
+            }
+        } while (selectedTutor == null);
+
+        TutorialGroup[] tutorialGroupsAssignedToTutor = this.searchTutorialGroupsUnderTutor(selectedTutor);
+        while (tutorialGroupsAssignedToTutor.length < 1) {
+            ui.warn("There are no tutorial groups that match this filter");
+            if (ui.restartFilter())
+                tutorialGroupsAssignedToTutor = this.searchTutorialGroupsUnderTutor(selectedTutor);
+            else {
+                ui.warn("No tutorial groups found, exiting...");
+                return;
+            }
+        }
+
+        ArrayList<TutorialGroup> tutorialGroupArrayList = new ArrayList<>(tutorialGroupsAssignedToTutor);
+
+        ui.sortTutorialGroup(tutorialGroupArrayList);
+
+        ui.buildAndPrintTutorialGroupTable(tutorialGroupArrayList, selectedTutor);
+    }
+
+    public Tutor[] searchTutorUnderTutorialGroup(TutorialGroup tg) {
+        ArrayList<Tutor> tutorOfTutorialGroup = new ArrayList<>();
+
+        for (
+            HashMap<Tutor, ArrayList<TutorialGroup>>.Pair p : 
+                this.tutorTutorialGroupMap
+                    .filter((Tutor _t, ArrayList<TutorialGroup> tgs) -> tgs.contains(tg))
+        ) {
+            tutorOfTutorialGroup.insert(p.getKey());
+        }
+
+        do {
+            tutorOfTutorialGroup = ui.filterTutors(tutorOfTutorialGroup);
+            if (tutorOfTutorialGroup.getNumberOfEntries() < 1)
+                return new Tutor[0]; // directly return, calling function should handle
+        } while (ui.continueFilter());
+
+        return tutorOfTutorialGroup.toArray(Tutor.class);
+    }
+
+    // only used internally, gets every tutorial groups that has already been assigned
+    private ArrayList<TutorialGroup> getTutorialGroupsAssignedToAnyTutor() {
+        ArrayList<TutorialGroup> tutorialGroupsAssignedToAnyTutor = new ArrayList<>();
+
+        for (HashMap<Tutor, ArrayList<TutorialGroup>>.Pair p : this.tutorTutorialGroupMap) {
+            for (TutorialGroup tg : p.getValue()) {
+                if (!tutorialGroupsAssignedToAnyTutor.contains(tg))
+                    tutorialGroupsAssignedToAnyTutor.insert(tg);
+            }
+        }
+
+        return tutorialGroupsAssignedToAnyTutor;
+    }
+
+    public void listTutorUnderTutorialGroup() {
+        ArrayList<TutorialGroup> tutorialGroupsAssigned = this.getTutorialGroupsAssignedToAnyTutor();
+
+        TutorialGroup selectedTutorialGroup = null;
+        do {
+            ArrayList<TutorialGroup> filteredTutorialGroup = ui.filterTutorialGroups(tutorialGroupsAssigned);
+            selectedTutorialGroup = ui.selectTutorialGroup(filteredTutorialGroup);
+
+            if (selectedTutorialGroup == null && !ui.restartFilter()) {
+                ui.warn("No tutorial groups selected, exiting...");
+                return;
+            }
+        } while (selectedTutorialGroup == null);
     }
 
     // only handles removing the tutor from the course map
@@ -395,7 +504,7 @@ public class TeachingAssignment implements Serializable {
             case 5:
                 this.listCoursesUnderTutor();
                 break;
-            case 6:
+            case 6: // exit
                 break;
 
             // won't reach

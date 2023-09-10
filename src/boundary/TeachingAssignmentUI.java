@@ -526,6 +526,42 @@ public class TeachingAssignmentUI implements Serializable {
         }
     }
 
+    // manipulates the list passed in
+    public void sortTutorialGroup(ArrayList<TutorialGroup> tutorialGroups) {
+        int sortByChoice = this.getSortBy(new String[] {
+            "Tutorial Group Code (ASC)",
+            "Tutorial Group Code (DESC)",
+            "Number of Students (ASC)",
+            "Number of Students (DESC)",
+            "Don't sort by anything"
+        });
+
+        switch (sortByChoice) {
+            case 0:
+                tutorialGroups.sort((TutorialGroup tg1, TutorialGroup tg2) -> tg2.getTutGrpCode().compareTo(tg1.getTutGrpCode()));
+                break;
+
+            case 1:
+                tutorialGroups.sort((TutorialGroup tg1, TutorialGroup tg2) -> tg1.getTutGrpCode().compareTo(tg2.getTutGrpCode()));
+                break;
+            
+            case 2:
+                tutorialGroups.sort(
+                    (TutorialGroup tg1, TutorialGroup tg2) -> tg2.getStudent().getNumberOfEntries() - tg1.getStudent().getNumberOfEntries()
+                );
+                break;
+
+            case 3:
+                tutorialGroups.sort(
+                    (TutorialGroup tg1, TutorialGroup tg2) -> tg1.getStudent().getNumberOfEntries() - tg2.getStudent().getNumberOfEntries()
+                );
+                break;
+
+            default:
+                break;
+        }
+    }
+
     // won't use tiok this for tutorial group (only for Tutor cuz Tutor and Course related only)
     public void buildAndPrintCourseTable(ArrayList<Course> coursesArrayList, Tutor t) {
         TableBuilder tb = new TableBuilder();
@@ -602,7 +638,7 @@ public class TeachingAssignmentUI implements Serializable {
         
         while (true) {
             int choice = this.tableDisplayConfig(
-                "Table configuration to display tutors under a course",
+                "Table configuration to display tutors",
                 new String[] {
                     tb.hasColumn("Tutor ID") ? "Remove column 'Tutor ID'" : "Add column 'Tutor ID",
                     tb.hasColumn("Tutor Name") ? "Remove column 'Tutor Name'" : "Add column 'Tutor Name",
@@ -676,11 +712,72 @@ public class TeachingAssignmentUI implements Serializable {
         } else if (obj instanceof TutorialGroup) {
             TutorialGroup tg = (TutorialGroup) obj;
             tableHeading = "Tutors Assigned to the Tutorial Group [" +
-                // TODO: confirm with SC see this how
                 tg.getProgrammeCode() + tg.getTutGrpCode() + " " + tg.getProgrammeName() +
             "]";
         }
         tb.printTable(showNumber, tableHeading);
+    }
+
+    // won't use tiok this for course
+    public void buildAndPrintTutorialGroupTable(ArrayList<TutorialGroup> tutorialGroupArrayList, Tutor t) {
+        TableBuilder tb = new TableBuilder();
+        boolean showNumber = false;
+
+        while (true) {
+            int choice = this.tableDisplayConfig(
+                "Table configuration to display tutorial groups",
+                new String[] {
+                    tb.hasColumn("Programme Code") ? "Remove column 'Programme Code'" : "Add column 'Programme Code'",
+                    tb.hasColumn("Tutorial Group Code") ? "Remove column 'Tutorial Group Code'" : "Add column 'Tutorial Group Code'",
+                    tb.hasColumn("Programme Name") ? "Remove column 'Programme Name'" : "Add column 'Programme Name'",
+                    tb.hasColumn("Number of Students") ? "Remove column 'Number of Students'" : "Add column 'Number of Students'",
+                    showNumber ? "Disable data numbers" : "Show data numbers",
+                    "Show all columns",
+                    "Done configuration"
+                }
+            );
+            
+            if (choice == 0 || choice == 5) {
+                if (tb.hasColumn("Programme Code") && choice != 5)
+                    tb.removeColumn("Programme Code");
+                else
+                    tb.addColumn("Programme Code", tutorialGroupArrayList.map((TutorialGroup tg) -> tg.getProgrammeCode()).toArray(String.class));
+            }
+
+            if (choice == 1 || choice == 5) {
+                if (tb.hasColumn("Tutorial Group Code") && choice != 5)
+                    tb.removeColumn("Tutorial Group Code");
+                else
+                    tb.addColumn("Tutorial Group Code", tutorialGroupArrayList.map((TutorialGroup tg) -> tg.getTutGrpCode()).toArray(String.class));
+            }
+
+            if (choice == 2 || choice == 5) {
+                if (tb.hasColumn("Programme Name") && choice != 5)
+                    tb.removeColumn("Programme Name");
+                else
+                    tb.addColumn("Programme Name", tutorialGroupArrayList.map((TutorialGroup tg) -> tg.getProgrammeName()).toArray(String.class));
+            }
+
+            if (choice == 3 || choice == 5) {
+                if (tb.hasColumn("Number of Students") && choice != 5)
+                    tb.removeColumn("Number of Students");
+                else
+                    tb.addColumn("Number of Students", tutorialGroupArrayList.map((TutorialGroup tg) -> (Integer) tg.getStudent().getNumberOfEntries()).toArray(Integer.class));
+            }
+
+            if (choice == 4 || choice == 5) {
+                showNumber = !showNumber || choice == 5;
+            }
+
+            if (choice == 6)
+                break;
+        }
+        tb.printTable(
+            showNumber, 
+            "Tutorial Groups Assigned to Tutor [" + 
+                t.getId() + " " + t.getName() + 
+                "(" + t.getDepartment() + ")" + 
+            "]");
     }
 
     public void removeSuccessful(String what, String assignedTo) {

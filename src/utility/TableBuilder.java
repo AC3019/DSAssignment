@@ -212,6 +212,8 @@ public class TableBuilder {
         // }
         // System.out.println("\u2500\u2518"); // close the last column
 
+        // TODO if got time, center the whole table ;))
+
         return sb.toString();
     }
 
