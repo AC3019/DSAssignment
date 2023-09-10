@@ -34,8 +34,11 @@ public class TableBuilder {
 
     // return itself to facilitate method chaining
     public TableBuilder addColumn(String colName, Object[] colData) {
+        if (this.hasColumn(colName)) {
+            System.out.println("Table already has column [" + colName + "], ignoring...");
+            return this;
+        }
         this.table.put(colName, colData);
-
         return this;
     }
 
