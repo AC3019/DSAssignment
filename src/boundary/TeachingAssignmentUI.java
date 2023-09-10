@@ -20,10 +20,19 @@ public class TeachingAssignmentUI implements Serializable {
             "Assign tutorial groups to tutor",
             "Remove tutor from a course",
             "Remove tutorial group from a tutor",
+            "Generate report",
+            "Exit the module"
+        }, (s) -> s);
+        return choice;
+    }
+
+    public int getReportChoice() {
+        int choice = Input.getChoice("Enter your choice: ", new String[] {
             "List all tutors under a course",
             "List all courses under a tutor",
-            "Generate report",
-            "Exit teaching assignment"
+            "List all tutorial group under a tutor",
+            "List all tutor for a tutorial group",
+            "Back"
         }, (s) -> s);
         return choice;
     }
@@ -312,6 +321,12 @@ public class TeachingAssignmentUI implements Serializable {
         System.out.println(s);
         Input.reinit(); // although not very performant but this is a fool proof way to make sure there is no buffer problems
         Input.pause();
+    }
+
+    // a print anything function for anything that don't need to have their own function
+    // unlike warn, this is for stuffs that don't require attention, just a casual log to tell user that something has happened
+    public void log(String s) {
+        System.out.println(s);
     }
 
     // allows wildcards

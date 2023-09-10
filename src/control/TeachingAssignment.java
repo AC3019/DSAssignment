@@ -373,6 +373,22 @@ public class TeachingAssignment implements Serializable {
                 return;
             }
         } while (selectedTutorialGroup == null);
+
+        Tutor[] tutorsAssignedToTutorialGroup = this.searchTutorUnderTutorialGroup(selectedTutorialGroup);
+        while (tutorsAssignedToTutorialGroup.length < 0) {
+            ui.warn("There is no tutor that matches this filter");
+            if (ui.restartFilter())
+                tutorsAssignedToTutorialGroup = this.searchTutorUnderTutorialGroup(selectedTutorialGroup);
+            else {
+                ui.warn("No tutors found, exiting...");
+                return;
+            }
+        }
+
+        ArrayList<Tutor> tutorsArrayList = new ArrayList<>(tutorsAssignedToTutorialGroup);
+
+        ui.sortTutor(tutorsArrayList);
+        ui.buildAndPrintTutorTable(tutorsArrayList, selectedTutorialGroup);
     }
 
     // only handles removing the tutor from the course map
@@ -380,6 +396,11 @@ public class TeachingAssignment implements Serializable {
         ArrayList<Tutor> tutorAssignedToCourse = this.courseTutorMap.get(c);
 
         tutorAssignedToCourse.remove(tutorAssignedToCourse.indexOf(t));
+
+        // if the course has no tutors after removing, remove it from the map
+        if (tutorAssignedToCourse.getNumberOfEntries() < 1) {
+            this.courseTutorMap.remove(c);
+        }
     }
 
     // the whole process of removing a tutor from a course
@@ -417,6 +438,11 @@ public class TeachingAssignment implements Serializable {
         ArrayList<TutorialGroup> tutorialGroupAssignedToTutor = this.tutorTutorialGroupMap.get(t);
 
         tutorialGroupAssignedToTutor.remove(tutorialGroupAssignedToTutor.indexOf(tg));
+
+        // if after remove the tutor is not assigned to any tutorial group, remove them from the map
+        if (tutorialGroupAssignedToTutor.getNumberOfEntries() < 1) {
+            this.tutorTutorialGroupMap.remove(t);
+        }
     }
 
     // the whole process of removing a tutorial group from a tutor
@@ -450,68 +476,121 @@ public class TeachingAssignment implements Serializable {
         ui.removeSuccessful("Tutorial Group", "Tutor");
     }
 
+    public void generateReport() {
+        /** Reports generated
+         *  "List all tutors under a course",
+            "List all courses under a tutor",
+            "List all tutorial group under a tutor",
+            "List all tutor for a tutorial group",
+            "Back"
+         */
+        while (true) {
+            int choice = ui.getReportChoice();
+    
+            switch (choice) {
+                case 0:
+                    this.listTutorsUnderCourse();
+                    break;
+                case 1:
+                    this.listCoursesUnderTutor();
+                    break;
+                case 2:
+                    this.listTutorialGroupUnderTutor();
+                    break;
+                case 3:
+                    this.listTutorUnderTutorialGroup();
+                    break;
+                case 4:
+                    return;
+            
+                default: // won't reach
+                    break;
+            }
+        }
+    }
+
     // due to java's referencing properties, we need to clean up data when tutor is removed by the tutor management submodule
     // don't need to implement cleanUp for Course for now becuz the course subsystem is just a stub
-    // TODO
     public void cleanUp(Tutor tutor) {
+        // remove the tutor from every course that they are assigned
+        ui.log("Removing tutor from courses associated");
+        int associated = 0; // to record how many courses the tutor has been assigned to to tell the user later
+        for (HashMap<Course, ArrayList<Tutor>>.Pair p : this.courseTutorMap) {
+            ArrayList<Tutor> tutors = p.getValue();
+            if (tutors.contains(tutor)) {
+                tutors.remove(tutors.indexOf(tutor));
+                associated++;
+            }
+        }
+        ui.log("Successfully removed the tutor from " + associated + " courses");
 
+        if (!this.tutorTutorialGroupMap.containsKey(tutor)) {
+            return; // if not associated with any tutorial group can just STAWP
+        }
+        // remove the tutor from the tutorTutorialGroup association
+        // reuse associated
+        associated = this.tutorTutorialGroupMap.remove(tutor).getNumberOfEntries();
+        ui.log("Successfully removed the tutor from " + associated + " tutorial groups");
     }
 
     // due to java's referencing properties, we need to clean up data when tutorial group is removed
-    // TODO:
     public void cleanUp(TutorialGroup tutGrp) {
-
+        // remove the tutorial group from every tutors that they have been assigned
+        ui.log("Removing tutorial group from tutors associated");
+        int associated = 0; // to record how many courses the tutor has been assigned to to tell the user later
+        for (HashMap<Tutor, ArrayList<TutorialGroup>>.Pair p : this.tutorTutorialGroupMap) {
+            ArrayList<TutorialGroup> tutGrps = p.getValue();
+            if (tutGrps.contains(tutGrp)) {
+                tutGrps.remove(tutGrps.indexOf(tutGrp));
+                associated++;
+            }
+        }
+        ui.log("Successfully removed the tutorial group from " + associated + " tutors");
     }
 
     // main function to this module, handles everything
     // need to take in controls of other 2 subsystem as need to integrate with them
     public void main(TutorManagement tm, TutorialGroupManagement tgm, CourseManagement cm) {
         /*
-         * "Assign tutor to a course",
+         *  "Assign tutor to a course",
             "Assign tutorial groups to tutor",
             "Remove tutor from a course",
             "Remove tutorial group from a tutor",
-            "List all tutors under a course",
-            "List all courses under a tutor",
-            TODO: Both TODO below is if got time
-            TODO: "List all tutorial group under a tutor",
-            TODO: "List all tutor for a tutorial group",
             "Generate report",
-            "Exit teaching assignment"
+            "Exit the module"
          */
-        int option = ui.getMenuChoice();
-        switch (option) {
-            case 0:
-                this.assignTutorsToCourse(cm, tm);
-                break;
-        
-            case 1:
-                this.assignTutorialGroupsToTutor(tm, tgm);
-                break;
+
+        while (true) {
+            int option = ui.getMenuChoice();
+            switch (option) {
+                case 0:
+                    this.assignTutorsToCourse(cm, tm);
+                    break;
             
-            case 2:
-                this.removeTutorFromCourseProcess();
-                break;
-
-            case 3:
-                this.removeTutorialGroupFromTutorProcess(); 
-                break;
-
-            case 4:
-                this.listTutorsUnderCourse();
-                break;
-
-            case 5:
-                this.listCoursesUnderTutor();
-                break;
-            case 6: // exit
-                break;
-
-            // won't reach
-            default:
-                break;
+                case 1:
+                    this.assignTutorialGroupsToTutor(tm, tgm);
+                    break;
+                
+                case 2:
+                    this.removeTutorFromCourseProcess();
+                    break;
+    
+                case 3:
+                    this.removeTutorialGroupFromTutorProcess(); 
+                    break;
+    
+                case 4:
+                    this.generateReport();
+                    break;
+                
+                case 5: // exit
+                    return; 
+    
+                // won't reach
+                default:
+                    break;
+            }
         }
-
     }
 
     public static void main(String[] args) {
