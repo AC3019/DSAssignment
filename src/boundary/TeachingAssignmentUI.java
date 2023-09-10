@@ -9,6 +9,7 @@ import control.DepartmentManagement;
 import entity.Course;
 import entity.Tutor;
 import entity.TutorialGroup;
+import utility.FileStringWriter;
 import utility.Input;
 import utility.TableBuilder;
 
@@ -633,13 +634,15 @@ public class TeachingAssignmentUI implements Serializable {
                 break;
             }
         }
-        tb.printTable(
-            showNumber, 
-            "Courses Assigned to Tutor [" + 
+        String tableHeading = "Courses Assigned to Tutor [" + 
                 t.getId() + " " + t.getName() + 
                 "(" + t.getDepartment() + ")" + 
-            "]"
-        );
+            "]";
+        tb.printTable(showNumber, tableHeading);
+        boolean wantToSaveToFile = Input.confirm("Do you want to export data to a file?");
+        if (wantToSaveToFile) {
+            this.saveToFile(tb, showNumber, tableHeading);
+        }
     }
 
     /**
@@ -731,6 +734,10 @@ public class TeachingAssignmentUI implements Serializable {
             "]";
         }
         tb.printTable(showNumber, tableHeading);
+        boolean wantToSaveToFile = Input.confirm("Do you want to export data to a file?");
+        if (wantToSaveToFile) {
+            this.saveToFile(tb, showNumber, tableHeading);
+        }
     }
 
     // won't use tiok this for course
@@ -787,12 +794,36 @@ public class TeachingAssignmentUI implements Serializable {
             if (choice == 6)
                 break;
         }
-        tb.printTable(
-            showNumber, 
-            "Tutorial Groups Assigned to Tutor [" + 
+        String tableHeading = "Tutorial Groups Assigned to Tutor [" + 
                 t.getId() + " " + t.getName() + 
                 "(" + t.getDepartment() + ")" + 
-            "]");
+            "]";
+        tb.printTable(showNumber, tableHeading);
+
+        boolean wantToSaveToFile = Input.confirm("Do you want to export data to a file?");
+        if (wantToSaveToFile) {
+            this.saveToFile(tb, showNumber, tableHeading);
+        }
+    }
+
+    // ui to save generated stuff to a file, used only internally
+    private void saveToFile(TableBuilder tb, boolean showNumber, String possibleReportTitle) {
+        // ask want save csv or report
+        int choice = Input.getChoice("Enter your choice: ", new String[] {
+            "Generate CSV file (includes field names as header row)",
+            "Save report to txt file"
+        }, (s) -> s);
+
+        Input.cleanBuffer(); // use cleanBuffer here because is very certain this is getLine after getInt, so cleanBuffer will be more performant and don't need to be very fool proof and explicit
+        String fileName = Input.getString("Enter filename (" + (choice == 0 ? ".csv" : ".txt") + " will be appended to end of file name): ");
+
+        String dataToWrite = choice == 0 ? tb.generateCSVString(showNumber, true) : tb.generateTableString(showNumber, possibleReportTitle);
+
+        if (choice == 0) {
+            FileStringWriter.writeToCSV(fileName, dataToWrite);
+        } else {
+            FileStringWriter.writeReportToTxt(fileName, dataToWrite);
+        }
     }
 
     public void removeSuccessful(String what, String assignedTo) {
