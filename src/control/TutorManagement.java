@@ -48,6 +48,7 @@ public class TutorManagement implements Serializable {
         boolean running = true;
 
         while (running) {
+            tmu.displayHeader();
             int choice = tmu.printMenu();
                        switch (choice) {
                 case 0:
@@ -375,7 +376,8 @@ public class TutorManagement implements Serializable {
         char continueInput = 'Y';
         int choice = 0;
         HashMap<Integer, Tutor> ts = this.tutors;
-        
+        //Tutor[] filteredTutors = ts.getValues(Tutor.class);
+
             if (tutors.size() > 0) {
                 do{
                 choice = tmu.filterTutorData();
@@ -388,7 +390,13 @@ public class TutorManagement implements Serializable {
                             tmu.printPrompt("Invalid criteria... don't have tutor with this criteria");
                             break;
                         }
-
+                        /*
+                        if(ts.size()>=1){
+                             for (Tutor t : filteredTutors) {
+                                tmu.printKey(t);
+                             }
+                        */
+                        
                         break;
                     case 1:
                         ts = findByDepartment(ts);
@@ -396,6 +404,13 @@ public class TutorManagement implements Serializable {
                             tmu.printPrompt("Invalid criteria... don't have tutor with this criteria");
                             break;
                         }
+                        /*
+                          if(ts.size()>=1){
+                             for (Tutor t : filteredTutors) {
+                                tmu.printKey(t);
+                             }
+                        */
+                        
 
                         break;
                     case 2:
@@ -404,7 +419,13 @@ public class TutorManagement implements Serializable {
                             tmu.printPrompt("Invalid criteria... don't have tutor with this criteria");
                             break;
                         }
-
+                        /*
+                          if(ts.size()>=1){
+                             for (Tutor t : filteredTutors) {
+                                tmu.printKey(t);
+                             }
+                        */
+                        
                         break;
                     case 3: // show all tutors
                         break;
@@ -433,11 +454,12 @@ public class TutorManagement implements Serializable {
             if (choice == 1) {
                 tmu.cleanBuffer();
             }
-          
+         
         Tutor[] filteredTutors = ts.getValues(Tutor.class);
         for (Tutor t : filteredTutors) {
             tmu.printKey(t);
         }
+
     }
 
     private HashMap<Integer, Tutor> findByGender(HashMap<Integer, Tutor> tutors) {
@@ -457,7 +479,7 @@ public class TutorManagement implements Serializable {
                 (Integer k, Tutor v) -> v.getGender() == (finalGender)
         );
 
-        tmu.printPrompt("The total number of tutors in this gender are " + matchedTutors.size());
+       // tmu.printPrompt("The total number of tutors in this gender are " + matchedTutors.size());
         return matchedTutors;
     }
 
@@ -468,7 +490,7 @@ public class TutorManagement implements Serializable {
         HashMap<Integer, Tutor> matchedTutors = tutors.filter(
                 (Integer k, Tutor v) -> v.getDepartment().equals(departmentToFilter)
         );
-               tmu.printPrompt("The total number of tutors in this subject are " + matchedTutors.size());
+             //  tmu.printPrompt("The total number of tutors in this department are " + matchedTutors.size());
         return matchedTutors;
     }
 
@@ -478,7 +500,7 @@ public class TutorManagement implements Serializable {
                 (Integer k, Tutor v) -> v.getName().contains(nameToFilter)
         );
         
-        tmu.printPrompt("The total number of tutors with this name are " + matchedTutors.size());
+       // tmu.printPrompt("The total number of tutors with this name are " + matchedTutors.size());
         return matchedTutors;
     }
 

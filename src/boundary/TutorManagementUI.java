@@ -24,7 +24,16 @@ public class TutorManagementUI implements Serializable {
     Scanner scan = new Scanner(System.in);
   
     Tutor t = new Tutor();
-
+    
+    public void displayHeader(){
+        System.out.println();
+        System.out.println("_|_|_|_|_|    _|_|    _|_|_|    _|    _|  _|      _|  _|_|_|_|_|");
+        System.out.println("    _|      _|    _|  _|    _|  _|    _|  _|_|  _|_|      _|");
+        System.out.println("    _|      _|_|_|_|  _|_|_|    _|    _|  _|  _|  _|      _|");
+        System.out.println("    _|      _|    _|  _|    _|  _|    _|  _|      _|      _|");
+        System.out.println("    _|      _|    _|  _|    _|    _|_|    _|      _|      _|");
+        System.out.println();
+    }
     public int printMenu() {
                int choice = Input.getChoice(
                 "Select an option: ",
@@ -236,7 +245,7 @@ public class TutorManagementUI implements Serializable {
 
        public void getReportTitle() {
         String title = Input.getString("What report title do you want to set: ", false);
-        System.out.print(title);
+        System.out.print("\t\t\t\t"+title);
     }
 
     public LocalDateTime printDateTime(LocalDateTime e) {
@@ -244,7 +253,7 @@ public class TutorManagementUI implements Serializable {
     }
 
     public void printFormatDateTime(String e) {
-        System.out.print("\t\t\t" + e);
+        System.out.print( "\t\t"+ e);
     }
 
     public void cleanBuffer() {
@@ -282,7 +291,7 @@ public class TutorManagementUI implements Serializable {
            return id;
     }
     public char wantToContinueFilter() {
-        return Character.toUpperCase(Input.getChar("Do you want to continue to filter based on current result (Y/N)?"));
+        return Character.toUpperCase(Input.getChar("Do you want to continue filter on second criteria based on above result(Y/N)?"));
     }
 
 }
