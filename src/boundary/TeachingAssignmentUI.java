@@ -310,7 +310,7 @@ public class TeachingAssignmentUI implements Serializable {
     // warns the user then wait for their action to let the system proceed
     public void warn(String s) {
         System.out.println(s);
-        Input.cleanBuffer();
+        Input.reinit(); // although not very performant but this is a fool proof way to make sure there is no buffer problems
         Input.pause();
     }
 
@@ -383,19 +383,19 @@ public class TeachingAssignmentUI implements Serializable {
 
     public String getProgCodeForTutGrpFilter() {
         printWildCardList();
-        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
+        Input.reinit(); // although not very performant but this is a fool proof way to make sure there is no buffer problems
         return Input.getString("Enter Programme Code filter (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public String getProgNameForTutGrpFilter() {
         printWildCardList();
-        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
+        Input.reinit(); // although not very performant but this is a fool proof way to make sure there is no buffer problems
         return Input.getString("Enter Programme Name filter (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public String getTutGrpCodeForTutGrpFilter() {
         printWildCardList();
-        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
+        Input.reinit(); // although not very performant but this is a fool proof way to make sure there is no buffer problems
         return Input.getString("Enter Tutorial Group Code filter (can use wildcards for a wider search, case insensitive): ", false);
     }
 
@@ -421,7 +421,7 @@ public class TeachingAssignmentUI implements Serializable {
      * @return
      */
     public boolean wantAssignMore(String type) {
-        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
+        Input.reinit(); // although not very performant but this is a fool proof way to make sure there is no buffer problems
         if (type.equals("TUTOR"))
             return Input.confirm("Do you want to assign more tutor to the course?");
         else 
@@ -429,7 +429,7 @@ public class TeachingAssignmentUI implements Serializable {
     }
 
     public boolean restartFilter() {
-        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
+        Input.reinit(); // although not very performant but this is a fool proof way to make sure there is no buffer problems
         return Input.confirm("Do you want to restart the filter?");
     }
 
@@ -438,7 +438,7 @@ public class TeachingAssignmentUI implements Serializable {
     }
 
     public boolean continueFilter() {
-        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
+        Input.reinit(); // although not very performant but this is a fool proof way to make sure there is no buffer problems
         return Input.confirm("Do you want to continue filter?");
     }
 
@@ -782,6 +782,7 @@ public class TeachingAssignmentUI implements Serializable {
 
     public void removeSuccessful(String what, String assignedTo) {
         System.out.println("Successfully removed [" + what + "] assigned to [" + assignedTo + "]");
+        Input.reinit(); // although not very performant but this is a fool proof way to make sure there is no buffer problems
         Input.pause();
     }
 

@@ -22,8 +22,7 @@ public class Input {
      * @return
      */
     public static void cleanBuffer() {
-        // only clear the nextLine character if it has one
-        if (s.hasNextLine()) s.nextLine();
+        s.nextLine();
     }
 
     /**
