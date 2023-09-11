@@ -670,57 +670,65 @@ public class TeachingAssignmentUI implements Serializable {
                     tb.hasColumn("Age") ? "Remove column 'Age'" : "Add column 'Age'",
                     tb.hasColumn("Phone No.") ? "Remove column 'Phone No.'" : "Add column 'Phone No.'",
                     tb.hasColumn("Department") ? "Remove column 'Department'" : "Add column 'Department",
+                    tb.hasColumn("Salary") ? "Remove column 'Salary'" : "Add column 'Salary'",
                     showNumber ? "Disable data number" : "Show data number",
                     "Show all column",
                     "Done configuration"
                 }
             );
 
-            if (choice == 0 || choice == 7) {
+            if (choice == 0 || choice == 8) {
                 // choice is 5 means we want show, don't remove
-                if (tb.hasColumn("Tutor ID") && choice != 7)
+                if (tb.hasColumn("Tutor ID") && choice != 8)
                         tb.removeColumn("Tutor ID");
                 else
                     tb.addColumn("Tutor ID", tutorArrayList.map((Tutor t) -> (Integer)t.getId()).toArray(Integer.class));
             } 
             
-            if (choice == 1 || choice == 7) {
-                if (tb.hasColumn("Tutor Name") && choice != 7)
+            if (choice == 1 || choice == 8) {
+                if (tb.hasColumn("Tutor Name") && choice != 8)
                     tb.removeColumn("Tutor Name");
                 else
                     tb.addColumn("Tutor Name", tutorArrayList.map((Tutor t) -> t.getName()).toArray(String.class));
             } 
             
-            if (choice == 2 || choice == 7) {
-                if (tb.hasColumn("IC No.") && choice != 7)
+            if (choice == 2 || choice == 8) {
+                if (tb.hasColumn("IC No.") && choice != 8)
                     tb.removeColumn("IC. No.");
                 else
                     tb.addColumn("IC No.", tutorArrayList.map((Tutor t) -> t.getIcNO()).toArray(String.class));
             } 
             
-            if (choice == 3 || choice == 7) {
-                if (tb.hasColumn("Age") && choice != 7)
+            if (choice == 3 || choice == 8) {
+                if (tb.hasColumn("Age") && choice != 8)
                     tb.removeColumn("Age");
                 else
                     tb.addColumn("Age", tutorArrayList.map((Tutor t) -> (Integer) t.getAge()).toArray(Integer.class));
             } 
 
-            if (choice == 4 || choice == 7) {
-                if (tb.hasColumn("Phone No.") && choice != 7)
+            if (choice == 4 || choice == 8) {
+                if (tb.hasColumn("Phone No.") && choice != 8)
                     tb.removeColumn("Phone No.");
                 else
                     tb.addColumn("Phone No.", tutorArrayList.map((Tutor t) -> t.getPhoneNum()).toArray(String.class));
             } 
 
-            if (choice == 5 || choice == 7) {
-                if (tb.hasColumn("Department") && choice != 7)
+            if (choice == 5 || choice == 8) {
+                if (tb.hasColumn("Department") && choice != 8)
                     tb.removeColumn("Department");
                 else
                     tb.addColumn("Department", tutorArrayList.map((Tutor t) -> t.getDepartment()).toArray(String.class));
             } 
 
-            if (choice == 6 || choice == 7) {
-                showNumber = !showNumber || choice == 7;
+            if (choice == 6 || choice == 8) {
+                if (tb.hasColumn("Salary") && choice != 8)
+                    tb.removeColumn("Salary");
+                else
+                    tb.addColumn("Salary", tutorArrayList.map((Tutor t) -> "RM " + t.getSalary()).toArray(String.class));
+            } 
+
+            if (choice == 7 || choice == 8) {
+                showNumber = !showNumber || choice == 8;
             }
 
             if (choice == 8)
