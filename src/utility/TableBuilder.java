@@ -231,7 +231,7 @@ public class TableBuilder {
                 sb.append("#,");
             for (int i = 0; i < keys.length - 1; i++) // don't want include last one
                 sb.append(keys[i] + ",");
-            sb.append(keys[keys.length - 1]); // append the last one without the last comma
+            sb.append(keys[keys.length - 1] + "\n"); // append the last one without the last comma
         }
 
         for (int i = 0; i < dataLength; i++) { // don't want include last one
@@ -249,7 +249,7 @@ public class TableBuilder {
             String temp = tempObj == null ? "" : tempObj.toString();
             if (temp.contains(","))
                 temp = "\"" + temp + "\"";
-            sb.append(temp); // append the last one without the last comma
+            sb.append(temp + "\n"); // append the last one without the last comma
         }
 
         return sb.toString();
