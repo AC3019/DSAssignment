@@ -333,7 +333,7 @@ public class TeachingAssignmentUI implements Serializable {
     // allows wildcards
     public String getNameForTutorFilter() {
         printWildCardList();
-        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
+        Input.reinit(); // although not very performant but this is a fool proof way to make sure there is no buffer problems
         return Input.getString(
             "What is the tutor's name (can use wildcards for a wider search, case insensitive): ", 
             false
@@ -342,7 +342,7 @@ public class TeachingAssignmentUI implements Serializable {
 
     public String getIcNoForTutorFilter() {
         printWildCardList();
-        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
+        Input.reinit(); // although not very performant but this is a fool proof way to make sure there is no buffer problems
         return Input.getString(
             "What is the tutor's IC (can use wildcards for a wider search): ",
             false
@@ -364,13 +364,13 @@ public class TeachingAssignmentUI implements Serializable {
 
     public String getIdForCourseFilter() {
         printWildCardList();
-        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
+        Input.reinit(); // although not very performant but this is a fool proof way to make sure there is no buffer problems
         return Input.getString("Enter ID filter (can use wildcards for a wider search, case insensitive): ", false);
     }
 
     public String getNameForCourseFilter() {
         printWildCardList();
-        Input.cleanBuffer(); // always clean buffer before getting string, nvr know what happend before + alrd modified cleanBuffer to clean only when there is nextLine, so System.in won't be paused
+        Input.reinit(); // although not very performant but this is a fool proof way to make sure there is no buffer problems
         return Input.getString("Enter name filter (can use wildcards for a wider search, case insensitive): ", false);
     }
 
