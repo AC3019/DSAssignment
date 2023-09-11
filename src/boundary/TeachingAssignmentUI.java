@@ -94,13 +94,13 @@ public class TeachingAssignmentUI implements Serializable {
             case 1:
                 String ic = this.getIcNoForTutorFilter();
                 return tutors.filter(
-                    (Tutor t) -> this.convertWildCardToPattern(ic).matcher(t.getIcNO()).matches()
+                    (Tutor t) -> this.convertWildCardToPattern(ic).matcher(t.getIcNO()).find()
                 );
             
             case 2:
                 String name = this.getNameForTutorFilter();
                 return tutors.filter(
-                    (Tutor t) -> this.convertWildCardToPattern(name).matcher(t.getName()).matches()
+                    (Tutor t) -> this.convertWildCardToPattern(name).matcher(t.getName()).find()
                 );
             
             default:
@@ -123,12 +123,12 @@ public class TeachingAssignmentUI implements Serializable {
             case 0:
                 String id = this.getIdForCourseFilter();
                 return courses.filter(
-                    (Course c) -> this.convertWildCardToPattern(id).matcher(c.getId()).matches()
+                    (Course c) -> this.convertWildCardToPattern(id).matcher(c.getId()).find()
                 );
             case 1:
                 String name = this.getNameForCourseFilter();
                 return courses.filter(
-                    (Course c) -> this.convertWildCardToPattern(name).matcher(c.getName()).matches()
+                    (Course c) -> this.convertWildCardToPattern(name).matcher(c.getName()).find()
                 );
             
             case 2:
@@ -157,18 +157,18 @@ public class TeachingAssignmentUI implements Serializable {
             case 0:
                 String progCode = this.getProgCodeForTutGrpFilter();
                 return tutGrps.filter(
-                    (TutorialGroup t) -> this.convertWildCardToPattern(progCode).matcher(t.getProgrammeCode()).matches()
+                    (TutorialGroup t) -> this.convertWildCardToPattern(progCode).matcher(t.getProgrammeCode()).find()
                 );
             case 1:
                 String progName = this.getNameForCourseFilter();
                 return tutGrps.filter(
-                    (TutorialGroup t) -> this.convertWildCardToPattern(progName).matcher(t.getProgrammeName()).matches()
+                    (TutorialGroup t) -> this.convertWildCardToPattern(progName).matcher(t.getProgrammeName()).find()
                 );
             
             case 2:
                 String tutGrpCode = this.getTutGrpCodeForTutGrpFilter();
                 return tutGrps.filter(
-                    (TutorialGroup t) -> this.convertWildCardToPattern(tutGrpCode).matcher(t.getTutGrpCode()).matches()
+                    (TutorialGroup t) -> this.convertWildCardToPattern(tutGrpCode).matcher(t.getTutGrpCode()).find()
                 );
             
             default:
@@ -179,7 +179,11 @@ public class TeachingAssignmentUI implements Serializable {
     public Tutor selectTutorForCourse(Course c, ArrayList<Tutor> tutors, HashMap<Course, ArrayList<Tutor>> courseTutorMap) {
         int selection = this.getTutorChoice(
             tutors.filter(
-                (Tutor t) -> !courseTutorMap.get(c).contains(t)
+                (Tutor t) -> {
+                    if (courseTutorMap.get(c) == null)
+                        return true;
+                    return !courseTutorMap.get(c).contains(t);
+                }
             ).toArray(Tutor.class),
             "Tutors (Department: " + c.getDepartment() + ")",
             "Which tutor to assign for this course[" 
@@ -247,7 +251,7 @@ public class TeachingAssignmentUI implements Serializable {
         return Input.getChoice(
             prompt,
             tutors,
-            (Tutor t) -> t.getId() + " " + t.getName()
+            (Tutor t) -> t.getName()
         );
     }
 
@@ -284,8 +288,8 @@ public class TeachingAssignmentUI implements Serializable {
             "How do you want to decide which tutor to see: ",
             new String[] {
                 "Filter by ID",
-                "Filter by name",
                 "Filter by IC",
+                "Filter by name",
                 "Show me all of them"
             },
             (s) -> s
@@ -639,6 +643,8 @@ public class TeachingAssignmentUI implements Serializable {
                 "(" + t.getDepartment() + ")" + 
             "]";
         tb.printTable(showNumber, tableHeading);
+
+        Input.cleanBuffer();
         boolean wantToSaveToFile = Input.confirm("Do you want to export data to a file?");
         if (wantToSaveToFile) {
             this.saveToFile(tb, showNumber, tableHeading);
@@ -675,7 +681,7 @@ public class TeachingAssignmentUI implements Serializable {
                 if (tb.hasColumn("Tutor ID") && choice != 7)
                         tb.removeColumn("Tutor ID");
                 else
-                    tb.addColumn("Tutor ID", tutorArrayList.map((Tutor t) -> t.getId()).toArray(String.class));
+                    tb.addColumn("Tutor ID", tutorArrayList.map((Tutor t) -> (Integer)t.getId()).toArray(Integer.class));
             } 
             
             if (choice == 1 || choice == 7) {
@@ -734,6 +740,8 @@ public class TeachingAssignmentUI implements Serializable {
             "]";
         }
         tb.printTable(showNumber, tableHeading);
+
+        Input.cleanBuffer();
         boolean wantToSaveToFile = Input.confirm("Do you want to export data to a file?");
         if (wantToSaveToFile) {
             this.saveToFile(tb, showNumber, tableHeading);
@@ -800,6 +808,7 @@ public class TeachingAssignmentUI implements Serializable {
             "]";
         tb.printTable(showNumber, tableHeading);
 
+        Input.cleanBuffer();
         boolean wantToSaveToFile = Input.confirm("Do you want to export data to a file?");
         if (wantToSaveToFile) {
             this.saveToFile(tb, showNumber, tableHeading);

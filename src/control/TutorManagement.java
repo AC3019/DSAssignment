@@ -17,6 +17,7 @@ import java.io.Serializable;
 import boundary.TutorManagementUI;
 import utility.TableBuilder;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.time.LocalDateTime;
 
 public class TutorManagement implements Serializable {
@@ -40,7 +41,9 @@ public class TutorManagement implements Serializable {
     }
 
     public Tutor[] getTutors() {
-        return this.tutors.getValues(Tutor.class);
+        Tutor[] ts = this.tutors.getValues(Tutor.class);
+        System.out.println(Arrays.toString(ts));
+        return ts;
     }
 
     public void displayMenu(TeachingAssignment ta) {

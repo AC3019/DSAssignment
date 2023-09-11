@@ -96,13 +96,14 @@ public class TableBuilder {
         if (showNumber) {
             // calculate the number column size
             numberColumnSize = String.valueOf(totalRows).length();
-            rowLen += numberColumnSize + 2; // + 2 for surrounding space in number column
+            rowLen += numberColumnSize + 3; // + 2 for surrounding space in number column, +1 for the divider
         }
 
         // calculate every column's size
         for (int i: spaceForColumn) {
             rowLen += i + 3; // + 1 for the dividers among the columns, + 2 for the padding of the columns
         }
+        rowLen -= 1;
 
         // table heading
         if (!tableHeading.isBlank())

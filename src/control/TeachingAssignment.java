@@ -29,8 +29,9 @@ public class TeachingAssignment implements Serializable {
         ArrayList<Tutor> filtered = tutors.filter(
             (Tutor t) -> {
                 ArrayList<Tutor> cts = this.courseTutorMap.get(c);
-                if (cts == null)
-                    return false;
+                if (cts == null) 
+                    return true;
+                
                 return !cts.contains(t) && t.getDepartment().equals(c.getDepartment());
             }
         );

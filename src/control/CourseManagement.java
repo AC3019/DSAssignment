@@ -11,7 +11,9 @@ import entity.Course;
  */
 public class CourseManagement implements Serializable {
     private ArrayList<Course> courses = new ArrayList<>(new Course[] {
-
+        new Course("BACS 2023", "Data Structures and Algorithms", DepartmentManagement.departments[0], 3),
+        new Course("BACS 1023", "Introduction to Computing", DepartmentManagement.departments[0], 3),
+        new Course("BACS 1014", "Introduction to Computer Systems", DepartmentManagement.departments[0], 4),
     });
     
     public ArrayList<Course> getCourses() {
