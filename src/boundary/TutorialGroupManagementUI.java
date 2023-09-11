@@ -8,6 +8,7 @@ import java.io.Serializable;
 import adt.ArrayList;
 import entity.Student;
 import entity.TutorialGroup;
+import utility.FileStringWriter;
 import utility.Input;
 import utility.TableBuilder;
 
@@ -91,19 +92,18 @@ public class TutorialGroupManagementUI implements Serializable {
     }
     
     public String reportChoice(){
-        String choice = Input.getString("Did you want to generate the result into report(Y/N): ", false);
+        String choice = Input.getString("Did you want to save the result into file(Y/N): ", false);
         return choice;
     }
     
     public String reportTitle(){
         String title = Input.getString("Please enter the report title: ", false);
-        return title;
+        return title + "         " + "Time Generated: " + java.time.LocalTime.now();
     }
     
     public void printReportTitle(String title){
         System.out.println();
         System.out.println();
-        System.out.println(title + "         " + "Time Generated: " + java.time.LocalTime.now());
     }
         
     private int getTutGrpChoice(String prompt, ArrayList<TutorialGroup> tutGrp) {
@@ -359,7 +359,7 @@ public class TutorialGroupManagementUI implements Serializable {
     }
 
 //output for print table
-    public void printAllSelectedTutGrp(ArrayList<TutorialGroup> tutGrp){
+    public TableBuilder printAllSelectedTutGrp(ArrayList<TutorialGroup> tutGrp){
         TableBuilder tb = new TableBuilder();
         String[] progCodes = tutGrp.map((TutorialGroup tutGrps) -> tutGrps.getProgrammeCode()).toArray(String.class);
         tb.addColumn("Program Code", progCodes);
@@ -370,10 +370,11 @@ public class TutorialGroupManagementUI implements Serializable {
         Integer[] numOfStudents = tutGrp.map((TutorialGroup tutGrps) -> tutGrps.getStudent().getNumberOfEntries()).toArray(Integer.class);
         tb.addColumn("Number of Students", numOfStudents);
         tb.printTable(true);
+        return tb;
     }
     
     //print all selected student
-    public void displayAllSelectedStudent(ArrayList<Student> stud) {
+    public TableBuilder displayAllSelectedStudent(ArrayList<Student> stud) {
         TableBuilder tb = new TableBuilder();
         String[] ids = stud.map((Student s) -> s.getStudentID()).toArray(String.class);
         tb.addColumn("Student ID", ids);
@@ -386,6 +387,18 @@ public class TutorialGroupManagementUI implements Serializable {
         Integer[] marks = stud.map((Student s) -> s.getStudentDemeritMark()).toArray(Integer.class);
         tb.addColumn("Student Demerit Mark", marks);
         tb.printTable(true);
+        return tb;
+    }
+
+    public void saveFile(TableBuilder tb){
+        char reportChoice;
+        do{
+            reportChoice = this.reportChoice().toUpperCase().charAt(0);
+        }while(reportChoice != 'Y' && reportChoice != 'N');
+        if (reportChoice == 'Y'){
+            String title = this.reportTitle();
+            this.saveToFile(tb, true, title);
+        }
     }
 
 //function output
@@ -405,5 +418,37 @@ public class TutorialGroupManagementUI implements Serializable {
     public void errorInput(){
         System.out.println("Only 'Y' or 'N' will be accepted. Please try again.");
     }
+
+//save to file
+    private void saveToFile(TableBuilder tb, boolean showNumber, String possibleReportTitle) {
+        // ask want save csv or report
+        int choice = Input.getChoice("Enter your choice: ", new String[] {
+            "Generate CSV file (includes field names as header row)",
+            "Save report to txt file"
+        }, (s) -> s);
+
+        Input.cleanBuffer(); // use cleanBuffer here because is very certain this is getLine after getInt, so cleanBuffer will be more performant and don't need to be very fool proof and explicit
+        String fileName = Input.getString("Enter filename (" + (choice == 0 ? ".csv" : ".txt") + " will be appended to end of file name): ", false);
+
+        String dataToWrite = choice == 0 ? tb.generateCSVString(showNumber, true) : tb.generateTableString(showNumber, possibleReportTitle);
+
+        boolean success = false;
+        if (choice == 0) {
+            success = FileStringWriter.writeToCSV(fileName, dataToWrite);
+        } else {
+            success = FileStringWriter.writeReportToTxt(fileName, dataToWrite);
+        }
+
+        if (success) {
+            System.out.println(
+                "Successfully written to file, the file is located at " + 
+                (choice == 0 ? "export/" : "generated_reports/") + 
+                fileName + (choice == 0 ? ".csv" : ".txt")
+            );
+        } else {
+            System.out.println("Failed to write to file, please try again later");
+        }
+    }
+
 
 }

@@ -592,10 +592,4 @@ public class TeachingAssignment implements Serializable {
             }
         }
     }
-
-    public static void main(String[] args) {
-        TeachingAssignment ta = new TeachingAssignment();
-        // temp
-        ta.main(new TutorManagement(), new TutorialGroupManagement(), new CourseManagement());
-    }
 }

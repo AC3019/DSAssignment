@@ -7,7 +7,10 @@ import adt.*;
 import boundary.TutorialGroupManagementUI;
 import entity.Student;
 import entity.TutorialGroup;
+import utility.TableBuilder;
+
 import java.io.Serializable;
+import java.util.regex.Pattern;
 /**
  *
  * @author Neoh Soon Chee
@@ -20,9 +23,16 @@ public class TutorialGroupManagement implements Serializable {
     public ArrayList<TutorialGroup> getTutorialGroups() {
         return this.tutGrpList;
     }
+
+    public TutorialGroupManagement() {
+        TutorialGroup tg1 = new TutorialGroup("RSW", "Degree in Software Engineering", "230101");
+        Pattern.compile("\\d{2}((0[1-9])|(1[1-2]))\\d{2}").matcher("user Input").matches();
+
+        tutGrpList.insert(tg1);
+    }
     
     //main menu display for select function
-    public void displayTutGrpManagement() {
+    public void displayTutGrpManagement(TeachingAssignment ta) {
         display.header();
         int choice = 999;
         do {
@@ -32,7 +42,7 @@ public class TutorialGroupManagement implements Serializable {
                     createTutGrp();
                     break;
                 case 1:
-                    removeTutGrp();
+                    removeTutGrp(ta);
                     break;
                 case 2:
                     sortTutGrpList();
@@ -71,7 +81,7 @@ public class TutorialGroupManagement implements Serializable {
     }
     
     //function to delete a tutGrp
-    public TutorialGroup removeTutGrp(){
+    public void removeTutGrp(TeachingAssignment ta){
         display.header();
         if(!tutGrpList.isEmpty()){
             ArrayList<TutorialGroup> passingList = new ArrayList<>();
@@ -111,25 +121,27 @@ public class TutorialGroupManagement implements Serializable {
                 //}
                 //display final version of passing list
                 display.passingList(passingList.get(passingList.getNumberOfEntries()-1));
-                display.displayAllSelectedStudent(studentList);
+                // display.displayAllSelectedStudent(studentList);
                 //ask for report needed?
-                char reportChoice;
-                do{
-                    reportChoice = display.reportChoice().toUpperCase().charAt(0);
-                    while(reportChoice != 'Y' && reportChoice != 'N'){
-                        display.errorInput();
-                        reportChoice = display.reportChoice().toUpperCase().charAt(0);
-                    }     
-                }while(reportChoice != 'Y' && reportChoice != 'N');
-                if (reportChoice == 'Y'){
-                    display.printReportTitle(display.reportTitle());
-                    display.displayAllSelectedStudent(passingList.get(passingList.getNumberOfEntries()-1).getStudent());
-                }
+                // char reportChoice;
+                // do{
+                    // reportChoice = display.reportChoice().toUpperCase().charAt(0);
+                    // while(reportChoice != 'Y' && reportChoice != 'N'){
+                        // display.errorInput();
+                        // reportChoice = display.reportChoice().toUpperCase().charAt(0);
+                    // }     
+                // }while(reportChoice != 'Y' && reportChoice != 'N');
+                // if (reportChoice == 'Y'){
+                    // display.printReportTitle(display.reportTitle());
+                    // display.displayAllSelectedStudent(passingList.get(passingList.getNumberOfEntries()-1).getStudent());
+                    display.saveFile(display.displayAllSelectedStudent(studentList));
+                    // display.saveFile(display.displayAllSelectedStudent(passingList.get(passingList.getNumberOfEntries()-1).getStudent()));
+                //} else {
+                    ta.cleanUp(tutGrpRemoved);
+                //}
             }
-            return tutGrpRemoved;
         }else
             display.noTutGrp();
-        return null;
     }
     
     public void sortTutGrpList(){
@@ -154,7 +166,7 @@ public class TutorialGroupManagement implements Serializable {
                         if(!tutGrpList.isEmpty()){
                             //print in table form
                             display.afterSort();
-                            display.printAllSelectedTutGrp(tutGrpList);
+                            //display.printAllSelectedTutGrp(tutGrpList);
                             display.cleanBuffer();
                         }else{
                             display.noTutGrp();
@@ -165,7 +177,7 @@ public class TutorialGroupManagement implements Serializable {
                         if(!tutGrpList.isEmpty()){
                             //print in table form
                             display.afterSort();
-                            display.printAllSelectedTutGrp(tutGrpList);
+                            // display.printAllSelectedTutGrp(tutGrpList);
                         }else{
                             display.noTutGrp();
                         }
@@ -173,18 +185,19 @@ public class TutorialGroupManagement implements Serializable {
                     display.errorChoice();
                 }
             }
-            char report;
-            do{
-                report = display.reportChoice().toUpperCase().charAt(0);
-                while(report != 'Y' && report != 'N'){
-                    display.errorInput();
-                    report = display.reportChoice().toUpperCase().charAt(0);
-                }
-            }while(report != 'Y' && report != 'N');
-            if (report == 'Y'){
-                display.printReportTitle(display.reportTitle());
-                display.printAllSelectedTutGrp(tutGrpList);
-            }
+            //char report;
+            //do{
+                //report = display.reportChoice().toUpperCase().charAt(0);
+                //while(report != 'Y' && report != 'N'){
+                    //display.errorInput();
+                    //report = display.reportChoice().toUpperCase().charAt(0);
+                //}
+            //}while(report != 'Y' && report != 'N');
+            //if (report == 'Y'){
+                //display.printReportTitle(display.reportTitle());
+                //display.printAllSelectedTutGrp(tutGrpList);
+                display.saveFile(display.printAllSelectedTutGrp(tutGrpList));
+            //}
         }else{
             display.noTutGrp();
         }
@@ -407,24 +420,26 @@ public class TutorialGroupManagement implements Serializable {
                     }
                     selectedStudentList = tutGrp.getStudent().filter((Student item) -> item.getStudentGender().equals(gender));
                     display.afterFilter();
-                    display.displayAllSelectedStudent(selectedStudentList);                  
+                    // display.displayAllSelectedStudent(selectedStudentList);                  
                 }else
                     selectedStudentList = tutGrp.getStudent();
                 //print report function
-                char reportChoice;
-                do{
-                    if(filterDecision == 'Y')
-                        display.cleanBuffer();
-                    reportChoice = display.reportChoice().toUpperCase().charAt(0);
-                    while(reportChoice != 'Y' && reportChoice != 'N'){
-                        display.errorInput();
-                        reportChoice = display.reportChoice().toUpperCase().charAt(0);
-                    }
-                }while(reportChoice != 'Y' && reportChoice != 'N');
-                if (reportChoice == 'Y'){
-                    display.printReportTitle(display.reportTitle());
-                    display.displayAllSelectedStudent(selectedStudentList);
-                }
+                //char reportChoice;
+                //do{
+                    //if(filterDecision == 'Y')
+                        //display.cleanBuffer();
+                    //reportChoice = display.reportChoice().toUpperCase().charAt(0);
+                    //while(reportChoice != 'Y' && reportChoice != 'N'){
+                        //display.errorInput();
+                        //reportChoice = display.reportChoice().toUpperCase().charAt(0);
+                    //}
+                //}while(reportChoice != 'Y' && reportChoice != 'N');
+                //if (reportChoice == 'Y'){
+                    //display.displayAllSelectedStudent(selectedStudentList);
+                    display.cleanBuffer();
+                    display.saveFile(display.displayAllSelectedStudent(selectedStudentList));
+                    //display.printReportTitle(display.reportTitle());
+                //}
             }else{
                 display.noStudent();
             }
@@ -486,24 +501,10 @@ public class TutorialGroupManagement implements Serializable {
         }
         //display the filter result
         if (!selectedTutGrpList.isEmpty()){
-            display.printAllSelectedTutGrp(selectedTutGrpList);//display the result
+            TableBuilder tb = display.printAllSelectedTutGrp(selectedTutGrpList);//display the result
             //ask for report needed?
-            char reportChoice;
-            do{
-                reportChoice = display.reportChoice().toUpperCase().charAt(0);
-            }while(reportChoice != 'Y' && reportChoice != 'N');
-            if (reportChoice == 'Y'){
-                display.printReportTitle(display.reportTitle());
-                display.printAllSelectedTutGrp(selectedTutGrpList);
-            }
+           display.saveFile(tb); 
         }else
             display.noTutGrpFound();
-    }
-        
-    //main method
-    public static void main(String[] args) {
-        TutorialGroupManagement tutGrpManagement = new TutorialGroupManagement();
-        tutGrpManagement.displayTutGrpManagement();
-        //display.displayAllStudent(tutGrpManagement.studentList.toArray(Student.class));
     }
 }

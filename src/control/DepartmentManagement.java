@@ -6,6 +6,11 @@ package control;
 public class DepartmentManagement {
     public static String[] departments = new String[] {
         "FOCS",
-        "FAFB"
+        "FAFB",
+        "FOET",
+        "FSSH",
+        "FCCI",
+        "FOAS",
+        "FOBE"
     };
 }

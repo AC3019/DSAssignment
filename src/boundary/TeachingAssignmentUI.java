@@ -807,6 +807,7 @@ public class TeachingAssignmentUI implements Serializable {
     }
 
     // ui to save generated stuff to a file, used only internally
+    // reportFor is what is being generated
     private void saveToFile(TableBuilder tb, boolean showNumber, String possibleReportTitle) {
         // ask want save csv or report
         int choice = Input.getChoice("Enter your choice: ", new String[] {
@@ -815,7 +816,7 @@ public class TeachingAssignmentUI implements Serializable {
         }, (s) -> s);
 
         Input.cleanBuffer(); // use cleanBuffer here because is very certain this is getLine after getInt, so cleanBuffer will be more performant and don't need to be very fool proof and explicit
-        String fileName = Input.getString("Enter filename (" + (choice == 0 ? ".csv" : ".txt") + " will be appended to end of file name): ");
+        String fileName = Input.getString("Enter filename (" + (choice == 0 ? ".csv" : ".txt") + " will be appended to end of file name): ", false);
 
         String dataToWrite = choice == 0 ? tb.generateCSVString(showNumber, true) : tb.generateTableString(showNumber, possibleReportTitle);
 

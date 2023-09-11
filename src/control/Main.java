@@ -10,6 +10,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import boundary.MainUI;
+
 /**
  * Implements serializable to allow saving of snapshots
  * @author xuanbin, Neoh Soon Chee, yong
@@ -22,14 +24,29 @@ public class Main implements Serializable {
     private TeachingAssignment teachingAssignmentControl = new TeachingAssignment();
 
     public static void main(String[] args) {
+        MainUI ui = new MainUI();
         Main m = new Main(); // to be able to save snapshot
-        m.tutorManagementControl.displayMenu(m.teachingAssignmentControl);
 
+        while (true) {
+            int choice = ui.getMenuChoice();
+            switch (choice) {
+                case 0:
+                    m.tutorManagementControl.displayMenu(m.teachingAssignmentControl);
+                    break;
+                case 1:
+                    m.tutorialaGroupManagementControl.displayTutGrpManagement(m.teachingAssignmentControl);
+                    break;
+                case 2:
+                    m.teachingAssignmentControl.main(m.tutorManagementControl, m.tutorialaGroupManagementControl, m.courseManagementControl);
+                    break;
+                case 3: // bye bye
+                    return;
+            }
+        }
         // STUB, saving system snapshot
-        m.saveSnapshot(m);
+        // m.saveSnapshot(m);
         // STUB, loading system snapshot
-        m = m.loadSnapshot();
-        System.out.println("I hate Netbeans, faQ");
+        // m = m.loadSnapshot();
     }
     
     // TODO: make save and load snapshot functions

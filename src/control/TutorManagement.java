@@ -25,19 +25,18 @@ public class TutorManagement implements Serializable {
     TutorManagementUI tmu = new TutorManagementUI();
     private boolean dataChanged = false;
 
+    public TutorManagement() {
+        Tutor t1 = new Tutor("Yong Yi Kit", DepartmentManagement.departments[0], 'M', 20, "0123456789", "001010-07-0441", 50000);
+
+        this.tutors.put(t1.getId(), t1);
+    }
+
     public boolean isDataChanged() {
         return this.dataChanged;
     }
 
     public void setDataChanged(boolean dataChanged) {
         this.dataChanged = dataChanged;
-    }
-
-        public static void main(String[] args) {
-        TutorManagement tm = new TutorManagement();
-        TeachingAssignment ta = new TeachingAssignment();
-        tm.displayMenu(ta);
-
     }
 
     public Tutor[] getTutors() {
