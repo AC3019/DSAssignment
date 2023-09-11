@@ -95,7 +95,7 @@ public class TableBuilder {
         
         if (showNumber) {
             // calculate the number column size
-            numberColumnSize = String.valueOf(totalRows).length();
+            numberColumnSize = String.valueOf(totalRows).length() - 1; // index start from 0
             rowLen += numberColumnSize + 3; // + 2 for surrounding space in number column, +1 for the divider
         }
 
@@ -108,7 +108,7 @@ public class TableBuilder {
         // table heading
         if (!tableHeading.isBlank())
             appendWithNewLine.accept(
-                tableHeading.length() >= numberColumnSize 
+                tableHeading.length() >= rowLen 
                     ? tableHeading : Formatter.centerString(tableHeading, rowLen + 1) // rowLen + 1 for the space in front
             );
 
