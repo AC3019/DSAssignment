@@ -20,13 +20,14 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     private String phoneNum;
     private String icNo;
     private static int currentID = 1;
+    private int salary;
 
     // default constructor
     public Tutor() {
     }
 
     public Tutor(int id,String name, String department, char gender, /* TutorialGroup tutorialGroup */int age,
-            String phoneNum,String icNo) {
+            String phoneNum,String icNo,int salary) {
         this.id=id;
         this.name = name;
         this.department = department;
@@ -35,21 +36,23 @@ public class Tutor implements Comparable<Tutor>, Serializable{
         this.age = age;
         this.phoneNum = phoneNum;
         this.icNo=icNo;
+        this.salary=salary;
 
     }
     
      public Tutor( String name, String department, char gender, /* TutorialGroup tutorialGroup */int age,
-            String phoneNum,String icNo) {
+            String phoneNum,String icNo,int salary) {
        
-        this(currentID++, name, department, gender, age, phoneNum, icNo);
+        this(currentID++, name, department, gender, age, phoneNum, icNo,salary);
     }
     
 
-    public Tutor (int id,String name, String department,String phoneNum){
+    public Tutor (int id,String name, String department,String phoneNum,int salary){
         this.id=id;
         this.name=name;
         this.department=department;
         this.phoneNum=phoneNum;
+        this.salary=salary;
     }
     public String getName() {
         return name;
@@ -64,7 +67,12 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     public char getGender() {
         return gender;
     }
-
+    public int getSalary(){
+        return salary;
+    }
+    public void setSalary(int salary){
+        this.salary=salary;
+    }
     public int getAge() {
         return age;
 
@@ -111,8 +119,8 @@ public class Tutor implements Comparable<Tutor>, Serializable{
 
     public String toString() {
         return String.format(
-                "Tutor's id: %d\nTutor's name:%s\nTutor's department:%s\nTutor's gender: %s\nTutor's age:%d\nTutor's phone num:%s\nTutor's IcNo:%s\n ",
-                id, name, department, gender, age, phoneNum, icNo);
+                "Tutor's id: %d\nTutor's name:%s\nTutor's department:%s\nTutor's gender: %s\nTutor's age:%d\nTutor's phone num:%s\nTutor's IcNo:%s\nTutor's salary: %d\n ",
+                id, name, department, gender, age, phoneNum, icNo,salary);
     }
 
     @Override

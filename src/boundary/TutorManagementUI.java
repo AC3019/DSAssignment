@@ -85,6 +85,7 @@ public class TutorManagementUI implements Serializable {
         Matcher m;
         String regexIc="\\d{6}-\\d{2}-\\d{4}";
         Pattern pattern1=Pattern.compile(regexIc);
+        int salary;
         //= pattern.matcher(phoneNum);
         Matcher m1;
         do {
@@ -103,6 +104,8 @@ public class TutorManagementUI implements Serializable {
 
             icNo = Input.getString("Ic No (xxxxxx-xx-xxxx):", false);
             m1=pattern1.matcher(icNo);
+            salary=Input.getInt("Enter your salary: ");
+            Input.cleanBuffer();
             // validate gender
             if (Character.valueOf(gender).compareTo("M".charAt(0)) != 0
                     && Character.valueOf(gender).compareTo("F".charAt(0)) != 0) {
@@ -122,7 +125,7 @@ public class TutorManagementUI implements Serializable {
 
         } while (invalidInput);
 
-        Tutor tutorObj = new Tutor(name, department, gender, age, phoneNum, icNo);
+        Tutor tutorObj = new Tutor(name, department, gender, age, phoneNum, icNo,salary);
         return tutorObj;
     }
 
@@ -203,6 +206,7 @@ public class TutorManagementUI implements Serializable {
                 new String[]{
                     "Sort by name in alphabetical order:",
                     "Sort by tutor's id in ascending order:",
+                    "Sort by tutor's salary in descending order: ",
                     "Exit "
 
                 },

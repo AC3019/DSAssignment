@@ -278,7 +278,7 @@ public class TutorManagement implements Serializable {
                                         break;
                                     } else {
                                         //tmu.cleanBuffer();
-                                        newDepartment = tmu.getNewDepartment();
+                                        newDepartment = tmu.getDepartment();
                                     }
                                 } while (tutor.getDepartment().equals(newDepartment));
                                 tutor.setDepartment(newDepartment);
@@ -292,6 +292,7 @@ public class TutorManagement implements Serializable {
                             tmu.printPrompt("Your current phone Number is " + tutor.getPhoneNum());
 
                             newPhoneNum = tmu.getNewPhoneNum();
+                            
                             if (tutor.getPhoneNum().equals(newPhoneNum)) {
                                 tmu.printPrompt("pls enter a new phone num");
                             } else {
@@ -351,8 +352,16 @@ public class TutorManagement implements Serializable {
                             tmu.printKey(t);
                         }
                         break;
-                    
                     case 2:
+                        adt.ArrayList<Tutor> arl1 = new adt.ArrayList<>(this.tutors.getValues(Tutor.class));
+                        
+                      arl1.sort((Tutor t2, Tutor t1) -> t1.getSalary() - t2.getSalary());
+                      for (Tutor t : arl1) {
+                            tmu.printKey(t);
+                        }
+                        break;
+
+                    case 3:
                         break;
                     default:
                         tmu.invalidSwitchChoice();
@@ -525,6 +534,8 @@ public class TutorManagement implements Serializable {
             tb.addColumn("Tutor Contact Number", ts.map((t) -> t.getPhoneNum()).toArray(String.class));
             tb.addColumn("Tutor Gender", ts.map((t) -> t.getGender()).toArray(Character.class));
             tb.addColumn("Tutor Age", ts.map((t) -> t.getAge()).toArray(Integer.class));
+            tb.addColumn("Tutor Salary", ts.map((t) -> t.getSalary()).toArray(Integer.class));
+
         } else {
             tmu.printPrompt("No tutor inside the list");
         }
