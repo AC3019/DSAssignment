@@ -26,9 +26,13 @@ public class TutorialGroupManagement implements Serializable {
 
     public TutorialGroupManagement() {
         TutorialGroup tg1 = new TutorialGroup("RSW", "Degree in Software Engineering", "230101");
-        Pattern.compile("\\d{2}((0[1-9])|(1[1-2]))\\d{2}").matcher("user Input").matches();
+        //Pattern.compile("\\d{2}((0[1-9])|(1[1-2]))\\d{2}").matcher("user Input").matches();
 
         tutGrpList.insert(tg1);
+        Student s1 = new Student("2205","James",21,"Male");
+        Student s2 = new Student("2205","Nicole",22,"Female");
+        tutGrpList.get(0).getStudent().insert(s1);
+        tutGrpList.get(0).getStudent().insert(s2);
     }
     
     //main menu display for select function

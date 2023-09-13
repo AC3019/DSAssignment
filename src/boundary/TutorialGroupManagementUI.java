@@ -8,6 +8,7 @@ import java.io.Serializable;
 import adt.ArrayList;
 import entity.Student;
 import entity.TutorialGroup;
+import java.util.regex.Pattern;
 import utility.FileStringWriter;
 import utility.Input;
 import utility.TableBuilder;
@@ -50,7 +51,12 @@ public class TutorialGroupManagementUI implements Serializable {
     public TutorialGroup createTutGrp(){
         String programmeCode = Input.getString("Please enter the programme code for the tutorial group: ", false);
         String programmeName = Input.getString("Please enter the name of the programme: ",false);
-        String tutGrpCode = Input.getString("Please enter the year, month and group number of the tutorial group for tutorial group code(230101): ", false); 
+        String tutGrpCode;
+        do{
+            tutGrpCode = Input.getString("Please enter the year, month and group number of the tutorial group for tutorial group code(Year: 2023 Month: 01 Group: 01 -> 230101): ", false);
+            if(!Pattern.compile("\\d{2}((0[1-9])|(1[1-2]))\\d{2}").matcher(tutGrpCode).matches())
+                System.out.println("Invalid format for the tutorial group code is enter. Please reinput the tutorial group code according the format.");
+        }while(!Pattern.compile("\\d{2}((0[1-9])|(1[1-2]))\\d{2}").matcher(tutGrpCode).matches()); 
         programmeCode = programmeCode.toUpperCase();
         return new TutorialGroup(programmeCode, programmeName, tutGrpCode);
     }
@@ -117,7 +123,7 @@ public class TutorialGroupManagementUI implements Serializable {
     
     //create a new student obj
     public Student addStudent(){
-        String studentID = Input.getString("Please enter the intake year and month for student ID of the student(Year: 2022 Month: 01 -> 2201): ", false);
+        String studentID = Input.getString("Please enter the intake year and month for student ID of the student(Year: 2023 Month: 01 -> 2301): ", false);
         String name = Input.getString("Please enter the name of the student: ", false);
         int age = Input.getInt("Please enter the age of the student: ", 0, 120);
         Input.cleanBuffer();
