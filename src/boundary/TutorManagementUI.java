@@ -17,7 +17,9 @@ import java.time.format.DateTimeFormatter;
 
 import java.io.Serializable;
 import java.util.Scanner;
+import utility.FileStringWriter;
 import utility.Input;
+import utility.TableBuilder;
 
 public class TutorManagementUI implements Serializable {
 
@@ -247,17 +249,20 @@ public class TutorManagementUI implements Serializable {
         System.out.println(e);
     }
 
-       public void getReportTitle() {
+       public String getReportTitle() {
         String title = Input.getString("What report title do you want to set: ", false);
         System.out.print("\t\t\t\t"+title);
+        return("\t\t\t\t"+title);
     }
 
     public LocalDateTime printDateTime(LocalDateTime e) {
         return (e);
     }
 
-    public void printFormatDateTime(String e) {
-        System.out.print( "\t\t"+ e);
+    public String printFormatDateTime(String e) {
+       String x= getReportTitle();
+        System.out.print( "\t\t\t"+ e);
+        return ( x+"\t\t"+ e);
     }
 
     public void cleanBuffer() {
@@ -296,6 +301,36 @@ public class TutorManagementUI implements Serializable {
     }
     public char wantToContinueFilter() {
         return Character.toUpperCase(Input.getChar("Do you want to continue filter on second criteria based on above result(Y/N)?"));
+    }
+    public void saveToFile(TableBuilder tb, boolean showNumber, String possibleReportTitle) {
+        // ask want save csv or report
+        int choice = Input.getChoice("Enter your choice: ", new String[] {
+            "Generate CSV file (includes field names as header row)",
+            "Save report to txt file"
+        }, (s) -> s);
+
+        Input.cleanBuffer(); // use cleanBuffer here because is very certain this is getLine after getInt, so cleanBuffer will be more performant and don't need to be very fool proof and explicit
+        String fileName = Input.getString("Enter filename (" + (choice == 0 ? ".csv" : ".txt") + " will be appended to end of file name): ", false);
+
+        String dataToWrite = choice == 0 ? tb.generateCSVString(showNumber, true) : tb.generateTableString(showNumber, possibleReportTitle);
+
+        boolean success = false;
+        if (choice == 0) {
+            success = FileStringWriter.writeToCSV(fileName, dataToWrite);
+        } else {
+            success = FileStringWriter.writeReportToTxt(fileName, dataToWrite);
+        }
+
+        if (success) {
+            System.out.println(
+                "Successfully written to file, the file is located at " + 
+                (choice == 0 ? "export/" : "generated_reports/") + 
+                fileName + (choice == 0 ? ".csv" : ".txt")
+            );
+            Input.pause();
+        } else {
+            System.out.println("Failed to write to file, please try again later");
+        }
     }
 
 }
