@@ -95,7 +95,7 @@ public class TableBuilder {
         
         if (showNumber) {
             // calculate the number column size
-            numberColumnSize = String.valueOf(totalRows).length() - 1; // index start from 0
+            numberColumnSize = String.valueOf(totalRows - 1).length(); // index start from 0
             rowLen += numberColumnSize + 3; // + 2 for surrounding space in number column, +1 for the divider
         }
 
