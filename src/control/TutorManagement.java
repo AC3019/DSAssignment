@@ -518,18 +518,20 @@ public class TutorManagement implements Serializable {
     public void getTotalNumOfTutor() {
         tmu.printPrompt("The total number of tutors are " + tutors.size());
     }
-
+    
     public void generateReport() {
         ArrayList<Tutor> ts = new ArrayList(tutors.getValues(Tutor.class));
         TableBuilder tb = new TableBuilder();
         LocalDateTime obj = LocalDateTime.now();
         DateTimeFormatter myObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         String formattedDate = obj.format(myObj);
-
+       
         if (tutors.size() > 0) {
             tmu.getReportTitle();
-            tmu.printFormatDateTime(formattedDate);
+           // tmu.printFormatDateTime(formattedDate);
             tmu.printEmptyLine();
+            //tmu.saveFile(tb);
+            
             tb.addColumn("Tutor ID", ts.map((t) -> String.valueOf(t.getId())).toArray(String.class));
             tb.addColumn("Tutor Name", ts.map((t) -> t.getName()).toArray(String.class));
             tb.addColumn("Tutor Department", ts.map((t) -> t.getDepartment()).toArray(String.class));
@@ -537,6 +539,7 @@ public class TutorManagement implements Serializable {
             tb.addColumn("Tutor Gender", ts.map((t) -> t.getGender()).toArray(Character.class));
             tb.addColumn("Tutor Age", ts.map((t) -> t.getAge()).toArray(Integer.class));
             tb.addColumn("Tutor Salary", ts.map((t) -> t.getSalary()).toArray(Integer.class));
+            tmu.saveToFile(tb, true,tmu.printFormatDateTime(formattedDate) );
 
         } else {
             tmu.printPrompt("No tutor inside the list");
