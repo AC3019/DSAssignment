@@ -248,21 +248,26 @@ public class TutorManagementUI implements Serializable {
     public void printPrompt(String e) {
         System.out.println(e);
     }
-
+        /*
        public String getReportTitle() {
         String title = Input.getString("What report title do you want to set: ", false);
-        System.out.print("\t\t\t\t"+title);
-        return("\t\t\t\t"+title);
+        //System.out.print("\t\t\t\t"+title);
+        return("\t\t"+title);
     }
+*/
+
 
     public LocalDateTime printDateTime(LocalDateTime e) {
         return (e);
     }
 
     public String printFormatDateTime(String e) {
-       String x= getReportTitle();
+         String title = Input.getString("What report title do you want to set: ", false);
+        System.out.print(title);
+       //String x= getReportTitle();
         System.out.print( "\t\t\t"+ e);
-        return ( x+"\t\t"+ e);
+        System.out.println();
+        return ( title + "\t\t\t"+ e);
     }
 
     public void cleanBuffer() {

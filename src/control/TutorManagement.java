@@ -527,8 +527,8 @@ public class TutorManagement implements Serializable {
         String formattedDate = obj.format(myObj);
        
         if (tutors.size() > 0) {
-            tmu.getReportTitle();
-           // tmu.printFormatDateTime(formattedDate);
+           // String x=tmu.getReportTitle();
+           // String x=tmu.printFormatDateTime(formattedDate);
             tmu.printEmptyLine();
             //tmu.saveFile(tb);
             
