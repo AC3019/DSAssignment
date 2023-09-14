@@ -203,7 +203,6 @@ public class TutorManagement implements Serializable {
             continueInput = tmu.wantToContinue();
             while (continueInput != 'Y' && continueInput != 'N') {
                 tmu.continueMsgError();
-                //Input.cleanBuffer();
                 continueInput = tmu.wantToContinue();
             }
                 }while (continueInput == 'Y');
@@ -240,7 +239,6 @@ public class TutorManagement implements Serializable {
                         case 0:
                             tmu.printPrompt("Your current name is " + tutor.getName());
                             newName = tmu.getNewName();
-                           // tmu.cleanBuffer();
                             if (tutor.getName().equals(newName)) {
                                 tmu.printPrompt("Please enter a new name... amend fail");
                                 //prompt user error msg if ammend using the same name 
@@ -263,7 +261,6 @@ public class TutorManagement implements Serializable {
                         case 1:
                             tmu.printPrompt("Your current department is " + tutor.getDepartment());
                             newDepartment = tmu.getDepartment();
-                            //tmu.cleanBuffer();
                             if (tutor.getDepartment().equals(newDepartment)) {
                                 tmu.printPrompt("Pls enter a new department... amend fail");
                                 //prompt user error msg if ammend using same department
@@ -273,7 +270,6 @@ public class TutorManagement implements Serializable {
                                     if (falseContinue != 'Y') {
                                         break;
                                     } else {
-                                        //tmu.cleanBuffer();
                                         newDepartment = tmu.getDepartment();
                                     }
                                 } while (tutor.getDepartment().equals(newDepartment));
@@ -292,12 +288,10 @@ public class TutorManagement implements Serializable {
                             if (tutor.getPhoneNum().equals(newPhoneNum)) {
                                 tmu.printPrompt("pls enter a new phone num");
                                 do {
-                                   //tmu.cleanBuffer();
                                     falseContinue = Character.toUpperCase(Input.getChar("Do you want to enter a new phone num(Y/N):"));
                                     if (falseContinue != 'Y') {
                                         break;
                                     } else {
-                                        //tmu.cleanBuffer();
                                         newPhoneNum = tmu.getNewPhoneNum();
                                     }
                                 } while (tutor.getPhoneNum().equals(newPhoneNum));
@@ -395,7 +389,6 @@ public class TutorManagement implements Serializable {
         char continueInput = 'Y';
         int choice = 0;
         HashMap<Integer, Tutor> ts = this.tutors;
-        //Tutor[] filteredTutors = ts.getValues(Tutor.class);
 
             if (tutors.size() > 0) {
                 do{
@@ -451,11 +444,7 @@ public class TutorManagement implements Serializable {
     } else {
                 tmu.printPrompt("Pls add tutor first");
             }
-            /*
-            if (choice == 1) {
-                tmu.cleanBuffer();
-            }
-*/
+            
          
         Tutor[] filteredTutors = ts.getValues(Tutor.class);
         for (Tutor t : filteredTutors) {
@@ -520,7 +509,6 @@ public class TutorManagement implements Serializable {
            // String x=tmu.getReportTitle();
             String x=tmu.printFormatDateTime(formattedDate);
             tmu.printEmptyLine();
-            //tmu.saveFile(tb);
             
             tb.addColumn("Tutor ID", ts.map((t) -> String.valueOf(t.getId())).toArray(String.class));
             tb.addColumn("Tutor Name", ts.map((t) -> t.getName()).toArray(String.class));
