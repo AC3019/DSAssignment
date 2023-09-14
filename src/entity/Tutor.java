@@ -10,10 +10,11 @@ import java.io.Serializable;
  *
  * @author yong
  */
-public class Tutor implements Comparable<Tutor>, Serializable{
+public class Tutor implements Comparable<Tutor>, Serializable {
+
     private String name;
     private String department;
-    private int id ;
+    private int id;
     private char gender;
     // private TutorialGroup tutorialGroup;
     private int age;
@@ -26,34 +27,34 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     public Tutor() {
     }
 
-    public Tutor(int id,String name, String department, char gender, /* TutorialGroup tutorialGroup */int age,
-            String phoneNum,String icNo,int salary) {
-        this.id=id;
+    public Tutor(int id, String name, String department, char gender, /* TutorialGroup tutorialGroup */ int age,
+            String phoneNum, String icNo, int salary) {
+        this.id = id;
         this.name = name;
         this.department = department;
         this.gender = gender;
         // this.tutorialGroup=tutorialGroup;
         this.age = age;
         this.phoneNum = phoneNum;
-        this.icNo=icNo;
-        this.salary=salary;
+        this.icNo = icNo;
+        this.salary = salary;
 
     }
-    
-     public Tutor( String name, String department, char gender, /* TutorialGroup tutorialGroup */int age,
-            String phoneNum,String icNo,int salary) {
-       
-        this(currentID++, name, department, gender, age, phoneNum, icNo,salary);
-    }
-    
 
-    public Tutor (int id,String name, String department,String phoneNum,int salary){
-        this.id=id;
-        this.name=name;
-        this.department=department;
-        this.phoneNum=phoneNum;
-        this.salary=salary;
+    public Tutor(String name, String department, char gender, /* TutorialGroup tutorialGroup */ int age,
+            String phoneNum, String icNo, int salary) {
+
+        this(currentID++, name, department, gender, age, phoneNum, icNo, salary);
     }
+
+    public Tutor(int id, String name, String department, String phoneNum, int salary) {
+        this.id = id;
+        this.name = name;
+        this.department = department;
+        this.phoneNum = phoneNum;
+        this.salary = salary;
+    }
+
     public String getName() {
         return name;
 
@@ -67,18 +68,19 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     public char getGender() {
         return gender;
     }
-    public int getSalary(){
+
+    public int getSalary() {
         return salary;
     }
-    public void setSalary(int salary){
-        this.salary=salary;
+
+    public void setSalary(int salary) {
+        this.salary = salary;
     }
+
     public int getAge() {
         return age;
 
     }
-    
-        
 
     public String getPhoneNum() {
         return phoneNum;
@@ -87,20 +89,23 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     public int getId() {
         return id;
     }
-    public String getIcNO(){
+
+    public String getIcNO() {
         return icNo;
     }
+
     public void setName(String name) {
         this.name = name;
     }
-   
-    
+
     public void setDepartment(String department) {
         this.department = department;
     }
-    public void setIcNo(String icNo){
-        this.icNo=icNo;
+
+    public void setIcNo(String icNo) {
+        this.icNo = icNo;
     }
+
     public void setGender(char gender) {
         this.gender = gender;
     }
@@ -120,7 +125,7 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     public String toString() {
         return String.format(
                 "Tutor's id: %d\nTutor's name:%s\nTutor's department:%s\nTutor's gender: %s\nTutor's age:%d\nTutor's phone num:%s\nTutor's IcNo:%s\nTutor's salary: %d\n ",
-                id, name, department, gender, age, phoneNum, icNo,salary);
+                id, name, department, gender, age, phoneNum, icNo, salary);
     }
 
     @Override
@@ -134,20 +139,26 @@ public class Tutor implements Comparable<Tutor>, Serializable{
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         Tutor other = (Tutor) obj;
-        if (id != other.id)
+        if (id != other.id) {
             return false;
+        }
         if (icNo == null) {
-            if (other.icNo != null)
+            if (other.icNo != null) {
                 return false;
-        } else if (!icNo.equals(other.icNo))
+            }
+        } else if (!icNo.equals(other.icNo)) {
             return false;
+        }
         return true;
     }
 
@@ -157,5 +168,3 @@ public class Tutor implements Comparable<Tutor>, Serializable{
     }
 
 }
-
-

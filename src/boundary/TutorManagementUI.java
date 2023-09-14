@@ -24,10 +24,10 @@ import utility.TableBuilder;
 public class TutorManagementUI implements Serializable {
 
     Scanner scan = new Scanner(System.in);
-  
+
     Tutor t = new Tutor();
-    
-    public void displayHeader(){
+
+    public void displayHeader() {
         System.out.println();
         System.out.println("_|_|_|_|_|    _|_|    _|_|_|    _|    _|  _|      _|  _|_|_|_|_|");
         System.out.println("    _|      _|    _|  _|    _|  _|    _|  _|_|  _|_|      _|");
@@ -36,8 +36,9 @@ public class TutorManagementUI implements Serializable {
         System.out.println("    _|      _|    _|  _|    _|    _|_|    _|      _|      _|");
         System.out.println();
     }
+
     public int printMenu() {
-               int choice = Input.getChoice(
+        int choice = Input.getChoice(
                 "Select an option: ",
                 new String[]{
                     "Add a new tutor",
@@ -58,10 +59,10 @@ public class TutorManagementUI implements Serializable {
     }
 
     public int funcInput() {
-      
+
         int choice = scan.nextInt();
         scan.nextLine(); // Consume newline
-        
+
         return choice;
     }
 
@@ -84,8 +85,8 @@ public class TutorManagementUI implements Serializable {
         String regexHp = "^(\\+?6?01)[0-9]{7,9}$";
         Pattern pattern = Pattern.compile(regexHp);
         Matcher m;
-        String regexIc="\\d{6}-\\d{2}-\\d{4}";
-        Pattern pattern1=Pattern.compile(regexIc);
+        String regexIc = "\\d{6}-\\d{2}-\\d{4}";
+        Pattern pattern1 = Pattern.compile(regexIc);
         int salary;
         Matcher m1;
         do {
@@ -94,17 +95,17 @@ public class TutorManagementUI implements Serializable {
             department = getDepartment();
             //name.toUpperCase();
             Input.cleanBuffer();
-           
+
             gender = Character.toUpperCase(Input.getChar("Gender(M/F): ", false));
-             age = Input.getInt("Age: ");
+            age = Input.getInt("Age: ");
             Input.cleanBuffer();
-           
+
             phoneNum = Input.getString("Phone (0123456789):  ", false);
             m = pattern.matcher(phoneNum);
 
             icNo = Input.getString("Ic No (xxxxxx-xx-xxxx):", false);
-            m1=pattern1.matcher(icNo);
-            salary=Input.getInt("Enter your salary: ");
+            m1 = pattern1.matcher(icNo);
+            salary = Input.getInt("Enter your salary: ");
             Input.cleanBuffer();
             // validate gender
             if (Character.valueOf(gender).compareTo("M".charAt(0)) != 0
@@ -116,27 +117,27 @@ public class TutorManagementUI implements Serializable {
             if (!m.matches()) {
                 System.out.println("phone num not matched");
                 invalidInput = true;
-                
+
             }
-            if(!m1.matches()){
+            if (!m1.matches()) {
                 System.out.println("Ic Num not matched");
-                invalidInput=true;
+                invalidInput = true;
             }
 
         } while (invalidInput);
 
-        Tutor tutorObj = new Tutor(name, department, gender, age, phoneNum, icNo,salary);
+        Tutor tutorObj = new Tutor(name, department, gender, age, phoneNum, icNo, salary);
         return tutorObj;
     }
 
     public int removeTutorData() {
-       
+
         int id = Input.getInt("Enter an id you want to remove: ");
         return id;
     }
 
     public int searchTutorId() {
-       
+
         int id = Input.getInt("Enter tutor's id that you want to find : ");
 
         return id;
@@ -245,26 +246,26 @@ public class TutorManagementUI implements Serializable {
     public void printPrompt(String e) {
         System.out.println(e);
     }
-        /*
+
+    /*
        public String getReportTitle() {
         String title = Input.getString("What report title do you want to set: ", false);
         //System.out.print("\t\t\t\t"+title);
         return("\t\t"+title);
     }
-*/
-
+     */
 
     public LocalDateTime printDateTime(LocalDateTime e) {
         return (e);
     }
 
     public String printFormatDateTime(String e) {
-         String title = Input.getString("What report title do you want to set: ", false);
+        String title = Input.getString("What report title do you want to set: ", false);
         System.out.print(title);
-       //String x= getReportTitle();
-        System.out.print( "\t\t\t"+ e);
+        //String x= getReportTitle();
+        System.out.print("\t\t\t" + e);
         System.out.println();
-        return ( title + "\t\t\t"+ e);
+        return (title + "\t\t\t" + e);
     }
 
     public void cleanBuffer() {
@@ -278,36 +279,42 @@ public class TutorManagementUI implements Serializable {
     public void printEmptyLine() {
         System.out.println();
     }
-    public void printAvailableNameInMap(String s){
+
+    public void printAvailableNameInMap(String s) {
         System.out.print(s);
-        
+
     }
+
     public void printKey(Tutor k) {
         System.out.println(k);
     }
-    public int searchTutorMenu(){
+
+    public int searchTutorMenu() {
         int choice = Input.getChoice(
-                        "Select an option: ",
-                        new String[]{
-                            "Search by id:",
-                            "Search by ic no:",
-                            "Exit "
-                        },
-                        (item) -> item
-                );
-                return choice;
+                "Select an option: ",
+                new String[]{
+                    "Search by id:",
+                    "Search by ic no:",
+                    "Exit "
+                },
+                (item) -> item
+        );
+        return choice;
     }
-    public Integer getNewId(){
-           Integer id = Input.getInt("Enter the tutor's id you want to ammend: ");
-           return id;
+
+    public Integer getNewId() {
+        Integer id = Input.getInt("Enter the tutor's id you want to ammend: ");
+        return id;
     }
+
     public char wantToContinueFilter() {
-       // Input.cleanBuffer();
+        // Input.cleanBuffer();
         return Character.toUpperCase(Input.getChar("Do you want to continue filter on second criteria based on above result(Y/N)?"));
     }
+
     public void saveToFile(TableBuilder tb, boolean showNumber, String possibleReportTitle) {
         // ask want save csv or report
-        int choice = Input.getChoice("Enter your choice: ", new String[] {
+        int choice = Input.getChoice("Enter your choice: ", new String[]{
             "Generate CSV file (includes field names as header row)",
             "Save report to txt file"
         }, (s) -> s);
@@ -326,9 +333,9 @@ public class TutorManagementUI implements Serializable {
 
         if (success) {
             System.out.println(
-                "Successfully written to file, the file is located at " + 
-                (choice == 0 ? "export/" : "generated_reports/") + 
-                fileName + (choice == 0 ? ".csv" : ".txt")
+                    "Successfully written to file, the file is located at "
+                    + (choice == 0 ? "export/" : "generated_reports/")
+                    + fileName + (choice == 0 ? ".csv" : ".txt")
             );
             Input.pause();
         } else {
