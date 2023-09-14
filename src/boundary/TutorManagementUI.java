@@ -74,7 +74,6 @@ public class TutorManagementUI implements Serializable {
     }
 
     public Tutor tutorInput() {
-        //Scanner scan = new Scanner(System.in);
         boolean invalidInput;
         String name;
         String department;
@@ -88,7 +87,6 @@ public class TutorManagementUI implements Serializable {
         String regexIc="\\d{6}-\\d{2}-\\d{4}";
         Pattern pattern1=Pattern.compile(regexIc);
         int salary;
-        //= pattern.matcher(phoneNum);
         Matcher m1;
         do {
             invalidInput = false;
@@ -305,6 +303,7 @@ public class TutorManagementUI implements Serializable {
            return id;
     }
     public char wantToContinueFilter() {
+       // Input.cleanBuffer();
         return Character.toUpperCase(Input.getChar("Do you want to continue filter on second criteria based on above result(Y/N)?"));
     }
     public void saveToFile(TableBuilder tb, boolean showNumber, String possibleReportTitle) {
