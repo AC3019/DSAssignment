@@ -297,6 +297,17 @@ public class TutorManagement implements Serializable {
                             
                             if (tutor.getPhoneNum().equals(newPhoneNum)) {
                                 tmu.printPrompt("pls enter a new phone num");
+                                do {
+                                   tmu.cleanBuffer();
+                                    falseContinue = Character.toUpperCase(Input.getChar("Do you want to enter a new phone num(Y/N):"));
+                                    if (falseContinue != 'Y') {
+                                        break;
+                                    } else {
+                                        //tmu.cleanBuffer();
+                                        newPhoneNum = tmu.getNewPhoneNum();
+                                    }
+                                } while (tutor.getPhoneNum().equals(newPhoneNum));
+                                tutor.setPhoneNumber(newPhoneNum);
                             } else {
                                 tutor.setPhoneNumber(newPhoneNum);
 
