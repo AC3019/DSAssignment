@@ -222,6 +222,7 @@ public class HashMap<K extends Comparable<K>, V>
                 throw new NotSameInstanceException(
                     "The instance of o (" + o.getClass().getSimpleName() + ") is not of Pair"
                 );
+            // does not need to override equals becuz this only used in the BST, which uses compareTo to do stuffs, and compareTo alrd defines `equals` relationship
             return this.key.compareTo(o.getKey());
         }
 
