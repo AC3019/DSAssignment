@@ -12,20 +12,21 @@ public interface MapInterface<K, V> {
      * Associates the value with the key and put it into the map
      * @param key
      * @param value
+     * @return false if the key is already in the map, signifying `put` failed, otherwise true
      */
-    public abstract void put(K key, V value);
+    public abstract boolean put(K key, V value);
 
     /**
      * Gets the value associated with the key
      * @param key
-     * @return the value associated with the key
+     * @return the value associated with the key, null if not found
      */
     public abstract V get(K key);
 
     /**
      * Sets the value corresponding to `key` to `value`
      * @param key
-     * @return false if the key not found
+     * @return false if the key not found, otherwise true
      */
     public abstract boolean set(K key, V value);
 

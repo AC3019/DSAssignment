@@ -59,7 +59,10 @@ public class HashMap<K extends Comparable<K>, V>
     }
 
     @Override
-    public void put(K key, V value) {
+    public boolean put(K key, V value) {
+        if (this.keys.contains(key))
+            return false;
+
         int position = getHashModulo(key);
 
         // if the elements in the bucket is the same as the bucket number * 2 (since we use binary search tree to search), it is probably too crowded, need expand the bucket numbers
@@ -70,11 +73,11 @@ public class HashMap<K extends Comparable<K>, V>
         }
         this.buckets[position].insert(new Pair(key, value));
         this.keys.insert(key);
+        return true;
     }
 
     @Override
     public V get(K key) {
-
         if (!this.containsKey(key))
             return null;
 
