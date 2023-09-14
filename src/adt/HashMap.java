@@ -135,7 +135,7 @@ public class HashMap<K extends Comparable<K>, V>
     }
 
     @Override
-    public boolean containsValue(MapFindable<K, V> mf) {
+    public boolean contains(MapFindable<K, V> mf) {
         return keyOf(mf) != null;
     }
 

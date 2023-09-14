@@ -70,7 +70,7 @@ public interface MapInterface<K, V> {
      * @param mf
      * @return
      */
-    public abstract boolean containsValue(MapFindable<K, V> mf);
+    public abstract boolean contains(MapFindable<K, V> mf);
 
     /**
      * Finds the key of the value (if any)

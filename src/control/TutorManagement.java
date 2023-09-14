@@ -94,7 +94,7 @@ public class TutorManagement implements Serializable {
     public void addNewTutor() {
         Tutor tutorObj = tmu.tutorInput();
         if (tutors.size() > 0) {
-            boolean containsDuplicate = tutors.containsValue((Integer k, Tutor t) -> t.getIcNO().equals(tutorObj.getIcNO()));
+            boolean containsDuplicate = tutors.contains((Integer k, Tutor t) -> t.getIcNO().equals(tutorObj.getIcNO()));
 
             if (containsDuplicate) {
                 tmu.duplicateMsg();
