@@ -4,7 +4,6 @@
  */
 package boundary; 
 import java.io.Serializable;
-
 import adt.ArrayList;
 import entity.Student;
 import entity.TutorialGroup;
@@ -53,7 +52,7 @@ public class TutorialGroupManagementUI implements Serializable {
         String programmeName = Input.getString("Please enter the name of the programme: ",false);
         String tutGrpCode;
         do{
-            tutGrpCode = Input.getString("Please enter the year, month and group number of the tutorial group for tutorial group code(Year: 2023 Month: 01 Group: 01 -> 230101): ", false);
+            tutGrpCode = Input.getString("Please enter the year, month and group number of the tutorial group for tutorial group code: ", false);
             if(!Pattern.compile("\\d{2}((0[1-9])|(1[1-2]))\\d{2}").matcher(tutGrpCode).matches())
                 System.out.println("Invalid format for the tutorial group code is enter. Please reinput the tutorial group code according the format.");
         }while(!Pattern.compile("\\d{2}((0[1-9])|(1[1-2]))\\d{2}").matcher(tutGrpCode).matches()); 
@@ -87,7 +86,6 @@ public class TutorialGroupManagementUI implements Serializable {
     }
     
     public String moveToPassList(){
-        //Input.cleanBuffer();
         String choice = Input.getString("Did you want to stall the tutorial group removed into passing list(Y/N): ", false);
         return choice;
     }
@@ -141,7 +139,6 @@ public class TutorialGroupManagementUI implements Serializable {
     }
     
     public String filterStudent(){
-        //Input.cleanBuffer();
         String decision = Input.getString("Did you want to filter the student by gender(Y/N): ", false);
         return decision;
     }
@@ -236,14 +233,7 @@ public class TutorialGroupManagementUI implements Serializable {
         return progCode;
     }
     
-    /*
-    public String getProgName(){
-        String progName = Input.getString("Please enter the programme name you want to filter: ",false);
-        return progName;
-    }*/
-    
     public String getTutGrpCode(){
-        //Input.cleanBuffer();
         String tutGrpCode = Input.getString("Please enter the tutorial group code you want to filter: ", false);
         return tutGrpCode;
     }
@@ -263,19 +253,16 @@ public class TutorialGroupManagementUI implements Serializable {
 
 //edit message
     public String edit(){
-        //Input.cleanBuffer();
         String decision = Input.getString("Did you want to edit the student detail(Y/N): ", false);
         return decision;
     }
     
     public String editMark(){
-        //Input.cleanBuffer();
         String decision = Input.getString("Did you want to edit the student's demerit mark(Y/N): ", false);
         return decision;
     }
     
     public int editStudent(ArrayList<Student> studentList){
-        //Input.cleanBuffer();
         int choice = Input.getInt("Enter the index number of the student you want to edit: ", 0, studentList.getNumberOfEntries()-1);
         return choice;
     }
@@ -298,7 +285,6 @@ public class TutorialGroupManagementUI implements Serializable {
     }
     
     public int getStudentMark(){
-        //Input.cleanBuffer();
         int mark = Input.getInt("Please enter the demerit mark of the student: ", 0, 100);
         return mark;
     }
@@ -455,6 +441,4 @@ public class TutorialGroupManagementUI implements Serializable {
             System.out.println("Failed to write to file, please try again later");
         }
     }
-
-
 }
