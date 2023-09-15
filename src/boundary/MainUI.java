@@ -24,7 +24,7 @@ public class MainUI {
         String fileName = Input.getString("Enter the filename of the snap shot (leave blank to use autosave format, current datetime): ");
 
         if (fileName.isBlank()) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy hh:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy hhmmss");
             fileName = sdf.format(new Date());
         }
 

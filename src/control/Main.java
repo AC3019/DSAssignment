@@ -29,8 +29,8 @@ public class Main implements Serializable {
     private static MainUI ui = new MainUI();
 
     private void autosaveSnapshot() {
-        // autosave snapshot of system once exit any subsystem, filename will be autosave/dd-MM-yy hh:mm:ss.dat
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy hh:mm:ss");
+        // autosave snapshot of system once exit any subsystem, filename will be autosave/dd-MM-yy hhmmss.dat
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy hhmmss");
         String fileName = sdf.format(new Date());
         saveSnapshot(this, "autosave/" + fileName);
     }
