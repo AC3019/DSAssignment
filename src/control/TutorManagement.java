@@ -504,7 +504,7 @@ public class TutorManagement implements Serializable {
 
         if (tutors.size() > 0) {
             // String x=tmu.getReportTitle();
-            String x = tmu.printFormatDateTime(formattedDate);
+            //String x = tmu.printFormatDateTime(formattedDate);
             tmu.printEmptyLine();
 
             tb.addColumn("Tutor ID", ts.map((t) -> String.valueOf(t.getId())).toArray(String.class));
@@ -514,12 +514,16 @@ public class TutorManagement implements Serializable {
             tb.addColumn("Tutor Gender", ts.map((t) -> t.getGender()).toArray(Character.class));
             tb.addColumn("Tutor Age", ts.map((t) -> t.getAge()).toArray(Integer.class));
             tb.addColumn("Tutor Salary", ts.map((t) -> t.getSalary()).toArray(Integer.class));
-            tmu.saveToFile(tb, true, x/*tmu.printFormatDateTime(formattedDate)*/);
+            //tmu.saveToFile(tb, true, x/*tmu.printFormatDateTime(formattedDate)*/);
 
         } else {
             tmu.printPrompt("No tutor inside the list");
         }
+        
+        String x=tmu.printFormatDateTime(formattedDate);
         tb.printTable(true);
+       tmu.saveToFile(tb, true, x);
+
     }
 
 }
