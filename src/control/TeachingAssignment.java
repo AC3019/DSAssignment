@@ -426,6 +426,7 @@ public class TeachingAssignment implements Serializable {
             do {
                 filteredTutorAssignedToCourse = ui.filterTutors(filteredTutorAssignedToCourse);
             } while (ui.continueFilter());
+            selectedTutor = ui.selectTutor(filteredTutorAssignedToCourse);
             if (selectedTutor == null && !ui.restartFilter())
                 return;
         } while (selectedTutor == null);

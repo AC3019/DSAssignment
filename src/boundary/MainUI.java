@@ -40,4 +40,10 @@ public class MainUI {
         return Input.getChoice("Available snapshots", "Which snapshot to load: ", snapshots, (s) -> s);
     }
 
+    public void warn(String s) {
+        System.out.println(s);
+        Input.reinit();
+        Input.pause();
+    }
+
 }
