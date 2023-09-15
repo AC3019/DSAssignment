@@ -730,7 +730,7 @@ public class TeachingAssignmentUI implements Serializable {
                 showNumber = !showNumber || choice == 8;
             }
 
-            if (choice == 8)
+            if (choice == 9)
                 break; // done config
         }
         String tableHeading = "";
