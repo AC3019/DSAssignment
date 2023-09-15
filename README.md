@@ -5,10 +5,11 @@ The assignment repo for a 3 students from TAR UMT Year 2 Sem 1 (2022 -> 2024)
 ## Requirements
 - JDK 20
 
-## Editing
+## Editing and Running
 - School recommends using Netbeans
 
 ### With Netbeans
+- Netbeans version 18
 - Open project
 - If there is problem (probably wrong platform)
   - Add new platform, namely JDK_20

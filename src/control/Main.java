@@ -15,6 +15,7 @@ import java.util.Date;
 
 import adt.ArrayList;
 import boundary.MainUI;
+import utility.Input;
 
 /**
  * Implements serializable to allow saving of snapshots
@@ -76,6 +77,10 @@ public class Main implements Serializable {
                             }
                         }
                     }};
+                    if (snapShotFileNames.getNumberOfEntries() <= 0) {
+                        ui.warn("There is no saved snapshot in the system yet");
+                        break;
+                    }
                     String[] snapshotChoices = snapShotFileNames.toArray(String.class);
                     int snapshotChoice = ui.getSnapshotChoice(snapshotChoices);
                     m = m.loadSnapshot(snapshotChoices[snapshotChoice]);
