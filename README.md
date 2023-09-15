@@ -23,7 +23,7 @@ The assignment repo for a 3 students from TAR UMT Year 2 Sem 1 (2022 -> 2024)
 ```shell
 javac -cp ./src/ -d ./build/ **/*.java
 
-java -cp ./build dsassignment.DSAssignment
+java -cp ./build control.Main
 ```
 or just use the script `buildRun.sh` (Only for MAC & Linux & UN*X based OS)
 ```sh
