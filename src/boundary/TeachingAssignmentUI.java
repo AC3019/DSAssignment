@@ -245,6 +245,7 @@ public class TeachingAssignmentUI implements Serializable {
     public int getTutorChoice(Tutor[] tutors, String prompt, String ifEmptyArr) {
         if (tutors.length <= 0) {
             System.out.println(ifEmptyArr);
+            Input.reinit();
             Input.pause();
             return -1;
         }
@@ -589,9 +590,9 @@ public class TeachingAssignmentUI implements Serializable {
             int choice = this.tableDisplayConfig(
                 "Table configuration to display courses",
                 new String[] {
-                    tb.hasColumn("Course ID") ? "Remove column 'Course ID'" : "Add column 'Course ID",
-                    tb.hasColumn("Course Name") ? "Remove column 'Course Name'" : "Add column 'Course Name",
-                    tb.hasColumn("Department") ? "Remove column 'Department'" : "Add column 'Department",
+                    tb.hasColumn("Course ID") ? "Remove column 'Course ID'" : "Add column 'Course ID'",
+                    tb.hasColumn("Course Name") ? "Remove column 'Course Name'" : "Add column 'Course Name'",
+                    tb.hasColumn("Department") ? "Remove column 'Department'" : "Add column 'Department'",
                     tb.hasColumn("Credit Hour") ? "Remove column 'Credit Hour'" : "Add column 'Credit Hour'",
                     showNumber ? "Disable data number" : "Show data number",
                     "Show all column",
