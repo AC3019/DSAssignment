@@ -43,7 +43,6 @@ public class TutorManagement implements Serializable {
 
     public Tutor[] getTutors() {
         Tutor[] ts = this.tutors.getValues(Tutor.class);
-        System.out.println(Arrays.toString(ts));
         return ts;
     }
 

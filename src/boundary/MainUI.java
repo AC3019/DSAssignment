@@ -36,4 +36,8 @@ public class MainUI {
         System.out.println("Snapshot successfully saved to " + location);
     }
 
+    public int getSnapshotChoice(String[] snapshots) {
+        return Input.getChoice("Available snapshots", "Which snapshot to load: ", snapshots, (s) -> s);
+    }
+
 }

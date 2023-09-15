@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import adt.ArrayList;
 import boundary.MainUI;
 
 /**
@@ -55,8 +56,29 @@ public class Main implements Serializable {
                 case 3:
                     // user save, save to snapshots/name
                     String fileName = ui.getSnapshotName();
+                    m.saveSnapshot(m, "snapshots/" + fileName);
                     break;
                 case 4:
+                    // snapshots can be saved to two locations only, get all the files out
+                    // snapshots/ folder
+                    File[] snapshotDir = new File("snapshots/").listFiles();
+                    // autosave/ folder
+                    File[] autosaveDir = new File("autosave/").listFiles();
+                    ArrayList<String> snapShotFileNames = new ArrayList<>() {{
+                        if (snapshotDir != null) {
+                            for (File f: snapshotDir) {
+                                insert("snapshots/" + f.getName());
+                            }
+                        }
+                        if (autosaveDir != null) {
+                            for (File f: autosaveDir) {
+                                insert("autosave/" + f.getName());
+                            }
+                        }
+                    }};
+                    String[] snapshotChoices = snapShotFileNames.toArray(String.class);
+                    int snapshotChoice = ui.getSnapshotChoice(snapshotChoices);
+                    m = m.loadSnapshot(snapshotChoices[snapshotChoice]);
                     break;
                 case 5: // bye bye
                     return;
@@ -92,7 +114,7 @@ public class Main implements Serializable {
     public Main loadSnapshot(String fileName) {
         try {
             ObjectInputStream reader = new ObjectInputStream(
-                new FileInputStream(fileName + ".dat")
+                new FileInputStream(fileName)
             );
             Main loaded = (Main) reader.readObject();
             reader.close();

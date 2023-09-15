@@ -262,7 +262,6 @@ public class TeachingAssignmentUI implements Serializable {
             Input.pause();
             return -1;
         }
-        System.out.println(tableHeading);
         return Input.getChoice(
             tableHeading,
             prompt,
