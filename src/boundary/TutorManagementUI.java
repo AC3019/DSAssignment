@@ -16,14 +16,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import java.io.Serializable;
-import java.util.Scanner;
+// import java.util.Scanner;
 import utility.FileStringWriter;
 import utility.Input;
 import utility.TableBuilder;
 
 public class TutorManagementUI implements Serializable {
 
-    Scanner scan = new Scanner(System.in);
+    // Scanner scan = new Scanner(System.in);
 
     Tutor t = new Tutor();
 
@@ -58,13 +58,13 @@ public class TutorManagementUI implements Serializable {
         return choice;
     }
 
-    public int funcInput() {
+    // public int funcInput() {
 
-        int choice = scan.nextInt();
-        scan.nextLine(); // Consume newline
+    //     int choice = scan.nextInt();
+    //     scan.nextLine(); // Consume newline
 
-        return choice;
-    }
+    //     return choice;
+    // }
 
     public String getDepartment() {
         return DepartmentManagement.departments[Input.getChoice(
