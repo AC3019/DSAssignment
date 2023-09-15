@@ -217,7 +217,7 @@ public class TeachingAssignmentUI implements Serializable {
             tgs.filter((TutorialGroup tg) -> {
                 ArrayList<TutorialGroup> hmTg = tutorTutorialGroupMap.get(t);
                 if (hmTg == null) 
-                    return false;
+                    return true;
                 return !hmTg.contains(tg);
             }).toArray(TutorialGroup.class),
             "Which tutorial group to assign to this tutor[" + t.getId() + " " + t.getName() + "]: ",
