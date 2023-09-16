@@ -86,7 +86,7 @@ public class TutorialGroupManagementUI implements Serializable {
     }
     
     public String moveToPassList(){
-        String choice = Input.getString("Did you want to stall the tutorial group removed into passing list(Y/N): ", false);
+        String choice = Input.getString("Did you want to store the tutorial group removed into passing list(Y/N): ", false);
         return choice;
     }
     
@@ -335,7 +335,7 @@ public class TutorialGroupManagementUI implements Serializable {
     }
     
     public void creatingNewTutGrp(){
-        System.out.println("Creating new tutorial group to stall the student.");
+        System.out.println("Creating new tutorial group to store the student.");
     }
     
     public void studentNotFound(){
