@@ -30,7 +30,7 @@ public class TeachingAssignment implements Serializable {
             (Tutor t) -> {
                 ArrayList<Tutor> cts = this.courseTutorMap.get(c);
                 if (cts == null) 
-                    return true;
+                    return t.getDepartment().equals(c.getDepartment());
                 
                 return !cts.contains(t) && t.getDepartment().equals(c.getDepartment());
             }

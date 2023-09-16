@@ -25,6 +25,13 @@ public interface ListInterface<T> {
     public abstract ListInterface<T> insert(T item);
 
     /**
+     * Inserts an array of item to the list
+     * @param items Inserts all the the items to the back of the list
+     * @return `this` Returns the object itself, after inserting the element to facilitate method chaining
+     */
+    public abstract ListInterface<T> insert(T[] items);
+
+    /**
      * For this List, fixed position insertion only opens to inserting element **in between** the elements, if wanna add item to the back of List, use `insert(T item)` instead
      * @param index where to insert to
      * @param item the item to insert

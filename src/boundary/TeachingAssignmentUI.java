@@ -74,6 +74,7 @@ public class TeachingAssignmentUI implements Serializable {
             Pattern.CASE_INSENSITIVE
         );
     }
+    
 
     // shud probably be done by TutorManagement module, but I had more complex logics to implement, they don't allow working with custom list of tutors
     // can filter with three criteria, 0 -> ID, 1 -> IC or 2 -> name or 3 -> show all (just return the ori arraylist)
@@ -82,14 +83,77 @@ public class TeachingAssignmentUI implements Serializable {
      * + for one or more characters excluding space 
      * * for one or more characters including space 
      * (I will use regex to make them valid)
+     * Allow use of comma for multiple ID or hyphen for range
      */
     public ArrayList<Tutor> filterTutors(ArrayList<Tutor> tutors) {
         int discoverTutorChoice = this.getTutorFindFilter();
 
         switch (discoverTutorChoice) {
             case 0:
-                int id = this.getIDForTutorFilter();
-                return tutors.filter((Tutor t) -> t.getId() == id);
+                while (true) {
+                    String ids = this.getIDOptionsForTutorFilter();
+                    // cannot have , and - tgt
+                    if (ids.contains(",") && ids.contains("-")) {
+                        System.out.println(", and - cannot exist simulteanously, please input only , separated integers or - separated integers only");
+                        continue;
+                    }
+
+                    // only comma
+                    if (ids.contains(",")) {
+                        ArrayList<Integer> intIds = new ArrayList<>();
+                        String[] tempIds = ids.split(",");
+                        try {
+                            for (String id: tempIds) {
+                                intIds.insert(Integer.parseInt(id.trim()));
+                            }
+                        } catch (NumberFormatException nfe) {
+                            System.out.println("Invalid input, please only input integers separated by commas");
+                            continue;
+                        }
+
+                        if (intIds.getNumberOfEntries() < 1) {
+                            System.out.println("There is no integer value provided, please reenter...");
+                            continue;
+                        }
+
+                        return tutors.filter((Tutor t) -> intIds.contains((Integer) t.getId()));
+                    }
+
+                    // only hyphen (range)
+                    if (ids.contains("-")) {
+                        ArrayList<Integer> intIds = new ArrayList<>();
+                        String[] rangeNum = ids.split("-");
+                        try {
+                            for (String id: rangeNum) {
+                                intIds.insert(Integer.parseInt(id.trim()));
+                            }
+                        } catch (NumberFormatException nfe) {
+                            System.out.println("Invalid input, please only input integers separated by hyphens");
+                            continue;
+                        }
+
+                        if (intIds.getNumberOfEntries() != 2) {
+                            System.out.println("There must be exactly two numbers in the range");
+                            continue;
+                        }
+                        // Should only got two elems in the list, and the first one must be smaller than the second one
+                        if (intIds.get(0) > intIds.get(1)) {
+                            System.out.println("The second number in the range must be bigger than the first number");
+                            continue;
+                        }
+                        return tutors.filter((Tutor t) -> t.getId() >= intIds.get(0).intValue() && t.getId() <= intIds.get(1).intValue());
+                    }
+
+                    // last case, not comma, not range, just parse and return ==
+                    int id;
+                    try {
+                        id = Integer.parseInt(ids);
+                    } catch (NumberFormatException nfe) {
+                        System.out.println("Invalid input, please enter either a single integer, ',' separated integers or '-' separated integers only");
+                        continue;
+                    }
+                    return tutors.filter((Tutor t) -> t.getId() == id);
+                }
 
             case 1:
                 String ic = this.getIcNoForTutorFilter();
@@ -296,8 +360,9 @@ public class TeachingAssignmentUI implements Serializable {
         );
     }
 
-    public int getIDForTutorFilter() {
-        return Input.getInt("Enter the desired tutor ID: ");
+    public String getIDOptionsForTutorFilter() {
+        Input.reinit();
+        return Input.getString("Enter tutor IDs, separated with , or use - for ranges (eg. 1,2,3 or 1-3): ");
     }
 
     public void printWildCardList() {

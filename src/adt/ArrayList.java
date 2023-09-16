@@ -133,6 +133,15 @@ public class ArrayList<T> implements ListInterface<T>, Iterable<T>, Serializable
     }
 
     @Override
+    public ListInterface<T> insert(T[] items) {
+        for (T item: items) {
+            this.insert(item);
+        }
+
+        return this; // method chaining ftw
+    }
+
+    @Override
     public ListInterface<T> insert(int index, T item) throws IndexOutOfBoundsException {
         if (index > this.numberOfEntries) 
             throw new IndexOutOfBoundsException(
