@@ -16,14 +16,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import java.io.Serializable;
-// import java.util.Scanner;
 import utility.FileStringWriter;
 import utility.Input;
 import utility.TableBuilder;
 
 public class TutorManagementUI implements Serializable {
 
-    // Scanner scan = new Scanner(System.in);
 
     Tutor t = new Tutor();
 
@@ -58,13 +56,7 @@ public class TutorManagementUI implements Serializable {
         return choice;
     }
 
-    // public int funcInput() {
-
-    //     int choice = scan.nextInt();
-    //     scan.nextLine(); // Consume newline
-
-    //     return choice;
-    // }
+  
 
     public String getDepartment() {
         return DepartmentManagement.departments[Input.getChoice(
@@ -93,7 +85,7 @@ public class TutorManagementUI implements Serializable {
             invalidInput = false;
             name = Input.getString("Name:", false).toUpperCase();
             department = getDepartment();
-            //name.toUpperCase();
+         
             Input.cleanBuffer();
 
             gender = Character.toUpperCase(Input.getChar("Gender(M/F): ", false));
@@ -182,7 +174,6 @@ public class TutorManagementUI implements Serializable {
     }
 
     public int filterTutorData() {
-        //Scanner scan = new Scanner(System.in);
         int choice = Input.getChoice(
                 "Select an option: ",
                 new String[]{
@@ -258,10 +249,8 @@ public class TutorManagementUI implements Serializable {
     }
 
     public String printFormatDateTime(String e) {
-       // String title = Input.getString("What report title do you want to set: ", false);
         String title=getReportTitle();
        System.out.print(title);
-        //String x= getReportTitle();
         System.out.print("\t\t\t" + e);
         System.out.println();
         return (title + "\t\t\t" + e);
