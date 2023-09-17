@@ -53,6 +53,11 @@ public class TableBuilder {
         return this.table.containsKey(colName);
     }
 
+    // determine whether there is any column in the table
+    public boolean hasContent() {
+        return this.table.size() > 0;
+    }
+
     public String generateTableString(boolean showNumber, String tableHeading) {
         StringBuilder sb = new StringBuilder();
 

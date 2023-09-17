@@ -703,6 +703,11 @@ public class TeachingAssignmentUI implements Serializable {
                 break;
             }
         }
+        if (!tb.hasContent()) {
+            this.warn("Table is not configured to show anything, exiting...");
+            return;
+        }
+
         String tableHeading = "Courses Assigned to Tutor [" + 
                 t.getId() + " " + t.getName() + 
                 "(" + t.getDepartment() + ")" + 
@@ -799,6 +804,11 @@ public class TeachingAssignmentUI implements Serializable {
             if (choice == 9)
                 break; // done config
         }
+        if (!tb.hasContent()) {
+            this.warn("Table is not configured to show anything, exiting...");
+            return;
+        }
+
         String tableHeading = "";
         if (obj instanceof Course) {
             Course c = (Course) obj;
@@ -875,6 +885,11 @@ public class TeachingAssignmentUI implements Serializable {
             if (choice == 6)
                 break;
         }
+        if (!tb.hasContent()) {
+            this.warn("Table is not configured to show anything, exiting...");
+            return;
+        }
+
         String tableHeading = "Tutorial Groups Assigned to Tutor [" + 
                 t.getId() + " " + t.getName() + 
                 "(" + t.getDepartment() + ")" + 
