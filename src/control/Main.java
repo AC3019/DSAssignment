@@ -15,7 +15,6 @@ import java.util.Date;
 
 import adt.ArrayList;
 import boundary.MainUI;
-import utility.Input;
 
 /**
  * Implements serializable to allow saving of snapshots
@@ -83,19 +82,18 @@ public class Main implements Serializable {
                     }
                     String[] snapshotChoices = snapShotFileNames.toArray(String.class);
                     int snapshotChoice = ui.getSnapshotChoice(snapshotChoices);
-                    m = m.loadSnapshot(snapshotChoices[snapshotChoice]);
+                    Main temp = m.loadSnapshot(snapshotChoices[snapshotChoice]);
+                    if (temp != null) {
+                        m = temp;
+                        ui.snapShotLoaded(snapshotChoices[snapshotChoice]);
+                    }
                     break;
                 case 5: // bye bye
                     return;
             }
         }
-        // STUB, saving system snapshot
-        // m.saveSnapshot(m);
-        // STUB, loading system snapshot
-        // m = m.loadSnapshot();
     }
     
-    // TODO: make save and load snapshot functions
     public void saveSnapshot(Main state, String fileName) {
         try {
             // handle directory as well (denoted by a /) shud be always a level one dir only
@@ -111,8 +109,8 @@ public class Main implements Serializable {
             writer.writeObject(state);
             writer.close();
             ui.snapShotSaved(fileName + ".dat");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception _e) {
+            System.out.println("Can't save snapshot at this time, please try again later");
         }
     }
 
@@ -124,8 +122,8 @@ public class Main implements Serializable {
             Main loaded = (Main) reader.readObject();
             reader.close();
             return loaded;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception _e) {
+            System.out.println("Can't load this snapshot, possible system version incompatible, please try again with another snapshot");
             return null;
         }
     }

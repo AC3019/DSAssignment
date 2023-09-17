@@ -36,6 +36,11 @@ public class MainUI {
         System.out.println("Snapshot successfully saved to " + location);
     }
 
+    public void snapShotLoaded(String fileName) {
+        System.out.println("Restoring system to saved state in '" + fileName + "'...");
+        System.out.println("Successfully restored the system state to the snapshot");
+    }
+
     public int getSnapshotChoice(String[] snapshots) {
         return Input.getChoice("Available snapshots", "Which snapshot to load: ", snapshots, (s) -> s);
     }
