@@ -29,7 +29,6 @@ public class TutorManagement implements Serializable {
     public TutorManagement() {
         //data
         Tutor t1 = new Tutor("YONG YI KIT", DepartmentManagement.departments[0], 'M', 20, "0123456789", "001010-07-0441", 50000);
-
         this.tutors.put(t1.getId(), t1);
     }
 
