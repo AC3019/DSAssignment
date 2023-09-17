@@ -9,3 +9,4 @@ autosave/
 snapshots/
 generated_reports/
 exports/
+.DS_Store
